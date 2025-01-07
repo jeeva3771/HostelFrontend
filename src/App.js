@@ -1,4 +1,3 @@
-import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { AuthProvider, useAuth } from './Pages/StudentLogin/AuthContext'
 import PrivateRoute from './Pages/StudentLogin/PrivateRoute'

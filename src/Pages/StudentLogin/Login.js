@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import './Login.css'
 import { useAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 function StudentLogin() {
     const [email, setEmail] = useState('')
     const [otp, setOtp] = useState('')
+    const [isOtpGenerated, setIsOtpGenerated] = useState(false)
     const { login } = useAuth()
     const navigate = useNavigate()
 
@@ -17,7 +17,8 @@ function StudentLogin() {
         setOtp(e.target.value)
     }
 
-    const handleGenerateOtp = async () => { 
+    const handleGenerateOtp = async (e) => {
+        e.preventDefault() 
         var myHeaders = new Headers()
         myHeaders.append("Content-Type", "application/json")
 
@@ -35,6 +36,7 @@ function StudentLogin() {
             .then(async (response) => {
                 if (response.status === 200) {
                     alert('OTP has been sent to your email')
+                    setIsOtpGenerated(true)
                 } else {
                     alert(await response.text())
                 }
@@ -45,8 +47,8 @@ function StudentLogin() {
             });
     }
         
-
-    const handleVerifyOtpAndLogin = async () => {
+    const handleVerifyOtpAndLogin = async (e) => {
+        e.preventDefault()
         var myHeaders = new Headers()
         myHeaders.append("Content-Type", "application/json")
 
@@ -65,6 +67,7 @@ function StudentLogin() {
             .then(async (response) => {
                 if (response.status === 200) {
                     login()
+                    alert('welcome')
                     navigate('/home')
                     // window.location = 'https://localhost:1006/student/attendance/report'
                 } else if (response.status === 400) {
@@ -83,21 +86,49 @@ function StudentLogin() {
 
 
     return (
-        
-        <div className="container">
-            <h2>Student Login</h2>
-            <div>
-                <label className="labelSection">Email</label>
-                <input type="email" value={email}  onChange={handleEmailChange} required/>
-            </div>
-            <button onClick={handleGenerateOtp}>Generate OTP</button>
-            <div>
-                <label className="labelSection">OTP</label>
-                <input type="text" value={otp} onChange={handleOtpChange} required/>
-            </div>
-            <button onClick={handleVerifyOtpAndLogin}>VerifyOtp&Login</button>
+        <div class="auth-wrapper">
+            <div class="auth-content">
+            <form className="container">
+            <h2 className="f-w-400">Student Sign In</h2>
 
+            {!isOtpGenerated && (
+                <div>
+                    <div className="form-group mb-3">
+                        <label for="formBasicEmail" class="form-label">Email</label>
+                        <input
+                        className="form-control"
+                        label="Email"
+                        name="email"
+                        id="formBasicEmail"
+                        value={email}
+                        onChange={handleEmailChange}
+                        type="email"
+                        />
+                    </div>
+                    <button onClick={handleGenerateOtp}>Generate OTP</button>
+                </div>
+            )}
+
+            {isOtpGenerated && (
+                <div>
+                    <div className="form-group mb-4">
+                        <label for="otp" class="form-label">OTP</label>
+                        <input
+                        className="form-control"
+                        label="otp"
+                        name="otp"
+                        id="otp"
+                        value={otp}
+                        onChange={handleOtpChange}
+                        type="text"
+                        />
+                    </div>
+                    <button onClick={handleVerifyOtpAndLogin}>Verify OTP & Login Report</button>
+                </div>
+            )}
+            </form>
         </div>
+    </div>
     )
 }
 
