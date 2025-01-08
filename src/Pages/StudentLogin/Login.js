@@ -29,6 +29,7 @@ function StudentLogin() {
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
+            credentials: 'include', // Ensure cookies are sent
             body: raw
         }
 
@@ -84,51 +85,50 @@ function StudentLogin() {
             .catch(() => alert('Something went wrong.Please try later.'))
     }
 
-
     return (
         <div class="auth-wrapper">
             <div class="auth-content">
-            <form className="container">
-            <h2 className="f-w-400">Student Sign In</h2>
+                <form className="container">
+                    <h2 className="f-w-400">Student Sign In</h2>
 
-            {!isOtpGenerated && (
-                <div>
-                    <div className="form-group mb-3">
-                        <label for="formBasicEmail" class="form-label">Email</label>
-                        <input
-                        className="form-control"
-                        label="Email"
-                        name="email"
-                        id="formBasicEmail"
-                        value={email}
-                        onChange={handleEmailChange}
-                        type="email"
-                        />
-                    </div>
-                    <button onClick={handleGenerateOtp}>Generate OTP</button>
-                </div>
-            )}
+                    {!isOtpGenerated && (
+                        <div>
+                            <div className="form-group mb-3">
+                                <label for="formBasicEmail" class="form-label">Email</label>
+                                <input
+                                    className="form-control"
+                                    label="Email"
+                                    name="email"
+                                    id="formBasicEmail"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    type="email"
+                                />
+                            </div>
+                            <button onClick={handleGenerateOtp}>Generate OTP</button>
+                        </div>
+                    )}
 
-            {isOtpGenerated && (
-                <div>
-                    <div className="form-group mb-4">
-                        <label for="otp" class="form-label">OTP</label>
-                        <input
-                        className="form-control"
-                        label="otp"
-                        name="otp"
-                        id="otp"
-                        value={otp}
-                        onChange={handleOtpChange}
-                        type="text"
-                        />
-                    </div>
-                    <button onClick={handleVerifyOtpAndLogin}>Verify OTP & Login Report</button>
-                </div>
-            )}
-            </form>
+                    {isOtpGenerated && (
+                        <div>
+                            <div className="form-group mb-4">
+                                <label for="otp" class="form-label">OTP</label>
+                                <input
+                                    className="form-control"
+                                    label="otp"
+                                    name="otp"
+                                    id="otp"
+                                    value={otp}
+                                    onChange={handleOtpChange}
+                                    type="text"
+                                />
+                            </div>
+                            <button onClick={handleVerifyOtpAndLogin}>Verify OTP & Login Report</button>
+                        </div>
+                    )}
+                </form>
+            </div>
         </div>
-    </div>
     )
 }
 
