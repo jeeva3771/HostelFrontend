@@ -1,9 +1,3 @@
-import 'bootstrap';
-import Quill from 'quill';
-import tinymce from 'tinymce';
-import simpleDatatables from 'simple-datatables';
-import * as echarts from 'echarts';
-
 /**
 * Template Name: NiceAdmin
 * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/

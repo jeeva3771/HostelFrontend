@@ -5,7 +5,7 @@ function Layout() {
         <nav>
           <ul>
             <li>
-              <Link to="/student/login">Student Login</Link>
+              <Link to="/student/login/">Student Login</Link>
             </li>
           </ul>
         </nav>
