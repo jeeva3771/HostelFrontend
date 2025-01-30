@@ -4,9 +4,12 @@
   "dependencies": {
     "bootstrap": "^5.3.3",
     "cra-template": "1.2.0",
+    "dotenv": "^16.4.7",
     "echarts": "^5.6.0",
+    "js-cookie": "^3.0.5",
     "quill": "^2.0.3",
     "react": "^19.0.0",
+    "react-cookie": "^7.2.2",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
     "react-scripts": "^5.0.1",
@@ -18,7 +21,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prod": "cross-env NODE_ENV=prod",
+    "devtest": "cross-env NODE_ENV=dev"
   },
   "eslintConfig": {
     "extends": [

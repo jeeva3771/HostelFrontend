@@ -1,13 +1,18 @@
-const Breadcrumbs = () => {
+import { Link } from "react-router-dom"
+
+const Breadcrumbs = ({breadcrumb}) => {
     return (
     <nav>
         <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-                Home
-            </li>
-            <li className="breadcrumb-item active">
-                AttendanceReport
-            </li>
+            {breadcrumb.map((item, index) => (    
+                <li className={`breadcrumb-item ${index === breadcrumb.length - 1 ? 'active' : ''}`}>
+                    {index === breadcrumb.length - 1 ? (
+                        item.name 
+                    ) : (
+                        <Link to={item.link}>{item.name}</Link> 
+                    )}
+                </li>
+            ))}
         </ol>
     </nav>
     )

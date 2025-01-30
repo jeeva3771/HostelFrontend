@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/assets/img/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -24,7 +24,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Student Login</title>
     <link rel="stylesheet" href="%PUBLIC_URL%/assets/css/style.css">
 
     <!-- Favicons -->
@@ -53,26 +53,33 @@
         height: 6px;
       }
 
-      .clr1 {
-        background-color: green;
-      }
-
-      .clr2 {
-        background-color: red;
-      }
-
-      .clr3 {
-        background-color: orange;
-      }
-
-      .clr4 {
-        background-color: #adb5bd;
-      }
-
       .alignCal {
         padding-left: 20%;
       }
+
+      .textWhite {
+        color: white;
+      }
+
+      .spinner {
+        position: absolute; 
+        top: 42%;
+        left: 44%;
+        width: 20px;
+        height: 20px;
+      }
           
+      .upperCase {
+        text-transform: capitalize;
+      }
+
+      .containerCalendar {
+          width: 440px;
+      }
+
+      .none {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -101,7 +108,7 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
       
     <!-- Template Main JS File -->
-    <script src="%PUBLIC_URL%/assets/js/main.js"></script>\
+    <script src="%PUBLIC_URL%/assets/js/main.js"></script>
     
   </body>
 </html>

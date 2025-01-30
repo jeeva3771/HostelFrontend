@@ -1,24 +1,31 @@
 import { Link } from 'react-router-dom'
-const Siderbar = ({ activeMenu }) => {
-    const mainMenu = [
-        { name: 'Attendance Report', url: '/student/report/', icon: 'bi bi-card-list'},
-        { name: 'Student', url: '/student/details/', icon: 'bi bi-person' },
-    ]
 
+const mainMenu = [
+    { name: 'Attendance Report', url: '/student/report/', icon: 'bi bi-card-list'},
+    { name: 'Pages', url: false, icon: false },
+    { name: 'Student', url: '/student/details/', icon: 'bi bi-person' },
+]
+
+const Siderbar = ({ activeMenu }) => {
     return (
-        <aside id="sidebar" className="sidebar">
-            <ul className="sidebar-nav" id="sidebar-nav">
+        <aside 
+            id="sidebar" 
+            className="sidebar"
+        >
+            <ul 
+                className="sidebar-nav" 
+                id="sidebar-nav"
+            >
                 {mainMenu.map((item) => (
-                <>
-                    {item.name === 'Student' && <li className="nav-heading">Pages</li>}
+                    item.url ? 
                     <li>
-                        <Link to={item.url} className={`nav-link ${ 
-                            activeMenu === item.name ? 'active' : 'collapsed'}`}>
+                        <Link 
+                            to={item.url} 
+                            className={`nav-link ${ activeMenu === item.name ? 'active' : 'collapsed'}`}>
                             <i className={item.icon}></i>
                             <span>{item.name}</span>
                         </Link>
-                    </li>
-                </>
+                    </li> : <li className="nav-heading">{item.name}</li>
                 ))}
             </ul>
         </aside>

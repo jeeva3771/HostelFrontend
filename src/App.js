@@ -35,12 +35,16 @@ function App() {
                 </RedirectIfLoggedIn>
               }
             />
+            <Route
+              path="/api/student/login/"
+              element={<StudentLogin />}
+            />
             <Route 
               path="/student/report/" 
               element={
-              <PrivateRoute>
-                <Report />
-              </PrivateRoute>
+                <PrivateRoute>
+                  <Report />
+                </PrivateRoute>
               } 
             />
             <Route
