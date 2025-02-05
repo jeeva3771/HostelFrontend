@@ -72,7 +72,7 @@ function StudentLogin() {
 
             if (response.status === 200) {
                 navigate('/student/report/')
-                setLogged(await response.json())
+                setLogged(await response.json(), 'student')
             } else if (response.status === 400) {
                 const errorData = await response.json()
                 if (errorData.errorType === 'OTP') {

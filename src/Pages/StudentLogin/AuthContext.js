@@ -3,26 +3,36 @@ import React, { createContext, useState, useContext, useEffect } from 'react'
 const AuthContext = createContext()
 
 export const AuthProvider = ({children}) => {
-    const [isLogged, setIsLogged] = useState(false)
+    const [isWardenLogged, setIsWardenLogged] = useState(false)
+    const [isStudentLogged, setIsStudentLogged] = useState(false)
     const [userDetails, setUserDetails] = useState({})
 
-    const setLogged = (user) => {
-        setIsLogged(true)
-        setUserDetails(user)
-        localStorage.setItem("isLogged", "true")
-        localStorage.setItem("userDetails", JSON.stringify(user))
+    const setLogged = (user, role) => {
+        if (role === "student") {
+            setIsStudentLogged(true)
+            // setIsWardenLogged(false)
+            localStorage.setItem("isStudentLogged", "true")
+            // localStorage.setItem("isWardenLogged", "false")
+        } else if (role === "warden") {
+            // setIsWardenLogged(true)
+            setIsStudentLogged(false)
+            localStorage.setItem("isWardenLogged", "true")
+            // localStorage.setItem("isStudentLogged", "false")
+        }
+        setUserDetails({ ...user, role })
+        localStorage.setItem("userDetails", JSON.stringify({ ...user, role }))
     }
 
     const setLogout = () => {
-        setIsLogged(false)
+        setIsStudentLogged(false)
         setUserDetails({})
-        localStorage.removeItem("isLogged")
+        localStorage.removeItem("isStudentLogged")
         localStorage.removeItem("userDetails")
     }
     
     useEffect(() => {
-        const loggedStatus = localStorage.getItem("isLogged") === "true"
-        setIsLogged(loggedStatus)
+        const loggedStatus = localStorage.getItem("isStudentLogged") === "true"
+        setIsStudentLogged(loggedStatus)
         if (loggedStatus) {
             var user = localStorage.getItem("userDetails")
             setUserDetails(JSON.parse(user))
@@ -32,7 +42,7 @@ export const AuthProvider = ({children}) => {
     }, [])
     
     return (
-        <AuthContext.Provider value={{ isLogged, setLogged, setLogout, userDetails}}>
+        <AuthContext.Provider value={{ isWardenLogged, isStudentLogged, setLogged, setLogout, userDetails}}>
             {children}
         </AuthContext.Provider>
     )

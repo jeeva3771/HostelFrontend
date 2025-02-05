@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom"
 import { useAuth } from "./AuthContext"
 
-const PrivateRoute = ({children}) => {
-    const { isLogged } = useAuth()
 
-    return isLogged ? children : <Navigate to='/student/login/' />
+export const StudentPrivateRoute = ({ children }) => {
+    const { isStudentLogged } = useAuth()
+
+    return isStudentLogged ? children : <Navigate to="/student/login/" />
 }
 
-export default PrivateRoute

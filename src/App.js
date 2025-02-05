@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { AuthProvider, useAuth } from './Pages/StudentLogin/AuthContext'
-import PrivateRoute from './Pages/StudentLogin/PrivateRoute'
+import studentPrivateRoute from './Pages/StudentLogin/PrivateRoute'
 import StudentLogin from './Pages/StudentLogin/Login'
 import Report from './Pages/StudentLogin/Report'
 import Details from "./Pages/StudentLogin/Details"
 
 function App() {
   const RedirectIfLoggedIn = ({ children }) => {
-    const { isLogged } = useAuth()
+    const { isStudentLogged } = useAuth()
 
-    if (isLogged) {
+    if (isStudentLogged) {
       return <Navigate to="/student/report" />
     }
     return children
@@ -27,6 +27,7 @@ function App() {
                 </RedirectIfLoggedIn>
               } 
             />
+
             <Route
               path="/student/login/"
               element={
@@ -42,17 +43,17 @@ function App() {
             <Route 
               path="/student/report/" 
               element={
-                <PrivateRoute>
+                <studentPrivateRoute>
                   <Report />
-                </PrivateRoute>
+                </studentPrivateRoute>
               } 
             />
             <Route
               path="/student/details/"
               element={
-                <PrivateRoute>
+                <studentPrivateRoute>
                   <Details />
-                </PrivateRoute>
+                </studentPrivateRoute>
               }
             >
             </Route>
