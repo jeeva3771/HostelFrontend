@@ -1,65 +1,84 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { AuthProvider, useAuth } from './Pages/StudentLogin/AuthContext'
-import studentPrivateRoute from './Pages/StudentLogin/PrivateRoute'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { StudentPrivateRoute } from './Pages/StudentLogin/PrivateRoute'
 import StudentLogin from './Pages/StudentLogin/Login'
+import WardenLogin from './Pages/WardenLogin/Login'
 import Report from './Pages/StudentLogin/Report'
-import Details from "./Pages/StudentLogin/Details"
+import Details from './Pages/StudentLogin/Details'
+import { useAuth, AuthProvider1 } from './Pages/WardenLogin/AuthContext'
+import { AuthProvider2 } from './Pages/StudentLogin/AuthContext'
 
 function App() {
-  const RedirectIfLoggedIn = ({ children }) => {
+  const RedirectIfLoggedInWarden = ({ children }) => {
+    const { isWardenLogged } = useAuth()
+
+    if (isWardenLogged) {
+      return <Navigate to="/home/" />
+    }
+    return children
+  }
+  
+  const RedirectIfLoggedInStudent = ({ children }) => {
     const { isStudentLogged } = useAuth()
 
     if (isStudentLogged) {
-      return <Navigate to="/student/report" />
+      return <Navigate to="/student/report/" />
     }
     return children
   }
 
   return (
-    <AuthProvider>
+    <AuthProvider1>
+    <AuthProvider2>
       <BrowserRouter>
           <Routes>
             <Route 
               path="/" 
               element={
-                <RedirectIfLoggedIn>
-                  <StudentLogin />
-                </RedirectIfLoggedIn>
+                <RedirectIfLoggedInStudent>
+                  <WardenLogin />
+                </RedirectIfLoggedInStudent>
               } 
+            />
+
+            <Route
+              path="/login/"
+              element={
+                <RedirectIfLoggedInWarden>
+                  <WardenLogin />
+                </RedirectIfLoggedInWarden>
+              }
             />
 
             <Route
               path="/student/login/"
               element={
-                <RedirectIfLoggedIn>
+                <RedirectIfLoggedInStudent>
                   <StudentLogin />
-                </RedirectIfLoggedIn>
+                </RedirectIfLoggedInStudent>
               }
-            />
-            <Route
-              path="/api/student/login/"
-              element={<StudentLogin />}
             />
             <Route 
               path="/student/report/" 
               element={
-                <studentPrivateRoute>
+                <StudentPrivateRoute>
                   <Report />
-                </studentPrivateRoute>
+                </StudentPrivateRoute>
               } 
             />
             <Route
               path="/student/details/"
               element={
-                <studentPrivateRoute>
+                <StudentPrivateRoute>
                   <Details />
-                </studentPrivateRoute>
+                </StudentPrivateRoute>
               }
             >
+              
             </Route>
           </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    </AuthProvider2>
+    </AuthProvider1>
   )
 }
 

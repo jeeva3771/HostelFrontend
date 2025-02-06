@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { appUrl } from '../../config/index'
+import { studentAppUrl } from '../../config/index'
 import { generateOtp, verifyOtpAndLogin } from './Api'
 
 function StudentLogin() {
@@ -10,7 +10,7 @@ function StudentLogin() {
     const [isOtpGenerated, setIsOtpGenerated] = useState(false)
     const [isEmailButtonEnabled, setIsEmailButtonEnabled] = useState(false)
     const [isOtpButtonEnabled, setIsOtpButtonEnabled] = useState(false)
-    const { setLogged } = useAuth()
+    const { setStudentLogged, setStudentLogout } = useAuth()
     const navigate = useNavigate()
     
     // useEffect(() => {
@@ -34,7 +34,7 @@ function StudentLogin() {
         setIsEmailButtonEnabled(false)
         
         try {
-            const { response, error} = await generateOtp(email, appUrl)
+            const { response, error} = await generateOtp(email, studentAppUrl)
 
             if (error) {
                 alert(error)
@@ -64,15 +64,15 @@ function StudentLogin() {
                 return
             }
 
-            // if (response.status === 401) {
-            //     setLogged()
-            //     navigate('/student/login/')
-            //     return
-            // }
+            if (response.status === 401) {
+                setStudentLogout()
+                navigate('/student/login/')
+                return
+            }
 
             if (response.status === 200) {
                 navigate('/student/report/')
-                setLogged(await response.json(), 'student')
+                setStudentLogged(await response.json(), 'student')
             } else if (response.status === 400) {
                 const errorData = await response.json()
                 if (errorData.errorType === 'OTP') {

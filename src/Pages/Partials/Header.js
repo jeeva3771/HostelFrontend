@@ -1,11 +1,11 @@
 import { useAuth } from "../StudentLogin/AuthContext"
-import { Link } from "react-router-dom"
-import { appUrl } from '../../config/index'
+import { Link, useNavigate } from "react-router-dom"
+import { studentAppUrl } from '../../config/index'
 import { logout } from '../StudentLogin/Api'
 
-
 function Header() {
-    const { setLogout, userDetails } = useAuth()  
+    const { setStudentLogout, studentDetails } = useAuth()  
+    const navigate = useNavigate()
 
     const logoutHandler = async () => {
       try {
@@ -17,7 +17,8 @@ function Header() {
 
         if (response && response.ok) {
           sessionStorage.clear()
-          setLogout()
+          setStudentLogout()
+          navigate('/student/login/')
         }
       } catch (error) {
         alert('Something went wrong.Please try later.')
@@ -226,18 +227,18 @@ function Header() {
                 className="nav-link nav-profile d-flex align-items-center pe-0" 
                 data-bs-toggle="dropdown">
                 <img 
-                  src={`${appUrl}/api/student/image?date=${Date.now()}`} 
+                  src={`${studentAppUrl}/api/student/image?date=${Date.now()}`} 
                   alt="Profile" 
                   className="rounded-circle"
                 />
                 <span className="d-none d-md-block dropdown-toggle ps-2 upperCase">
-                  {userDetails.name}
+                  {studentDetails.name}
                 </span>
               </button>
         
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li className="dropdown-header">
-                  <h6 className="upperCase">{userDetails.name}</h6>
+                  <h6 className="upperCase">{studentDetails.name}</h6>
                   <span>Student</span>
                 </li>
                 <li>

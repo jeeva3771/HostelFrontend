@@ -1,32 +1,34 @@
+import { Link } from "react-router-dom"
+import { useAuth } from "./AuthContext"
+import { Authentication } from "./Api"
+
 const { useState } = require("react")
 
 function WardenLogin() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('prem123@gmail.com')
+    const [password, setPassword] = useState('123123')
+    const [isLoading, setIsLoading] = useState(false)
+    const { setWardenDetails } = useAuth()
 
-    function loginUser() {
-        const myHeaders = new Headers()
-        myHeaders.append("Content-Type", "application/json")
-  
-        const raw = JSON.stringify({
-          "emailId": email,
-          "password": password
-        })
-  
-        const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw
-        };
-  
-        fetch(`${process.env.REACT_WARDENAPP_API_URL}/api/login`, requestOptions)
-        .then(async (response) => {
+    async function loginUser() {
+        setIsLoading(true)
+        try {
+            const { response, error } = await Authentication(email, password)
+
+            if (error) {
+                alert(error)
+                return
+            }
+
             if (response.status === 200) {
+                setIsLoading(true)
             } else {
                 alert(await response.text())
+                setIsLoading(true)
             }
-        })
-        .catch(() => alert('Something went wrong.Please try later.'))
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        }
     }
 
     return (
@@ -38,7 +40,7 @@ function WardenLogin() {
                     <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                         <div className="d-flex justify-content-center py-4">
                             <div className="logo d-flex align-items-center w-auto">
-                                <img src="/assets/img/logo.png" alt="" />
+                                <img src="/assets/img/logo.png" />
                                 <span className="d-none d-lg-block">Hostel</span>
                             </div>
                         </div>
@@ -48,39 +50,84 @@ function WardenLogin() {
                                     <h5 className="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                                     <p className="text-center small">Enter your email & password to login</p>
                                 </div>
-                                <div className="row g-3 needs-validation" novalidate>
+                                <div 
+                                    className="row g-3 needs-validation" 
+                                    novalidate
+                                >
                                 <div className="col-12">
-                                    <label for="email" className="form-label">Email</label>
+                                    <label 
+                                        for="email" 
+                                        className="form-label"
+                                    >Email
+                                    </label>
                                     <div className="input-group has-validation">
-                                        <input type="email" name="email" className="form-control" id="email"
-                                        value={email} placeholder="Enter email" required 
-                                        onChange={(e)=>setEmail(e.target.value)}/>
+                                        <input 
+                                            type="email" 
+                                            name="email" 
+                                            className="form-control" 
+                                            id="email"
+                                            value={email} 
+                                            placeholder="Enter email"
+                                            required 
+                                            onChange={(e)=>setEmail(e.target.value)}
+                                        />
                                         <div className="invalid-feedback">Please enter your email.</div>
                                     </div>
                                 </div>
 
                                 <div className="col-12">
-                                    <label for="password" className="form-label">Password</label>
-                                    <input type="password" name="password" className="form-control" id="password"
-                                        placeholder="Enter password" value={password} required 
-                                        onChange={(e)=>setPassword(e.target.value)}/>
+                                    <label 
+                                        for="password" 
+                                        className="form-label"
+                                    >Password
+                                    </label>
+                                    <input 
+                                        type="password" 
+                                        name="password" 
+                                        className="form-control" 
+                                        id="password"
+                                        placeholder="Enter password" 
+                                        value={password} 
+                                        required 
+                                        onChange={(e)=>setPassword(e.target.value)}
+                                    />
                                     <div className="invalid-feedback">Please enter your password!</div>
                                 </div>
 
                             <div className="col-12">
                                 <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" name="remember" id="rememberMe" value="true"/>
-                                    <label className="form-check-label me-2" for="rememberMe">Remember me</label>
-                                    <small><a href="/warden/resetpassword/">Forgotten password?</a></small>
+                                    <input 
+                                        className="form-check-input" 
+                                        type="checkbox" 
+                                        name="remember" 
+                                        id="rememberMe" 
+                                        value="true"
+                                    />
+                                    <label 
+                                        className="form-check-label me-2" 
+                                        for="rememberMe"
+                                    >Remember me
+                                    </label>
+                                    <small>
+                                        <a href="/warden/resetpassword/">Forgotten password?</a>
+                                    </small>
                                 </div>
                             </div>
 
                             <div className="col-12">
-                                <button className="btn btn-primary w-100" type="submit"
-                                    onclick={loginUser}>Login</button>
+                                <button 
+                                    className="btn btn-primary w-100" 
+                                    type="submit"
+                                    onClick={loginUser}
+                                    disabled={!email || !password|| isLoading} 
+                                >Login
+                                </button>
                             </div>
-                            <Link to="/student/login/" className="text-center small">
-                                Student login?</Link>
+                            <Link 
+                                to="/student/login/" 
+                                className="text-center small"
+                            >Student login?
+                            </Link>
                         </div>
                     </div>
                 </div>

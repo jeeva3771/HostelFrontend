@@ -1,4 +1,4 @@
-import { appUrl } from '../../config/index'
+import { studentAppUrl } from '../../config/index'
 
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
@@ -14,7 +14,7 @@ export async function generateOtp(email) {
             body: raw,
             credentials: 'include'
         }
-        const response = await fetch(`${appUrl}/api/student/generateotp/`, requestOptions)
+        const response = await fetch(`${studentAppUrl}/api/student/generateotp/`, requestOptions)
         // if (!response.ok) {
         //     throw new Error(await response.text())
         // }
@@ -43,7 +43,7 @@ export async function verifyOtpAndLogin(otp) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${appUrl}/api/student/verifyotp/authentication/`, requestOptions)
+        const response = await fetch(`${studentAppUrl}/api/student/verifyotp/authentication/`, requestOptions)
         // if (!response.ok) {
         //     throw new Error(await response.text())
         //}
@@ -62,7 +62,7 @@ export async function verifyOtpAndLogin(otp) {
 
 export async function report(month, year) {
     try {
-        const response = await fetch(`${appUrl}/api/student/attendancereport?month=${month}&year=${year}`, {
+        const response = await fetch(`${studentAppUrl}/api/student/attendancereport?month=${month}&year=${year}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -94,7 +94,7 @@ export async function updateImage(file) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${appUrl}/api/student/editimage`, requestOptions)
+        const response = await fetch(`${studentAppUrl}/api/student/editimage`, requestOptions)
         // if (!response.ok) {
         //     throw new Error(response.text())
         // }
@@ -119,7 +119,7 @@ export async function deleteImage() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${appUrl}/api/student/deleteimage`, requestOptions)
+        const response = await fetch(`${studentAppUrl}/api/student/deleteimage`, requestOptions)
 
         return {
             response,
@@ -135,7 +135,7 @@ export async function deleteImage() {
 
 export async function logout() {
     try {
-        const response = await fetch(`${appUrl}/api/student/logout`, {
+        const response = await fetch(`${studentAppUrl}/api/student/logout`, {
             method: 'GET',
             credentials: 'include'
         })

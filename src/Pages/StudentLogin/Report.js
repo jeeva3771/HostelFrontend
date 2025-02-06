@@ -5,12 +5,12 @@ import Header from '../Partials/Header'
 import * as XLSX from 'xlsx'
 import Breadcrumbs from '../Partials/BreadCrumb'
 import { useAuth } from "./AuthContext"
-import { appUrl } from '../../config/index'
+import { studentAppUrl } from '../../config/index'
 import { useNavigate } from 'react-router-dom'
 import { report } from './Api'
 
 function Report() {
-    const { setLogout, userDetails } = useAuth()
+    const { setStudentLogout, studentDetails } = useAuth()
     const [month, setMonth] = useState('')
     const [year, setYear] = useState('')
     const [dateLabel, setDateLabel] = useState([])
@@ -52,7 +52,7 @@ function Report() {
     useEffect(() => {
         const renderReport = async () => {
             try {
-                const { response, error } = await report(month, year, appUrl)
+                const { response, error } = await report(month, year, studentAppUrl)
 
                 if (error) {
                     alert(error)
@@ -60,7 +60,7 @@ function Report() {
                 }
 
                 if (response.status === 401) {
-                    setLogout()
+                    setStudentLogout()
                     navigate('/student/login/')
                     return
                 }
@@ -148,7 +148,7 @@ function Report() {
                                         type="text" 
                                         className="form-control upperCase" 
                                         id="student" 
-                                        value={userDetails.name} 
+                                        value={studentDetails.name} 
                                         disabled />
                                 </div>
                             </div>

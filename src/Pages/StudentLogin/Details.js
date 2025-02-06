@@ -4,16 +4,16 @@ import Siderbar from "../Partials/Aside"
 import Footer from "../Partials/Footer"
 import { useAuth } from "./AuthContext"
 import Breadcrumbs from '../Partials/BreadCrumb'
-import { appUrl } from '../../config/index'
+import { studentAppUrl } from '../../config/index'
 import { updateImage, deleteImage } from './Api'
 import { useNavigate } from 'react-router-dom'
 
 function Details() {
     const [details, setDetails] = useState(null)
     const fileInputRef = useRef(null)
-    const [imageUrl, setImageUrl] = useState(`${appUrl}/api/student/image?date=${Date.now()}`)
+    const [imageUrl, setImageUrl] = useState(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
     const [isUploading, setIsUploading] = useState(false)
-    const { userDetails, setLogout } = useAuth()
+    const { studentDetails, setStudentLogout } = useAuth()
     const { navigate } = useNavigate()
     const breadcrumbData = [
         { name: 'Pages', link: '' },
@@ -36,8 +36,8 @@ function Details() {
     ]
     
     useEffect(() => {
-        setDetails(userDetails)
-    }, [userDetails])
+        setDetails(studentDetails)
+    }, [studentDetails])
     
     useEffect(() => {
         if (!isUploading) return
@@ -67,13 +67,13 @@ function Details() {
             }
 
             if (response.status === 401) {
-                setLogout()
+                setStudentLogout()
                 navigate('/student/login/')
                 return
             }
 
             if(response.ok) {
-                setImageUrl(`${appUrl}/api/student/image?date=${Date.now()}`)
+                setImageUrl(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
                 alert("Image updated successfully!")
             } else if (response.status === 400) {
                 alert(await response.text())
@@ -95,13 +95,13 @@ function Details() {
             }
 
             if (response.status === 401) {
-                setLogout()
+                setStudentLogout()
                 navigate('/student/login/')
                 return
             }
 
             if (response.ok) {
-                setImageUrl(`${appUrl}/api/student/image?date=${Date.now()}`)
+                setImageUrl(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
             } else {
                 alert('Not deleted')
             }
@@ -135,7 +135,7 @@ function Details() {
                                 alt="Profile"
                                 className="rounded-circle"
                             />
-                            <h2 className="upperCase">{userDetails.name}</h2>
+                            <h2 className="upperCase">{studentDetails.name}</h2>
                             <h3>Student</h3>
                             <div className="social-links mt-2">
                                 <a 
