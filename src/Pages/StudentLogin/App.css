@@ -1,0 +1,32 @@
+.smallBox {
+  width: 10px;
+  height: 6px;
+}
+
+.alignCal {
+  padding-left: 20%;
+}
+
+.textWhite {
+  color: white;
+}
+
+.spinner {
+  position: absolute; 
+  top: 42%;
+  left: 44%;
+  width: 20px;
+  height: 20px;
+}
+    
+.upperCase {
+  text-transform: capitalize;
+}
+
+.containerCalendar {
+    width: 440px;
+}
+
+.none {
+  display: none;
+}

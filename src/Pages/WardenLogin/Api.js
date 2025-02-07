@@ -28,3 +28,25 @@ export async function Authentication(email, password) {
         }
     } 
 }
+
+export async function readBlockCount() {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/block/blockcount/block`, requestOptions)
+        console.log(response)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}

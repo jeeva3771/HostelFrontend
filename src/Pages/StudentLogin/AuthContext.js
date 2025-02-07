@@ -40,4 +40,4 @@ export const AuthProvider2 = ({children}) => {
     )
 }
 
-export const useAuth = () => useContext(AuthContext)
+export const useStudentAuth = () => useContext(AuthContext)

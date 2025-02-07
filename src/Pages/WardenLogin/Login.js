@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom"
-import { useAuth } from "./AuthContext"
+import { Link, useNavigate } from "react-router-dom"
+import { useWardenAuth } from "./AuthContext"
 import { Authentication } from "./Api"
+
 
 const { useState } = require("react")
 
@@ -8,9 +9,19 @@ function WardenLogin() {
     const [email, setEmail] = useState('prem123@gmail.com')
     const [password, setPassword] = useState('123123')
     const [isLoading, setIsLoading] = useState(false)
-    const { setWardenDetails } = useAuth()
+    const { setWardenDetails } = useWardenAuth()
+    const navigate = useNavigate()
+    const isFormValid = email.trim().length > 0 && password.trim().length > 0
 
-    async function loginUser() {
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value)
+    }
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value)
+    }
+
+    const loginUser = async () => {
         setIsLoading(true)
         try {
             const { response, error } = await Authentication(email, password)
@@ -21,10 +32,11 @@ function WardenLogin() {
             }
 
             if (response.status === 200) {
-                setIsLoading(true)
+                setWardenDetails(await response.json())
+                navigate('/home/')
             } else {
                 alert(await response.text())
-                setIsLoading(true)
+                setIsLoading(false)
             }
         } catch (error) {
             alert('Something went wrong.Please try later')
@@ -69,7 +81,7 @@ function WardenLogin() {
                                             value={email} 
                                             placeholder="Enter email"
                                             required 
-                                            onChange={(e)=>setEmail(e.target.value)}
+                                            onChange={handleEmailChange}
                                         />
                                         <div className="invalid-feedback">Please enter your email.</div>
                                     </div>
@@ -89,7 +101,7 @@ function WardenLogin() {
                                         placeholder="Enter password" 
                                         value={password} 
                                         required 
-                                        onChange={(e)=>setPassword(e.target.value)}
+                                        onChange={handlePasswordChange}
                                     />
                                     <div className="invalid-feedback">Please enter your password!</div>
                                 </div>
@@ -119,8 +131,9 @@ function WardenLogin() {
                                     className="btn btn-primary w-100" 
                                     type="submit"
                                     onClick={loginUser}
-                                    disabled={!email || !password|| isLoading} 
-                                >Login
+                                    disabled={!isFormValid || isLoading} 
+                                >
+                                    {isLoading ? "Logging in..." : "Login"}
                                 </button>
                             </div>
                             <Link 

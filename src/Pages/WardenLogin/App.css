@@ -1,0 +1,96 @@
+.focus:hover {
+  fill: #007bff;
+  cursor: pointer;
+}
+
+.focus:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.focus:focus {
+  fill: #007bff;
+  transform: scale(1.1);
+}
+
+.sortIcon {
+  color: #ccc;
+}
+
+.dark {
+  color: #333;
+}
+
+.datatable-top,
+.datatable-bottom {
+  padding: 8px 0px;
+}
+
+.imageSizing {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.removeImage {
+  font-size: 12px;
+  padding: 2px 4px;
+  line-height: 1;
+}
+
+.hidden {
+  display: none;
+}
+
+.smallBox {
+  width: 10px;
+  height: 6px;
+}
+
+.clr1 {
+  background-color: green;
+}
+
+.clr2 {
+  background-color: red;
+}
+
+.clr3 {
+  background-color: orange;
+}
+
+.clr4 {
+  background-color: #adb5bd;
+}
+
+.spinner1 {
+  width: 10px;
+  height: 10px;
+}
+
+.spinner2 {
+  position: absolute;
+  top: 42%;
+  left: 44%;
+  display: none;
+  width: 20px;
+  height: 20px;
+}
+
+.alignCal {
+  padding-left: 26%;
+}
+
+.position-absolute {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+td {
+  text-transform: capitalize;
+}

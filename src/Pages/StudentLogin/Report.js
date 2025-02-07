@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import Siderbar from '../Partials/Aside'
-import Footer from '../Partials/Footer'
-import Header from '../Partials/Header'
+import Siderbar from '../StudentPartials/Aside'
+import Footer from '../StudentPartials/Footer'
+import Header from '../StudentPartials/Header'
 import * as XLSX from 'xlsx'
-import Breadcrumbs from '../Partials/BreadCrumb'
-import { useAuth } from "./AuthContext"
+import Breadcrumbs from '../StudentPartials/BreadCrumb'
+import { useStudentAuth } from "./AuthContext"
 import { studentAppUrl } from '../../config/index'
 import { useNavigate } from 'react-router-dom'
 import { report } from './Api'
 
 function Report() {
-    const { setStudentLogout, studentDetails } = useAuth()
+    const { setStudentLogout, studentDetails } = useStudentAuth()
     const [month, setMonth] = useState('')
     const [year, setYear] = useState('')
     const [dateLabel, setDateLabel] = useState([])

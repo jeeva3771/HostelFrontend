@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from './AuthContext'
+import { useStudentAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { studentAppUrl } from '../../config/index'
 import { generateOtp, verifyOtpAndLogin } from './Api'
@@ -10,7 +10,7 @@ function StudentLogin() {
     const [isOtpGenerated, setIsOtpGenerated] = useState(false)
     const [isEmailButtonEnabled, setIsEmailButtonEnabled] = useState(false)
     const [isOtpButtonEnabled, setIsOtpButtonEnabled] = useState(false)
-    const { setStudentLogged, setStudentLogout } = useAuth()
+    const { setStudentLogged, setStudentLogout } = useStudentAuth()
     const navigate = useNavigate()
     
     // useEffect(() => {

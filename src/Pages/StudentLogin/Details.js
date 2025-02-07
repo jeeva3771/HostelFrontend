@@ -1,19 +1,20 @@
 import { useEffect, useState, useRef } from "react"
-import Header from "../Partials/Header"
-import Siderbar from "../Partials/Aside"
-import Footer from "../Partials/Footer"
-import { useAuth } from "./AuthContext"
-import Breadcrumbs from '../Partials/BreadCrumb'
+import Header from "../StudentPartials/Header"
+import Siderbar from "../StudentPartials/Aside"
+import Footer from "../StudentPartials/Footer"
+import { useStudentAuth } from "./AuthContext"
+import Breadcrumbs from '../StudentPartials/BreadCrumb'
 import { studentAppUrl } from '../../config/index'
 import { updateImage, deleteImage } from './Api'
 import { useNavigate } from 'react-router-dom'
+import './App.css'
 
 function Details() {
     const [details, setDetails] = useState(null)
     const fileInputRef = useRef(null)
     const [imageUrl, setImageUrl] = useState(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
     const [isUploading, setIsUploading] = useState(false)
-    const { studentDetails, setStudentLogout } = useAuth()
+    const { studentDetails, setStudentLogout } = useStudentAuth()
     const { navigate } = useNavigate()
     const breadcrumbData = [
         { name: 'Pages', link: '' },
@@ -110,7 +111,6 @@ function Details() {
         }
     }
 
-    
     return (
         <>
         <Header />

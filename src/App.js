@@ -4,12 +4,13 @@ import StudentLogin from './Pages/StudentLogin/Login'
 import WardenLogin from './Pages/WardenLogin/Login'
 import Report from './Pages/StudentLogin/Report'
 import Details from './Pages/StudentLogin/Details'
-import { useAuth, AuthProvider1 } from './Pages/WardenLogin/AuthContext'
-import { AuthProvider2 } from './Pages/StudentLogin/AuthContext'
+import { useWardenAuth, AuthProvider1 } from './Pages/WardenLogin/AuthContext'
+import { useStudentAuth,  AuthProvider2 } from './Pages/StudentLogin/AuthContext'
+import Home from './Pages/WardenLogin/Home'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
-    const { isWardenLogged } = useAuth()
+    const { isWardenLogged } = useWardenAuth()
 
     if (isWardenLogged) {
       return <Navigate to="/home/" />
@@ -18,8 +19,7 @@ function App() {
   }
   
   const RedirectIfLoggedInStudent = ({ children }) => {
-    const { isStudentLogged } = useAuth()
-
+    const { isStudentLogged } = useStudentAuth ()
     if (isStudentLogged) {
       return <Navigate to="/student/report/" />
     }
@@ -34,9 +34,9 @@ function App() {
             <Route 
               path="/" 
               element={
-                <RedirectIfLoggedInStudent>
+                <RedirectIfLoggedInWarden>
                   <WardenLogin />
-                </RedirectIfLoggedInStudent>
+                </RedirectIfLoggedInWarden>
               } 
             />
 
@@ -45,6 +45,15 @@ function App() {
               element={
                 <RedirectIfLoggedInWarden>
                   <WardenLogin />
+                </RedirectIfLoggedInWarden>
+              }
+            />
+
+            <Route
+              path="/home/"
+              element={
+                <RedirectIfLoggedInWarden>
+                  <Home />
                 </RedirectIfLoggedInWarden>
               }
             />

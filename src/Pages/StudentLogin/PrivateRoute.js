@@ -1,9 +1,8 @@
 import { Navigate } from "react-router-dom"
-import { useAuth } from "./AuthContext"
+import { useStudentAuth } from "./AuthContext"
 
 export const StudentPrivateRoute = ({ children }) => {
-    const { isStudentLogged } = useAuth()
-
+    const { isStudentLogged } = useStudentAuth()
     return isStudentLogged ? children : <Navigate to="/student/login/" />
 }
 
