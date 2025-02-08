@@ -13,7 +13,8 @@ export async function Authentication(email, password) {
         const requestOptions = {
             method: "POST",
             headers,
-            body: raw
+            body: raw,
+            credentials: 'include'
         }
 
         const response = await fetch(`${wardenAppUrl}/api/login/`, requestOptions)
@@ -34,11 +35,34 @@ export async function readBlockCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
-            headers: myHeaders
+            headers: myHeaders,
+            credentials: 'include'
         }
 
         const response = await fetch(`${wardenAppUrl}/api/block/blockcount/block`, requestOptions)
-        console.log(response)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+
+export async function readBlockFloorCount() {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/blockfloor/blockfloorcount/floor`, requestOptions)
         return {
             response,
             error: null,

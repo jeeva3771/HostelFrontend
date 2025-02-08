@@ -3,12 +3,16 @@ import Siderbar from "../WardenPartials/Aside"
 import Header from "../WardenPartials/Header"
 import Breadcrumbs from "../WardenPartials/BreadCrumb"
 import './App.css'
-import { readBlockCount } from "./Api"
+import { readBlockCount, readBlockFloorCount } from "./Api"
 import { useEffect, useState } from "react"
 
 function Home() {
-    const [blockCount, setBlockCount] = useState('')
-
+    const [state, setState] = useState({
+        blockCount: '',
+        isBlockLoad: false,
+        floorCount: '',
+        isFloorLoad: false
+    })
 
     const breadcrumbData = [
         { name: 'Home', link: '' },
@@ -17,27 +21,54 @@ function Home() {
 
     useEffect(()=>{
         handleBlockCount()
+        handleBlockFloorCount()
     }, [])
 
     const handleBlockCount = async () => {
         try {
+            setState(prev => ({ ...prev, isBlockLoad: true }))            
             const { response, error } = await readBlockCount()
 
             if (error) {
-                alert('error1')
                 alert(error)
                 return
             }
 
             if(response.ok) {
-                const response = await response.json()
-                setBlockCount(response)
-            } else if (response.status === 400) {
+                const block = await response.json()
+                setState(prev => ({ ...prev, blockCount: block.totalBlockCount }))
+            } else if (response.status === 404) {
                 alert(await response.text())
             } 
 
         } catch (error) {
             alert('Something went wrong.Please try later')
+        } finally {
+            setState(prev => ({ ...prev, isBlockLoad: false }));
+        }
+    }
+
+    const handleBlockFloorCount = async () => {
+        try {
+            setFloorLoad(true)
+            const { response, error } = await readBlockFloorCount()
+
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if(response.ok) {
+                const blockFloor = await response.json()
+                setfloorCount(blockFloor.totalFloorCount)
+            } else if (response.status === 404) {
+                alert(await response.text())
+            } 
+
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        } finally {
+            setFloorLoad(false)
         }
     }
 
@@ -95,7 +126,13 @@ function Home() {
                                         <div className="ps-3">
                                             <h6>Block</h6>
                                             <span className="text-success small pt-1 fw-bold">
-                                                <span className="spinner-border text-secondary spinner1">{blockCount}</span>
+                                            <span className="text-success small pt-1 fw-bold">
+                                                {isblockLoad ? (
+                                                    <span className="spinner-border text-secondary spinner1"></span>
+                                                ) : (
+                                                    blockCount
+                                                )}
+                                            </span>
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Block(s)</span>
                                         </div>
@@ -145,7 +182,11 @@ function Home() {
                                         <div className="ps-3">
                                             <h6>Block Floor</h6>
                                             <span className="text-success small pt-1 fw-bold">
-                                                <span className="spinner-border text-secondary spinner1"></span>
+                                                {isFloorLoad ? (
+                                                    <span className="spinner-border text-secondary spinner1"></span>
+                                                ) : (
+                                                    floorCount
+                                                )}
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Block Floor(s)</span>
                                         </div>
