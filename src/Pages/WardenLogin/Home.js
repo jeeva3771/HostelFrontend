@@ -3,15 +3,33 @@ import Siderbar from "../WardenPartials/Aside"
 import Header from "../WardenPartials/Header"
 import Breadcrumbs from "../WardenPartials/BreadCrumb"
 import './App.css'
-import { readBlockCount, readBlockFloorCount } from "./Api"
-import { useEffect, useState } from "react"
+import { 
+        readBlockCount,
+        readBlockFloorCount,
+        readRoomCount,
+        readStudentCount,
+        readWardenCount,
+        readCourseCount
+} from "./Api"
+import { 
+    useEffect,
+    useState 
+} from "react"
 
 function Home() {
     const [state, setState] = useState({
         blockCount: '',
         isBlockLoad: false,
         floorCount: '',
-        isFloorLoad: false
+        isFloorLoad: false,
+        roomCount: '',
+        isRoomLoad: false,
+        studentCount: '',
+        isStudentLoad: false,
+        wardenCount: '',
+        isWardenLoad: false,
+        courseCount: '',
+        isCourseLoad: false
     })
 
     const breadcrumbData = [
@@ -19,10 +37,20 @@ function Home() {
         { name: 'Dashboard', link: '' }
     ]
 
-    useEffect(()=>{
-        handleBlockCount()
-        handleBlockFloorCount()
+    useEffect(() => {
+        fetchCounts();
     }, [])
+
+    const fetchCounts = async () => {
+        await Promise.all([
+            handleBlockCount(), 
+            handleBlockFloorCount(),  
+            handleRoomCount(),
+            handleStudentCount(),
+            handleWardenCount(),
+            handleCourseCount()
+        ])
+    }
 
     const handleBlockCount = async () => {
         try {
@@ -50,7 +78,7 @@ function Home() {
 
     const handleBlockFloorCount = async () => {
         try {
-            setFloorLoad(true)
+            setState(prev => ({ ...prev, isFloorLoad: true }))
             const { response, error } = await readBlockFloorCount()
 
             if (error) {
@@ -60,7 +88,7 @@ function Home() {
             
             if(response.ok) {
                 const blockFloor = await response.json()
-                setfloorCount(blockFloor.totalFloorCount)
+                setState( prev => ({ ...prev, floorCount: blockFloor.totalFloorCount}))
             } else if (response.status === 404) {
                 alert(await response.text())
             } 
@@ -68,9 +96,105 @@ function Home() {
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
-            setFloorLoad(false)
+            setState(prev => ({ ...prev, isFloorLoad: false }))        
         }
     }
+
+    const handleRoomCount = async () => {
+        try {
+            setState(prev => ({ ...prev, isRoomLoad: true }))
+            const { response, error } = await readRoomCount()
+
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if(response.ok) {
+                const room = await response.json()
+                setState( prev => ({ ...prev, roomCount: room.totalRoomCount}))
+            } else if (response.status === 404) {
+                alert(await response.text())
+            } 
+
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        } finally {
+            setState(prev => ({ ...prev, isRoomLoad: false }))        
+        }
+    }
+
+    const handleStudentCount = async () => {
+        try {
+            setState(prev => ({ ...prev, isStudentLoad: true }))
+            const { response, error } = await readStudentCount()
+
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if(response.ok) {
+                const student = await response.json()
+                setState( prev => ({ ...prev, studentCount: student.totalStudentCount}))
+            } else if (response.status === 404) {
+                alert(await response.text())
+            } 
+
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        } finally {
+            setState(prev => ({ ...prev, isStudentLoad: false }))        
+        }
+    }
+
+    const handleWardenCount = async () => {
+        try {
+            setState(prev => ({ ...prev, isWardenLoad: true }))
+            const { response, error } = await readWardenCount()
+
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if(response.ok) {
+                const warden = await response.json()
+                setState( prev => ({ ...prev, wardenCount: warden.totalWardenCount}))
+            } else if (response.status === 404) {
+                alert(await response.text())
+            } 
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        } finally {
+            setState(prev => ({ ...prev, isWardenLoad: false }))        
+        }
+    }
+
+    const handleCourseCount = async () => {
+        try {
+            setState(prev => ({ ...prev, isCourseLoad: true }))
+            const { response, error } = await readCourseCount()
+
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if(response.ok) {
+                const course = await response.json()
+                setState( prev => ({ ...prev, courseCount: course.totalCourseCount}))
+            } else if (response.status === 404) {
+                alert(await response.text())
+            } 
+
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        } finally {
+            setState(prev => ({ ...prev, isCourseLoad: false }))        
+        }
+    }
+
 
     return (
         <>
@@ -127,10 +251,10 @@ function Home() {
                                             <h6>Block</h6>
                                             <span className="text-success small pt-1 fw-bold">
                                             <span className="text-success small pt-1 fw-bold">
-                                                {isblockLoad ? (
+                                                {state.isBlockLoad ? (
                                                     <span className="spinner-border text-secondary spinner1"></span>
                                                 ) : (
-                                                    blockCount
+                                                    state.blockCount
                                                 )}
                                             </span>
                                             </span> 
@@ -182,10 +306,10 @@ function Home() {
                                         <div className="ps-3">
                                             <h6>Block Floor</h6>
                                             <span className="text-success small pt-1 fw-bold">
-                                                {isFloorLoad ? (
+                                                {state.isFloorLoad ? (
                                                     <span className="spinner-border text-secondary spinner1"></span>
                                                 ) : (
-                                                    floorCount
+                                                    state.floorCount
                                                 )}
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Block Floor(s)</span>
@@ -217,7 +341,11 @@ function Home() {
                                         <div className="ps-3">
                                             <h6>Room</h6>
                                             <span className="text-success small pt-1 fw-bold">
-                                                <span className="spinner-border text-secondary spinner1"></span>
+                                                {state.isRoomLoad ? (
+                                                    <span className="spinner-border text-secondary spinner1"></span>
+                                                ) : (
+                                                    state.roomCount
+                                                )}
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Room(s)</span>
                                         </div>
@@ -265,7 +393,11 @@ function Home() {
                                         <div className="ps-3">
                                             <h6>Student</h6>
                                             <span className="text-success small pt-1 fw-bold">
-                                                <span className="spinner-border text-secondary spinner1"></span>
+                                                {state.isStudentLoad ? (
+                                                    <span className="spinner-border text-secondary spinner1"></span>
+                                                ) : (
+                                                    state.studentCount
+                                                )}
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Student(s)</span>
                                         </div>
@@ -313,8 +445,12 @@ function Home() {
                                         </div>
                                         <div className="ps-3">
                                             <h6>Warden</h6>
-                                            <span className="text-success small pt-1 fw-bold" id="warden">
-                                                <span className="spinner-border text-secondary spinner1"></span>
+                                            <span className="text-success small pt-1 fw-bold">
+                                                {state.isWardenLoad ? (
+                                                    <span className="spinner-border text-secondary spinner1"></span>
+                                                ) : (
+                                                    state.wardenCount
+                                                )}
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Warden(s)</span>
                                         </div>
@@ -364,7 +500,11 @@ function Home() {
                                         <div className="ps-3">
                                             <h6>Course</h6>
                                             <span className="text-success small pt-1 fw-bold">
-                                                <span className="spinner-border text-secondary spinner1"></span>
+                                                {state.isCourseLoad ? (
+                                                    <span className="spinner-border text-secondary spinner1"></span>
+                                                ) : (
+                                                    state.courseCount
+                                                )}
                                             </span> 
                                             <span className="text-muted small pt-2 ps-1">Course(s)</span>
                                         </div>

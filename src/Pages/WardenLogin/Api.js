@@ -39,7 +39,7 @@ export async function readBlockCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/block/blockcount/block`, requestOptions)
+        const response = await fetch(`${wardenAppUrl}/api/block/blockcount/block/`, requestOptions)
         return {
             response,
             error: null,
@@ -62,7 +62,95 @@ export async function readBlockFloorCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/blockfloor/blockfloorcount/floor`, requestOptions)
+        const response = await fetch(`${wardenAppUrl}/api/blockfloor/blockfloorcount/floor/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readRoomCount() {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/room/roomcount/room/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readStudentCount() {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/student/studentcount/student/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readWardenCount() {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/wardencount/warden/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readCourseCount() {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/course/coursecount/course/`, requestOptions)
         return {
             response,
             error: null,

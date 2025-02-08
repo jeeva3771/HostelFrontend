@@ -7,6 +7,7 @@ import Details from './Pages/StudentLogin/Details'
 import { useWardenAuth, AuthProvider1 } from './Pages/WardenLogin/AuthContext'
 import { useStudentAuth,  AuthProvider2 } from './Pages/StudentLogin/AuthContext'
 import Home from './Pages/WardenLogin/Home'
+import BlockList from './Pages/WardenLogin/Block/BlockList'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -54,6 +55,15 @@ function App() {
               element={
                 <RedirectIfLoggedInWarden>
                   <Home />
+                </RedirectIfLoggedInWarden>
+              }
+            />
+
+            <Route
+              path="/block/"
+              element={
+                <RedirectIfLoggedInWarden>
+                  <BlockList />
                 </RedirectIfLoggedInWarden>
               }
             />
