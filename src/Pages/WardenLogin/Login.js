@@ -3,7 +3,7 @@ import { useWardenAuth } from "./AuthContext"
 import { Authentication } from "./Api"
 
 
-const { useState } = require("react")
+const { useState, useEffect } = require("react")
 
 function WardenLogin() {
     const [email, setEmail] = useState('prem123@gmail.com')
@@ -20,6 +20,10 @@ function WardenLogin() {
     const handlePasswordChange = (e) => {
         setPassword(e.target.value)
     }
+
+    useEffect(() => {
+        document.title = "Warden Login"
+    }, [])
 
     const loginUser = async () => {
         setIsLoading(true)

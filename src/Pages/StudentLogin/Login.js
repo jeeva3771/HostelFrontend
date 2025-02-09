@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useStudentAuth } from './AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { studentAppUrl } from '../../config/index'
@@ -13,9 +13,13 @@ function StudentLogin() {
     const { setStudentLogged, setStudentLogout } = useStudentAuth()
     const navigate = useNavigate()
     
-    // useEffect(() => {
-    //     setIsEmailButtonEnabled(email.length > 0)
-    // }, [email])
+    useEffect(() => {
+        setIsEmailButtonEnabled(email.length > 0)
+    }, [email])
+
+    useEffect(() => {
+        document.title = "Student Login"
+    }, [])
 
     const handleEmailChange = (e) => {
         const value = e.target.value

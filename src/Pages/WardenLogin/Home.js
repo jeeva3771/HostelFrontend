@@ -16,6 +16,7 @@ import {
     useState 
 } from "react"
 
+
 function Home() {
     const [state, setState] = useState({
         blockCount: '',
@@ -38,7 +39,11 @@ function Home() {
     ]
 
     useEffect(() => {
-        fetchCounts();
+        document.title = "Home"
+    }, [])
+
+    useEffect(() => {
+        fetchCounts()
     }, [])
 
     const fetchCounts = async () => {

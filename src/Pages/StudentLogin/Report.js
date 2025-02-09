@@ -30,6 +30,10 @@ function Report() {
     ]
 
     useEffect(() => {
+        document.title = "Report"
+    }, [])
+
+    useEffect(() => {
         const currentYear = new Date().getFullYear()
         const currentMonth = new Date().getMonth()
         setYear(currentYear)

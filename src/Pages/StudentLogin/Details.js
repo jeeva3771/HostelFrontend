@@ -35,6 +35,10 @@ function Details() {
         { label: "Room Number", key: "roomNumber" },
         { label: "Joined Date", key: "joinDate" },
     ]
+
+    useEffect(() => {
+        document.title = "Student Details"
+    }, [])
     
     useEffect(() => {
         setDetails(studentDetails)

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { wardenAppUrl } from "../../../config";
+import { useEffect, useState } from "react"
+import { wardenAppUrl } from "../../../config"
 
 const BlockList = () => {
     const [blocks, setBlocks] = useState([]);
@@ -9,19 +9,22 @@ const BlockList = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        document.title = "Block List"
+    }, [])
+
+    useEffect(() => {
         fetchBlocks();
     }, [pageNo, limit, searchText]);
 
     const fetchBlocks = async () => {
         setLoading(true);
         try {
-            alert(wardenAppUrl)
             let url = `${wardenAppUrl}/api/block/?limit=${limit}&page=${pageNo}&orderby=bk.createdAt&sort=DESC`;
             if (searchText) {
                 url += `&search=${searchText.trim()}`;
             }
 
-            const response = await fetch(url, {method: 'GET'});
+            const response = await fetch(url, {method: 'GET',credentials: 'include'});
             const data = await response.json();
             console.log(data)
             setBlocks(data.blocks || []);
