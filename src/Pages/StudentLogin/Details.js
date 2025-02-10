@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import Header from "../StudentPartials/Header"
-import Siderbar from "../StudentPartials/Aside"
+import Sidebar from "../StudentPartials/Aside"
 import Footer from "../StudentPartials/Footer"
 import { useStudentAuth } from "./AuthContext"
 import Breadcrumbs from '../StudentPartials/BreadCrumb'
@@ -118,7 +118,7 @@ function Details() {
     return (
         <>
         <Header />
-        <Siderbar activeMenu={'Student'} />
+        <Sidebar activeMenu={'Student'} />
         <main 
             className="main" 
             id="main"

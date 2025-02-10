@@ -162,3 +162,31 @@ export async function readCourseCount() {
         }
     } 
 }
+
+export async function readBlocks(limit, pageNo, sortColumn, sortOrder, searchText) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let url = `${wardenAppUrl}/api/block/?limit=${limit}&page=${pageNo}&orderby=bk.${sortColumn}&sort=${sortOrder}`
+        if (searchText) {
+            url += `&search=${searchText.trim()}`
+        }
+
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+

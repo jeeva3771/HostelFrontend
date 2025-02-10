@@ -6,7 +6,7 @@ const mainMenu = [
     { name: 'Student', url: '/student/details/', icon: 'bi bi-person' },
 ]
 
-const Siderbar = ({ activeMenu }) => {
+const Sidebar = ({ activeMenu }) => {
     return (
         <aside 
             id="sidebar" 
@@ -32,4 +32,4 @@ const Siderbar = ({ activeMenu }) => {
     )
 }
 
-export default Siderbar
+export default Sidebar

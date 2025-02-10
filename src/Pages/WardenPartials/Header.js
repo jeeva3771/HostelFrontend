@@ -1,9 +1,39 @@
+import { useState, useEffect } from "react"
+
 function Header() {
+    const [showBackToTop, setShowBackToTop] = useState(false)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowBackToTop(window.scrollY > 200)
+        }
+
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [])
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    const SidebarToggle = () => {
+        const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    
+        const toggleSidebar = () => {
+            setIsSidebarOpen(!isSidebarOpen)
+            document.body.classList.toggle("toggle-sidebar", !isSidebarOpen)
+        }
+    
+        return (
+            <i className="bi bi-list toggle-sidebar-btn" onClick={toggleSidebar}></i>
+        )
+    }
+    
     return (
     <>
         <header 
             id="header" 
-            class="header fixed-top d-flex align-items-center"
+            class="header fixed-top d-flex align-items-center"  
         >
 
         <div class="d-flex align-items-center justify-content-between">
@@ -17,7 +47,7 @@ function Header() {
                 />
                 <span class="d-none d-lg-block">Hostel</span>
             </a>
-            <i class="bi bi-list toggle-sidebar-btn"></i>
+            <SidebarToggle />
         </div>
 
         <div class="search-bar">
@@ -273,12 +303,14 @@ function Header() {
             </ul>
         </nav>
         </header>
-        <a 
-            href="#" 
-            class="back-to-top d-flex align-items-center justify-content-center"
-        >
-            <i class="bi bi-arrow-up-short"></i>
-        </a>
+        {showBackToTop && (
+            <a 
+                className="back-to-top d-flex align-items-center justify-content-center active" 
+                onClick={scrollToTop}
+            >
+                <i className="bi bi-arrow-up-short"></i>
+            </a>
+        )}
     </>
 )
 }

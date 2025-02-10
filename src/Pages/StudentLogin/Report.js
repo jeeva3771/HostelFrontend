@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Siderbar from '../StudentPartials/Aside'
+import Sidebar from '../StudentPartials/Aside'
 import Footer from '../StudentPartials/Footer'
 import Header from '../StudentPartials/Header'
 import * as XLSX from 'xlsx'
@@ -127,7 +127,7 @@ function Report() {
     return (
         <>
         <Header />
-        <Siderbar activeMenu={'Attendance Report'} />
+        <Sidebar activeMenu={'Attendance Report'} />
         <main 
             className="main" 
             id="main"

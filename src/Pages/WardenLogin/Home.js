@@ -1,5 +1,5 @@
 import Footer from "../WardenPartials/Footer"
-import Siderbar from "../WardenPartials/Aside"
+import Sidebar from "../WardenPartials/Aside"
 import Header from "../WardenPartials/Header"
 import Breadcrumbs from "../WardenPartials/BreadCrumb"
 import './App.css'
@@ -204,7 +204,7 @@ function Home() {
     return (
         <>
         <Header />
-        <Siderbar activeMenu={'Dashboard'} />
+        <Sidebar activeMenu={'Dashboard'} />
         <main className="main" id="main">
             <div className="pagetitle">
                 <h1>Dashboard</h1>

@@ -30,65 +30,71 @@ const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState(null)
 
   const toggleMenu = (menuName) => {
-    setActiveMenu(activeMenu === menuName ? null : menuName)
+    setActiveMenu((prevMenu) => (prevMenu === menuName ? null : menuName))
   }
 
   return (
-    <aside 
-        id="sidebar" 
-        className="sidebar"
-    >
-      <ul 
-        className="sidebar-nav" 
-        id="sidebar-nav"
-      >
-        {mainMenu.map((item, index) => (
-          <li 
-            key={index} 
-            className="nav-item"
-        >
-            {item.children ? (
-              <>
-                <button
-                  className={`nav-link ${activeMenu === item.name ? "" : "collapsed"}`}
-                  onClick={() => toggleMenu(item.name)}
+    <aside id="sidebar" className="sidebar">
+      <ul className="sidebar-nav" id="sidebar-nav">
+        {mainMenu.map((item, index) => {
+          const isChildActive =
+            item.children &&
+            item.children.some((child) => location.pathname.startsWith(child.url))
+          const isOpen = activeMenu === item.name || isChildActive;
+
+          return (
+            <li key={index} className="nav-item">
+              {item.children ? (
+                <>
+                  <a
+                    className={`nav-link ${isOpen ? "" : "collapsed"}`}
+                    onClick={() => toggleMenu(item.name)}
+                    style={{ cursor: "pointer", transition: "0.3s ease" }}
+                  >
+                    <i className={item.icon}></i>
+                    <span>{item.name}</span>
+                    <i className="bi bi-chevron-down ms-auto"></i>
+                  </a>
+                  <ul
+                    className="nav-content"
+                    id={`${item.name.toLowerCase().replace(/\s+/g, "-")}-nav`}
+                    style={{
+                      maxHeight: isOpen ? "500px" : "0",
+                      overflow: "hidden",
+                      transition: "max-height 0.4s ease-in-out",
+                    }}
+                  >
+                    {item.children.map((child, childIndex) => (
+                      <li key={childIndex}>
+                        <Link
+                          to={child.url}
+                          className={`nav-link ${
+                            location.pathname.startsWith(child.url) ? "active" : ""
+                          }`}
+                          style={{ transition: "0.2s ease" }}
+                        >
+                          <i className="bi bi-circle"></i>
+                          <span>{child.name}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <Link
+                  to={item.url}
+                  className={`nav-link ${
+                    location.pathname.startsWith(item.url) ? "active" : "collapsed"
+                  }`}
+                  style={{ transition: "0.2s ease" }}
                 >
                   <i className={item.icon}></i>
                   <span>{item.name}</span>
-                  <i className="bi bi-chevron-down ms-auto"></i>
-                </button>
-                <ul
-                  className={`nav-content collapse ${activeMenu === item.name ? "show" : ""}`}
-                  id={`${item.name.toLowerCase().replace(/\s+/g, "-")}-nav`}
-                >
-                  {item.children.map((child, childIndex) => (
-                    <li key={childIndex}>
-                      <Link
-                        to={child.url}
-                        className={`nav-link ${
-                          location.pathname.includes(child.url) ? "active" : ""
-                        }`}
-                      >
-                        <i className="bi bi-circle"></i>
-                        <span>{child.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <Link
-                to={item.url}
-                className={`nav-link ${
-                  location.pathname.includes(item.url) ? "active" : "collapsed"
-                }`}
-              >
-                <i className={item.icon}></i>
-                <span>{item.name}</span>
-              </Link>
-            )}
-          </li>
-        ))}
+                </Link>
+              )}
+            </li>
+          )
+        })}
       </ul>
     </aside>
   )
