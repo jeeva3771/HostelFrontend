@@ -3,7 +3,7 @@ import Header from "../../WardenPartials/Header"
 import Sidebar from "../../WardenPartials/Aside"
 import Breadcrumbs from "../../WardenPartials/BreadCrumb"
 import Pagination from "../../../page"
-import { readBlocks } from "../Api"
+import { readBlocks, readBlockById, deleteBlockById } from "../Api"
 
 function BlockList() {
     const [blocks, setBlocks] = useState([])
@@ -14,6 +14,7 @@ function BlockList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
+    const [blockById, setBlockById] = useState("")
 
     const totalPages = Math.ceil(blockCount / limit)
 
@@ -22,14 +23,19 @@ function BlockList() {
         { name: 'Structure', link: '' },
         { name: 'Block', link: '/block/' }
     ]
-    const defaultColumn = ['blockCode', 'blockLocation', 'isActive', 'createdBy']
+    const defaultColumn = [
+        { key: 'blockCode', label: 'Block Code' },
+        { key: 'blockLocation', label: 'Location' },
+        { key: 'isActive', label: 'Status' },
+        { key: 'createdBy', label: 'Created By' }
+    ]
 
     useEffect(() => {
         document.title = "Block List"
-        fetchBlocks()
+        handleReadBlocks()
     }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
-    const fetchBlocks = async () => {
+    const handleReadBlocks = async () => {
         setLoading(true)
         try {
             const { response, error } = await readBlocks(limit, pageNo, sortColumn, sortOrder, searchText || '')
@@ -47,6 +53,51 @@ function BlockList() {
         }
     }
 
+    const handleReadBlockById = async (blockId) => {
+        try {
+            const { response, error } = await readBlockById(blockId)
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if (response.ok) {
+                alert('Successfully!')
+                setBlockById(await response.json())
+            } else {
+                alert(await response.text())
+            }
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        }
+    }
+
+
+    const handleDeleteById = async (blockId) => {
+        try {
+            var validateDelete = window.confirm('Are you sure you want to delete?')
+
+            if (!validateDelete)
+                return
+
+            const { response, error } = await deleteBlockById(blockId)
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if (response.ok) {
+                alert('Successfully deleted!')
+                handleReadBlocks()
+            } else {
+                alert(await response.text())
+            }
+            
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        }
+    }
+    
     const handleSort = (column) => {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
@@ -111,15 +162,15 @@ function BlockList() {
                                         <thead>
                                             <tr>
                                                 <th>Sno</th>
-                                                {defaultColumn.map(column => (
-                                                    <th key={column} onClick={() => handleSort(column)}>
-                                                        {column.replace(/([A-Z])/g, ' $1').trim()}
-                                                        {sortColumn === column ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
+                                                {defaultColumn.map(({ key, label }) => (
+                                                    <th key={key} onClick={() => handleSort(key)}>
+                                                        {label}
+                                                        {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
                                                     </th>
                                                 ))}
                                                 <th>Action</th>
                                             </tr>
-                                        </thead>
+                                        </thead>    
                                         <tbody>
                                             {loading ? (
                                                 <tr>
@@ -138,7 +189,41 @@ function BlockList() {
                                                         <td>{block.isActive === 1 ? 'Active' : 'Inactive'}</td>
                                                         <td>{block.createdFirstName} {block.createdLastName}</td>
                                                         <td>
-                                                            <button className="btn btn-info btn-sm">View</button>
+                                                            <svg 
+                                                                xmlns="http://www.w3.org/2000/svg" 
+                                                                width="20" 
+                                                                height="20" 
+                                                                fill="currentColor" 
+                                                                class="bi bi-info-circle mr-2 focus me-1" 
+                                                                viewBox="0 0 16 16" 
+                                                                onClick={()=> handleReadBlockById(block.blockId)}
+                                                            >
+                                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                            </svg>
+                                                            <svg 
+                                                                xmlns="http://www.w3.org/2000/svg" 
+                                                                width="20" 
+                                                                height="20" 
+                                                                fill="currentColor" 
+                                                                class="bi bi-pencil-square mr-2 focus me-1" 
+                                                                viewBox="0 0 16 16"
+                                                            >
+                                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                                            </svg>
+                                                            <svg 
+                                                                xmlns="http://www.w3.org/2000/svg" 
+                                                                width="20" 
+                                                                height="20" 
+                                                                fill="currentColor" 
+                                                                class="bi bi-trash focus" 
+                                                                onClick={()=> handleDeleteById(block.blockId)} 
+                                                                viewBox="0 0 16 16"
+                                                            >
+                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                            </svg>
                                                         </td>
                                                     </tr>
                                                 ))
@@ -146,7 +231,7 @@ function BlockList() {
                                                 <tr>
                                                     <td 
                                                         colSpan="7" 
-                                                        className="text-center text-lowercase small"
+                                                        className="text-center small"
                                                     >No results found.
                                                     </td>
                                                 </tr>

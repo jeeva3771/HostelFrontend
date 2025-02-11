@@ -4,15 +4,14 @@ import StudentLogin from './Pages/StudentLogin/Login'
 import WardenLogin from './Pages/WardenLogin/Login'
 import Report from './Pages/StudentLogin/Report'
 import Details from './Pages/StudentLogin/Details'
-import { useWardenAuth, AuthProvider1 } from './Pages/WardenLogin/AuthContext'
-import { useStudentAuth,  AuthProvider2 } from './Pages/StudentLogin/AuthContext'
+import { AuthProvider, useAuth } from './Pages/AuthContext'
 import Home from './Pages/WardenLogin/Home'
 import BlockList from './Pages/WardenLogin/Block/BlockList'
+import { WardenPrivateRoute } from './Pages/WardenLogin/PrivateRoute'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
-    const { isWardenLogged } = useWardenAuth()
-
+    const { isWardenLogged } = useAuth()
     if (isWardenLogged) {
       return <Navigate to="/home/" />
     }
@@ -20,7 +19,7 @@ function App() {
   }
   
   const RedirectIfLoggedInStudent = ({ children }) => {
-    const { isStudentLogged } = useStudentAuth ()
+    const { isStudentLogged } = useAuth ()
     if (isStudentLogged) {
       return <Navigate to="/student/report/" />
     }
@@ -28,8 +27,7 @@ function App() {
   }
 
   return (
-    <AuthProvider1>
-    <AuthProvider2>
+    <AuthProvider>
       <BrowserRouter>
           <Routes>
             <Route 
@@ -53,18 +51,18 @@ function App() {
             <Route
               path="/home/"
               element={
-                <RedirectIfLoggedInWarden>
+                <WardenPrivateRoute>
                   <Home />
-                </RedirectIfLoggedInWarden>
+                </WardenPrivateRoute>
               }
             />
 
             <Route
               path="/block/"
               element={
-                <RedirectIfLoggedInWarden>
+                <WardenPrivateRoute>
                   <BlockList />
-                </RedirectIfLoggedInWarden>
+                </WardenPrivateRoute>
               }
             />
 
@@ -92,12 +90,10 @@ function App() {
                 </StudentPrivateRoute>
               }
             >
-              
             </Route>
           </Routes>
       </BrowserRouter>
-    </AuthProvider2>
-    </AuthProvider1>
+    </AuthProvider>
   )
 }
 

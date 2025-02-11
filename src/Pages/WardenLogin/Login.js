@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useWardenAuth } from "./AuthContext"
 import { Authentication } from "./Api"
-
+import { useAuth } from "../AuthContext"
 
 const { useState, useEffect } = require("react")
 
@@ -9,7 +8,7 @@ function WardenLogin() {
     const [email, setEmail] = useState('prem123@gmail.com')
     const [password, setPassword] = useState('123123')
     const [isLoading, setIsLoading] = useState(false)
-    const { setWardenDetails } = useWardenAuth()
+    const { userLogged } = useAuth()
     const navigate = useNavigate()
     const isFormValid = email.trim().length > 0 && password.trim().length > 0
 
@@ -36,13 +35,14 @@ function WardenLogin() {
             }
 
             if (response.status === 200) {
-                setWardenDetails(await response.json())
+                userLogged(await response.json(), "warden")
                 navigate('/home/')
             } else {
                 alert(await response.text())
                 setIsLoading(false)
             }
         } catch (error) {
+            console.log(error)
             alert('Something went wrong.Please try later')
         }
     }
@@ -120,8 +120,8 @@ function WardenLogin() {
                                         value="true"
                                     />
                                     <label 
-                                        className="form-check-label me-2" 
-                                        for="rememberMe"
+                                        className="form-check-label me-2 me-5" 
+                                        for="rememberMe" 
                                     >Remember me
                                     </label>
                                     <small>

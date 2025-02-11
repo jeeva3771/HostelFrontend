@@ -4,13 +4,13 @@ import Footer from '../StudentPartials/Footer'
 import Header from '../StudentPartials/Header'
 import * as XLSX from 'xlsx'
 import Breadcrumbs from '../StudentPartials/BreadCrumb'
-import { useStudentAuth } from "./AuthContext"
+import { useAuth } from "../AuthContext"
 import { studentAppUrl } from '../../config/index'
 import { useNavigate } from 'react-router-dom'
 import { report } from './Api'
 
 function Report() {
-    const { setStudentLogout, studentDetails } = useStudentAuth()
+    const { userLogout, studentDetails } = useAuth()
     const [month, setMonth] = useState('')
     const [year, setYear] = useState('')
     const [dateLabel, setDateLabel] = useState([])
@@ -64,7 +64,7 @@ function Report() {
                 }
 
                 if (response.status === 401) {
-                    setStudentLogout()
+                    userLogout()
                     navigate('/student/login/')
                     return
                 }

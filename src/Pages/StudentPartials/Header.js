@@ -1,10 +1,10 @@
-import { useStudentAuth } from "../StudentLogin/AuthContext"
+import { useAuth } from "../AuthContext"
 import { Link, useNavigate } from "react-router-dom"
 import { studentAppUrl } from '../../config/index'
 import { logout } from '../StudentLogin/Api'
 
 function Header() {
-    const { setStudentLogout, studentDetails } = useStudentAuth()  
+    const { userLogout, studentDetails } = useAuth()  
     const navigate = useNavigate()
 
     const logoutHandler = async () => {
@@ -17,11 +17,11 @@ function Header() {
 
         if (response && response.ok) {
           sessionStorage.clear()
-          setStudentLogout()
+          userLogout('student')
           navigate('/student/login/')
         }
       } catch (error) {
-        alert('Something went wrong.Please try later.')
+          alert('Something went wrong.Please try later.')
       }
     }
     

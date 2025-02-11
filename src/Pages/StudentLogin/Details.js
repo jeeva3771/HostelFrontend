@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import Header from "../StudentPartials/Header"
 import Sidebar from "../StudentPartials/Aside"
 import Footer from "../StudentPartials/Footer"
-import { useStudentAuth } from "./AuthContext"
+import { useAuth } from "../AuthContext"
 import Breadcrumbs from '../StudentPartials/BreadCrumb'
 import { studentAppUrl } from '../../config/index'
 import { updateImage, deleteImage } from './Api'
@@ -14,7 +14,7 @@ function Details() {
     const fileInputRef = useRef(null)
     const [imageUrl, setImageUrl] = useState(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
     const [isUploading, setIsUploading] = useState(false)
-    const { studentDetails, setStudentLogout } = useStudentAuth()
+    const { studentDetails, userLogout } = useAuth()
     const { navigate } = useNavigate()
     const breadcrumbData = [
         { name: 'Pages', link: '' },
@@ -72,7 +72,7 @@ function Details() {
             }
 
             if (response.status === 401) {
-                setStudentLogout()
+                userLogout()
                 navigate('/student/login/')
                 return
             }
@@ -100,7 +100,7 @@ function Details() {
             }
 
             if (response.status === 401) {
-                setStudentLogout()
+                userLogout()
                 navigate('/student/login/')
                 return
             }

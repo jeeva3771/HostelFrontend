@@ -190,3 +190,46 @@ export async function readBlocks(limit, pageNo, sortColumn, sortOrder, searchTex
     } 
 }
 
+export async function readBlockById(blockId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/block/${blockId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+export async function deleteBlockById(blockId) {
+    try {
+        var requestOptions = {
+            method: 'DELETE',
+            credentials: 'include'
+        }
+        
+        const response = await fetch(`${wardenAppUrl}/api/block/${blockId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+

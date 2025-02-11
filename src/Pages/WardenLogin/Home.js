@@ -1,6 +1,6 @@
 import Footer from "../WardenPartials/Footer"
 import Sidebar from "../WardenPartials/Aside"
-import Header from "../WardenPartials/Header"
+import Header from "../Partials/Header"
 import Breadcrumbs from "../WardenPartials/BreadCrumb"
 import './App.css'
 import { 
@@ -199,7 +199,6 @@ function Home() {
             setState(prev => ({ ...prev, isCourseLoad: false }))        
         }
     }
-
 
     return (
         <>
@@ -717,7 +716,7 @@ function Home() {
                                                 <th scope="row">
                                                     <a href="#">
                                                         <img 
-                                                            src="iassets/img/product-1.jpg" 
+                                                            src="/assets/img/product-1.jpg" 
                                                             alt="" 
                                                         />
                                                     </a>
@@ -736,7 +735,7 @@ function Home() {
                                                 <th scope="row">
                                                     <a href="#">
                                                         <img 
-                                                            src="iassets/img/product-2.jpg" 
+                                                            src="/assets/img/product-2.jpg" 
                                                             alt="" 
                                                         />
                                                     </a>
@@ -756,7 +755,7 @@ function Home() {
                                                 <th scope="row">
                                                     <a href="#">
                                                         <img 
-                                                            src="iassets/img/product-3.jpg" 
+                                                            src="/assets/img/product-3.jpg" 
                                                             alt="" 
                                                         />
                                                     </a>
@@ -776,7 +775,7 @@ function Home() {
                                                 <th scope="row">
                                                     <a href="#">
                                                         <img 
-                                                            src="iassets/img/product-4.jpg" 
+                                                            src="/assets/img/product-4.jpg" 
                                                             alt=""
                                                         />
                                                     </a>
@@ -796,7 +795,7 @@ function Home() {
                                                 <th scope="row">
                                                     <a href="#">
                                                         <img 
-                                                            src="iassets/img/product-5.jpg" 
+                                                            src="/assets/img/product-5.jpg" 
                                                             alt=""
                                                         />
                                                     </a>
@@ -1052,7 +1051,7 @@ function Home() {
                             <div className="news">
                                 <div className="post-item clearfix">
                                     <img 
-                                        src="iassets/img/news-1.jpg" 
+                                        src="/assets/img/news-1.jpg" 
                                         alt="" 
                                     />
                                     <h4>
@@ -1063,7 +1062,7 @@ function Home() {
 
                                 <div className="post-item clearfix">
                                     <img 
-                                        src="iassets/img/news-2.jpg" 
+                                        src="/assets/img/news-2.jpg" 
                                         alt="" 
                                     />
                                     <h4>
@@ -1074,7 +1073,7 @@ function Home() {
 
                                 <div className="post-item clearfix">
                                     <img 
-                                        src="iassets/img/news-3.jpg" 
+                                        src="/assets/img/news-3.jpg" 
                                         alt="" 
                                     />
                                     <h4>
@@ -1085,7 +1084,7 @@ function Home() {
 
                                 <div className="post-item clearfix">
                                     <img 
-                                        src="iassets/img/news-4.jpg" 
+                                        src="/assets/img/news-4.jpg" 
                                         alt="" 
                                     />
                                     <h4>
@@ -1096,7 +1095,7 @@ function Home() {
 
                                 <div className="post-item clearfix">
                                     <img 
-                                        src="iassets/img/news-5.jpg" 
+                                        src="/assets/img/news-5.jpg" 
                                         alt="" 
                                     />
                                     <h4>
