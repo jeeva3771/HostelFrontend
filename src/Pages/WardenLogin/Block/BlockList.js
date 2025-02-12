@@ -1,11 +1,16 @@
-import { useEffect, useState } from "react"
-import Header from "../../WardenPartials/Header"
-import Sidebar from "../../WardenPartials/Aside"
-import Breadcrumbs from "../../WardenPartials/BreadCrumb"
+import { useEffect, useState, useRef } from "react"
+import Header from "../../Partials/Header"
+import Sidebar from "../../Partials/Aside"
+import Breadcrumbs from "../../Partials/BreadCrumb"
 import Pagination from "../../../page"
 import { readBlocks, readBlockById, deleteBlockById } from "../Api"
+import Footer from "../../Partials/Footer"
+import DetailsModal from "../Model/Model"
+import { useNavigate } from "react-router-dom"
+// import BlockForm from "./BlockForm"
 
-function BlockList() {
+
+function BlockList() {  
     const [blocks, setBlocks] = useState([])
     const [pageNo, setPageNo] = useState(1)
     const [blockCount, setBlockCount] = useState(0)
@@ -15,6 +20,8 @@ function BlockList() {
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
     const [blockById, setBlockById] = useState("")
+    const modalRef = useRef(null)
+    const navigate = useNavigate()
 
     const totalPages = Math.ceil(blockCount / limit)
 
@@ -62,8 +69,12 @@ function BlockList() {
             }
             
             if (response.ok) {
-                alert('Successfully!')
                 setBlockById(await response.json())
+                setTimeout(() => {
+                    if (modalRef.current) {
+                        modalRef.current.openModal(blockById, "block")
+                    }
+                }, 100);
             } else {
                 alert(await response.text())
             }
@@ -108,6 +119,10 @@ function BlockList() {
         if (newPage > 0 && newPage <= totalPages) {
             setPageNo(newPage)
         }
+    }
+
+    const handleEditBlock = (blockId) => {
+        navigate(`/block/edit/${blockId}`)
     }
 
     return (
@@ -186,7 +201,7 @@ function BlockList() {
                                                         <td>{(pageNo - 1) * limit + index + 1}</td>
                                                         <td>{block.blockCode}</td>
                                                         <td>{block.blockLocation}</td>
-                                                        <td>{block.isActive === 1 ? 'Active' : 'Inactive'}</td>
+                                                        <td>{block.isActive === 1 ? 'Active' : ''}</td>
                                                         <td>{block.createdFirstName} {block.createdLastName}</td>
                                                         <td>
                                                             <svg 
@@ -208,9 +223,13 @@ function BlockList() {
                                                                 fill="currentColor" 
                                                                 class="bi bi-pencil-square mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16"
+                                                                onClick={() => handleEditBlock(block.blockId)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                                                <path 
+                                                                    fill-rule="evenodd" 
+                                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                                                />
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
@@ -238,6 +257,7 @@ function BlockList() {
                                             )}
                                         </tbody>
                                     </table>
+                                    {blockById && <DetailsModal ref={modalRef} />}
                                     <Pagination 
                                         count={blockCount} 
                                         limit={limit} 
@@ -249,6 +269,7 @@ function BlockList() {
                         </div>
                 </section>
             </main>
+            <Footer />
         </>
     )
 }

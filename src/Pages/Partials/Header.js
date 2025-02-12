@@ -1,7 +1,81 @@
 import { useState, useEffect } from "react"
+import { useAuth } from "../AuthContext"
+import { Link, useNavigate } from "react-router-dom" 
+import { logout } from "../StudentLogin/Api"
+import { studentAppUrl, wardenAppUrl } from "../../config"
 
 function Header() {
     const [showBackToTop, setShowBackToTop] = useState(false)
+    const [details, setDetails] = useState({
+        image: '',
+        role: ''
+    })
+    const { userLogout } = useAuth() 
+    
+    useEffect(() => {
+        let auth = ''
+        let wardenId = ''
+        let parsedStudent = null
+        let parsedWarden = null
+        
+        try {
+            const studentData = localStorage.getItem("studentDetails")
+            if (studentData) {
+                parsedStudent = JSON.parse(studentData)
+                if (parsedStudent.role) {
+                    auth = parsedStudent.role
+                }
+            }
+
+            const wardenData = localStorage.getItem("wardenDetails")
+            if (wardenData) {
+                parsedWarden = JSON.parse(wardenData)
+                if (parsedWarden.role) {
+                    auth = parsedWarden.role
+                    wardenId = parsedWarden.wardenId
+                }
+            }
+        } catch (error) {
+            console.error("Error parsing local storage data:", error)
+        }
+
+        const imageUrl = auth === "warden"
+            ? `${wardenAppUrl}/api/warden/${wardenId}/avatar?date=${Date.now()}`
+            : `${studentAppUrl}/api/student/image?date=${Date.now()}`
+
+        setDetails({
+            image: imageUrl,
+            role: auth === "warden" ? "warden" : "student",
+            studentInfo: parsedStudent,
+            wardenInfo: parsedWarden
+        })
+    }, [])
+
+    const navigate = useNavigate()
+
+    const logoutHandler = async (role) => {
+        try {
+            const { response, error } = await logout(role)
+            if  (error) {
+                alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                sessionStorage.clear()
+                userLogout(role)
+                navigate(role === "warden" ? "/login/" : "/student/login/")
+            }
+
+            if (response && response.ok) {
+                sessionStorage.clear()
+                userLogout(role)
+                navigate(role === "warden" ? "/login/" : "/student/login/")
+            }
+        } catch (error) {
+            alert('Something went wrong.Please try later.')
+        }
+    }
 
     useEffect(() => {
         const handleScroll = () => {
@@ -247,17 +321,19 @@ function Header() {
                         data-bs-toggle="dropdown"
                     >
                         <img 
-                            src="" 
+                            src={details.image} 
                             alt="Profile" 
                             class="rounded-circle" 
                         />
-                        <span class="d-none d-md-block dropdown-toggle ps-2"></span>
+                        <span class="d-none d-md-block dropdown-toggle ps-2 upperCase">
+                            {details.role === "warden" ? `${details.wardenInfo.firstName}${details.wardenInfo?.lastName}` : details.studentInfo?.name }
+                        </span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6></h6>
-                            <span></span>
+                            <h6 className="upperCase">{details.role === "warden" ? `${details.wardenInfo.firstName}${details.wardenInfo?.lastName}`: details.studentInfo?.name}</h6>
+                            <span>{details.role === "warden" ? "Warden" : "Student"}</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider" />
@@ -290,13 +366,15 @@ function Header() {
                         </li>
 
                         <li>
-                            <a 
-                                class="dropdown-item d-flex align-items-center" 
-                                href="/api/logout/"
-                            >
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
+                        <Link 
+                            onClick={() => {
+                                logoutHandler(details.role === "warden" ? "warden" : "student")
+                            }}
+                            className="dropdown-item d-flex align-items-center"
+                        >
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Sign Out</span>
+                        </Link>
                         </li>
                     </ul>
                 </li>
@@ -312,7 +390,7 @@ function Header() {
             </a>
         )}
     </>
-)
+    )
 }
 
 export default Header

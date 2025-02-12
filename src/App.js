@@ -8,6 +8,8 @@ import { AuthProvider, useAuth } from './Pages/AuthContext'
 import Home from './Pages/WardenLogin/Home'
 import BlockList from './Pages/WardenLogin/Block/BlockList'
 import { WardenPrivateRoute } from './Pages/WardenLogin/PrivateRoute'
+import BlockForm from '../src/Pages/WardenLogin/Block/BlockForm'
+
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -19,7 +21,7 @@ function App() {
   }
   
   const RedirectIfLoggedInStudent = ({ children }) => {
-    const { isStudentLogged } = useAuth ()
+    const { isStudentLogged } = useAuth()
     if (isStudentLogged) {
       return <Navigate to="/student/report/" />
     }
@@ -64,6 +66,11 @@ function App() {
                   <BlockList />
                 </WardenPrivateRoute>
               }
+            />
+
+            <Route 
+              path="/block/edit/:blockId" 
+              element={<BlockForm />} 
             />
 
             <Route

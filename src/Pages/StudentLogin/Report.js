@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Sidebar from '../StudentPartials/Aside'
-import Footer from '../StudentPartials/Footer'
-import Header from '../StudentPartials/Header'
+import Sidebar from '../Partials/Aside'
+import Footer from '../Partials/Footer'
+import Header from '../Partials/Header'
 import * as XLSX from 'xlsx'
-import Breadcrumbs from '../StudentPartials/BreadCrumb'
+import Breadcrumbs from '../Partials/BreadCrumb'
 import { useAuth } from "../AuthContext"
 import { studentAppUrl } from '../../config/index'
 import { useNavigate } from 'react-router-dom'

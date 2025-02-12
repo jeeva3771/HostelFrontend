@@ -1,7 +1,7 @@
-import Footer from "../WardenPartials/Footer"
-import Sidebar from "../WardenPartials/Aside"
+import Footer from "../Partials/Footer"
+import Sidebar from "../Partials/Aside"
 import Header from "../Partials/Header"
-import Breadcrumbs from "../WardenPartials/BreadCrumb"
+import Breadcrumbs from "../Partials/BreadCrumb"
 import './App.css'
 import { 
         readBlockCount,
@@ -15,7 +15,6 @@ import {
     useEffect,
     useState 
 } from "react"
-
 
 function Home() {
     const [state, setState] = useState({
