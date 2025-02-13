@@ -29,7 +29,6 @@ const Sidebar = () => {
       console.error("Error parsing local storage data:", error)
     }
 
-    // Define Warden Menu
     const wardenMenu = [
       { name: "Dashboard", url: "/home/", icon: "bi bi-grid" },
       { name: "Attendance", url: "/attendance/", icon: "bi bi-card-checklist" },
@@ -64,7 +63,7 @@ const Sidebar = () => {
 
   const toggleMenu = (menuName) => {
     setActiveMenu((prevMenu) => (prevMenu === menuName ? null : menuName))
-  };
+  }
 
   return (
     <aside id="sidebar" className="sidebar">

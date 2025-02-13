@@ -4,48 +4,50 @@ import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
-import { readBlockById, editBlockById } from "../Api"
+import { readFloorById, editFloorById, readBlockCodes } from "../Api"
 
-function BlockForm() {
-    const [block, setBlock] = useState({
+function BlockFloorForm() {
+    const [blocks, setBlocks] = useState([])
+    const [floor, setFloor] = useState({
         blockCode: '',
-        location: '',
+        floorNumber: '',
         isActive: null
     })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const {blockId} = useParams()
+    const {floorId} = useParams()
     
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
         { name: 'Structure', link: '' },
-        { name: 'Block', link: '/block/' },
-        { name: blockId ? "Edit" : "Add", link: "" }
+        { name: 'Blockfloor', link: '/blockfloor/' },
+        { name: floorId ? "Edit" : "Add", link: "" }
     ]
 
     useEffect(() => {
-         document.title = blockId ? "Edit Block" : "Add Block"
+       document.title = floorId ? "Edit Blockfloor" : "Add Blockfloor"
+       handleBlockCodes()
     }, [])
 
     useEffect(() => {
-        if (!blockId) return
-        handleReadBlockById(blockId)
-    }, [blockId])
+        if (!floorId) return
+        handleReadFloorById(floorId)
+    }, [floorId])
 
-    const handleReadBlockById = async (blockId) => {
+    const handleReadFloorById = async (floorId) => {
         try {
-            const { response, error } = await readBlockById(blockId)
+            const { response, error } = await readFloorById(floorId)
             if (error) {
                 alert(error)
                 return
             }
             
             if (response.ok) {
-                const blocks = await response.json();
-                setBlock({
-                    blockCode: blocks.blockCode,
-                    location: blocks.blockLocation,
-                    isActive: blocks.isActive
+                const floors = await response.json()
+                setFloor({
+                    blockCode: floors.blockCode,
+                    floorNumber: floors.floorNumber,
+                    isActive: floors.isActive ? 1 : 0
                 })
             } else {
                 alert(await response.text())
@@ -55,23 +57,42 @@ function BlockForm() {
         }
     }
 
+    const handleBlockCodes = async () => {
+        try {
+            const { response, error } = await readBlockCodes()
+            if (error) {
+                alert(error)
+                return
+            }
+            
+            if (response.ok) {
+                const blockCode = await response.json()
+                setBlocks(blockCode)
+            } else {
+                alert(await response.text())
+            }
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        }
+    } 
+
     const handleSubmit = async () => {
         setLoading(true)
         const payload = {
-            blockCode: block.blockCode.trim(),
-            blockLocation: block.location,
-            isActive: block.isActive
+            blockId: floor.blockCode.trim(),
+            floorNumber: floor.floorNumber,
+            isActive: floor.isActive
         }
 
         try {
-            const { response, error } = await editBlockById(blockId, payload)
+            const { response, error } = await editFloorById(floorId, payload)
             if (error) {
                 alert(error)
                 return
             }
 
             if ([200, 201].includes(response.status)) {
-                navigate('/block/')
+                navigate('/blockfloor/')
             } else {
                 const responseData = await response.json()
                 alert(Array.isArray(responseData) ? responseData[0] : responseData.error || responseData)
@@ -81,7 +102,7 @@ function BlockForm() {
         } finally {
             setLoading(false)
         }
-    };
+    }
 
     return (
         <>
@@ -89,7 +110,7 @@ function BlockForm() {
         <Sidebar />
         <main id="main">
         <div className="pagetitle">
-            <h1>Block Form</h1>
+            <h1>Blockfloor Form</h1>
             <Breadcrumbs breadcrumb={breadcrumbData} />
         </div>
         <section className="section">
@@ -106,30 +127,36 @@ function BlockForm() {
                                         Block Code<span className="text-danger">*</span>
                                     </label>
                                     <div className="col-sm-10">
-                                        <input
-                                            type="text"
-                                            className="form-control"
+                                        <select
+                                            className="form-select"
                                             id="blockCode"
-                                            value={block.blockCode}
-                                            onChange={(e) => setBlock({ ...block, blockCode: e.target.value })}
-                                        />
+                                            value={floor.blockCode}
+                                            onChange={(e) => setFloor({ ...floor, blockCode: e.target.value })}
+                                        >
+                                            <option value="">Select a Block</option>
+                                            {blocks.map((block) => (
+                                                <option key={block.blockId} value={block.blockId}>
+                                                    {block.blockCode}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="location" 
+                                        for="floornum" 
                                     >
-                                        Location<span className="text-danger">*</span>
+                                        Floor Number<span className="text-danger">*</span>
                                     </label>
                                     <div className="col-sm-10">
                                         <input
-                                            type="text"
+                                            type="number"
                                             className="form-control"
-                                            id="location"
-                                            value={block.location}
-                                            onChange={(e) => setBlock({ ...block, location: e.target.value })}
+                                            id="floornum"
+                                            value={floor.floorNumber}
+                                            onChange={(e) => setFloor({ ...floor, floorNumber: e.target.value })}
                                         />
                                     </div>
                                 </div>
@@ -146,8 +173,8 @@ function BlockForm() {
                                                 name="status"
                                                 value="1"
                                                 id="active"
-                                                checked={block.isActive === 1}
-                                                onChange={() => setBlock({ ...block, isActive: 1 })}
+                                                checked={floor.isActive === 1}
+                                                onChange={() => setFloor({ ...floor, isActive: 1 })}
                                             />
                                             <label 
                                                 className="form-check-label" 
@@ -162,8 +189,8 @@ function BlockForm() {
                                                 name="status"
                                                 value="0"
                                                 id="inActive"
-                                                checked={block.isActive === 0}
-                                                onChange={() => setBlock({ ...block, isActive: 0 })}
+                                                checked={floor.isActive === 0}
+                                                onChange={() => setFloor({ ...floor, isActive: 0 })}
                                             />
                                             <label 
                                                 className="form-check-label" 
@@ -175,11 +202,11 @@ function BlockForm() {
                                 </fieldset>
 
                                 <div className="text-center">
-                                    {!blockId && (
+                                    {!floorId && (
                                         <button type="reset" className="btn btn-secondary me-2" onClick={() => {
-                                            setBlock({
+                                            setFloor({
                                                 blockCode: '',
-                                                location: '',
+                                                floorNumber: '',
                                                 isActive: null
                                             })
                                         }}>
@@ -190,7 +217,7 @@ function BlockForm() {
                                         type="button"
                                         className="btn btn-primary"
                                         onClick={handleSubmit}
-                                        disabled={!block.blockCode || !block.location || block.isActive === null || loading}
+                                        disabled={!floor.blockCode || !floor.floorNumber || floor.isActive === null || loading}
                                     >
                                         {loading ? "Submitting..." : "Submit"}
                                     </button>
@@ -207,4 +234,4 @@ function BlockForm() {
     )
 }
 
-export default BlockForm
+export default BlockFloorForm

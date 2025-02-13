@@ -1,7 +1,8 @@
 import { useRef, forwardRef, useImperativeHandle, useState } from "react";
 
+
 const DetailsModal = forwardRef((_, ref) => {
-    const modalRef = useRef(null)
+    const modalRef = useRef({})
     let modalInstance = null
     const [modalData, setModalData] = useState(null)
     const [fields, setFields] = useState([])
@@ -17,9 +18,8 @@ const DetailsModal = forwardRef((_, ref) => {
     ]
 
     const floor = [
-        { label: "Floor Number", key: "floorNumber" },
         { label: "Block Code", key: "blockCode" },
-        { label: "Location", key: "floorLocation" },
+        { label: "Floor Number", key: "floorNumber" },
         { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") },
         { label: "Created At", key: "createdTimeStamp" },
         { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
@@ -62,16 +62,20 @@ const DetailsModal = forwardRef((_, ref) => {
                         {modalData ? (
                             fields.map(({ label, key, key2, format, fallback }) => {
                                 const value = format 
-                                    ? format(modalData[key]) 
-                                    : modalData[key] || fallback || "";
+                                ? format(modalData[key]) 
+                                : key === "createdFirstName" || key === "updatedFirstName"
+                                ? modalData[key]?.charAt(0).toUpperCase() + modalData[key]?.slice(1) || fallback || ""
+                                : modalData[key] || fallback || ""
 
                                 return (
                                     <div 
                                         className="row" 
                                         key={label}
                                     >
-                                        <div className="col-sm-4"><strong>{label}</strong></div>
-                                        <div className="col-sm-8">: {value} {key2 ? modalData[key2] || "" : ""}</div>
+                                        <div className="col-sm-4">
+                                            <strong>{label}</strong>
+                                        </div>
+                                        <div className="col-sm-8">: {value}{key2 ? modalData[key2] || "" : ""}</div>
                                     </div>
                                 );
                             })

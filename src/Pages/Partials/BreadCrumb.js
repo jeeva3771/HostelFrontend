@@ -4,7 +4,7 @@ const Breadcrumbs = ({breadcrumb}) => {
     return (
     <nav>
         <ol className="breadcrumb">
-            {breadcrumb.map((item, index) => (    
+            {breadcrumb?.map((item, index) => (    
                 <li 
                     key={index} 
                     className={`breadcrumb-item ${index === breadcrumb.length - 1 ? 'active' : ''}`}

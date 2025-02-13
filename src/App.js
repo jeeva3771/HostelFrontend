@@ -8,8 +8,9 @@ import { AuthProvider, useAuth } from './Pages/AuthContext'
 import Home from './Pages/WardenLogin/Home'
 import BlockList from './Pages/WardenLogin/Block/BlockList'
 import { WardenPrivateRoute } from './Pages/WardenLogin/PrivateRoute'
-import BlockForm from '../src/Pages/WardenLogin/Block/BlockForm'
-
+import BlockForm from './Pages/WardenLogin/Block/BlockForm'
+import BlockFloorList from './Pages/WardenLogin/BlockFloor/BlockFloorList'
+import BlockFloorForm from './Pages/WardenLogin/BlockFloor/BlockFloorForm'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -69,8 +70,57 @@ function App() {
             />
 
             <Route 
-              path="/block/edit/:blockId" 
-              element={<BlockForm />} 
+              path="/block/add/" 
+              element={
+                <WardenPrivateRoute>
+                  <BlockForm />
+                </WardenPrivateRoute>
+              }   
+            />
+
+            <Route 
+              path="/block/:blockId/" 
+              element={
+                <WardenPrivateRoute>
+                  <BlockForm />
+                </WardenPrivateRoute>
+              }   
+            />
+
+            <Route 
+              path="/block/:blockId/" 
+              element={
+                <WardenPrivateRoute>
+                  <BlockForm />
+                </WardenPrivateRoute>
+              } 
+            />
+
+            <Route
+              path="/blockfloor/"
+              element={
+                <WardenPrivateRoute>
+                  <BlockFloorList />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/blockfloor/add/"
+              element={
+                <WardenPrivateRoute>
+                  <BlockFloorForm />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/blockfloor/:blockFloorId/"
+              element={
+                <WardenPrivateRoute>
+                  <BlockFloorForm />
+                </WardenPrivateRoute>
+              }
             />
 
             <Route

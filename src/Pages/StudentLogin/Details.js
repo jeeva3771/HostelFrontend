@@ -118,7 +118,7 @@ function Details() {
     return (
         <>
         <Header />
-        <Sidebar activeMenu={'Student'} />
+        <Sidebar />
         <main 
             className="main" 
             id="main"

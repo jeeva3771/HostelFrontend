@@ -127,7 +127,7 @@ function Report() {
     return (
         <>
         <Header />
-        <Sidebar activeMenu={'Attendance Report'} />
+        <Sidebar />
         <main 
             className="main" 
             id="main"
