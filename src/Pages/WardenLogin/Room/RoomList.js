@@ -1,60 +1,60 @@
-import { useEffect, useState, useRef } from "react"
-import Header from "../../Partials/Header"
+import { useState, useRef, useEffect } from "react"
 import Sidebar from "../../Partials/Aside"
 import Breadcrumbs from "../../Partials/BreadCrumb"
-import Pagination from "../../../page"
-import { readBlocks, readBlockById, deleteBlockById } from "../Api"
 import Footer from "../../Partials/Footer"
-import DetailsModal from "../Model"
+import Header from "../../Partials/Header"
 import { Link, useNavigate } from "react-router-dom"
-// import BlockForm from "./BlockForm"
+import Pagination from "../../../page"
+import DetailsModal from "../Model"
+import { readRooms, readRoomById, deleteRoomById } from "../Api"
 
-function BlockList() {  
-    const [blocks, setBlocks] = useState([])
+function RoomList() {
+    const [rooms, setRooms] = useState([])
     const [pageNo, setPageNo] = useState(1)
-    const [blockCount, setBlockCount] = useState(0)
+    const [roomCount, setRoomCount] = useState(0)
     const [limit, setLimit] = useState(10)
     const [searchText, setSearchText] = useState("")
     const [loading, setLoading] = useState(false)
-    const [sortColumn, setSortColumn] = useState("createdAt")
+    const [sortColumn, setSortColumn] = useState("r.createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [blockById, setBlockById] = useState({})
+    const [roomById, setRoomById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
 
-    const totalPages = Math.ceil(blockCount / limit)
+    const totalPages = Math.ceil(roomCount / limit)
 
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
         { name: 'Structure', link: '' },
-        { name: 'Block', link: '/block/' }
+        { name: 'Room', link: '/room/' }
     ]
     const defaultColumn = [
-        { key: 'blockCode', label: 'Block Code' },
-        { key: 'blockLocation', label: 'Location' },
-        { key: 'isActive', label: 'Status' },
-        { key: 'createdBy', label: 'Created By' }
+        { key: 'bk.blockCode', label: 'Block Code' },
+        { key: 'b.floorNumber', label: 'Floor Number' },
+        { key: 'r.roomNumber', label: 'Room Number' },
+        { key: 'r.isActive', label: 'Status' },
+        { key: 'r.createdBy', label: 'Created By' }
     ]
 
     useEffect(() => {
-        document.title = "Block List"
+        document.title = "Room List"
     }, [])
 
     useEffect(() => {
-        handleReadBlocks()
+        handleReadRooms()
     }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
-    const handleReadBlocks = async () => {
+    const handleReadRooms = async () => {
         try {
             setLoading(true)
-            const { response, error } = await readBlocks(limit, pageNo, sortColumn, sortOrder, searchText || '')
+            const { response, error } = await readRooms(limit, pageNo, sortColumn, sortOrder, searchText || '')
             if (error) {
                 alert(error)
                 return
             }
-            const blocks = await response.json()
-            setBlocks(blocks.blocks || [])
-            setBlockCount(blocks.blockCount || 0)
+            const rooms = await response.json()
+            setRooms(rooms.rooms || [])
+            setRoomCount(rooms.roomCount || 0)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
@@ -62,19 +62,19 @@ function BlockList() {
         }
     }
 
-    const handleReadBlockById = async (blockId) => {
+    const handleReadRoomById = async (roomId) => {
         try {
-            const { response, error } = await readBlockById(blockId)
+            const { response, error } = await readRoomById(roomId)
             if (error) {
                 alert(error)
                 return
             }
             
             if (response.ok) {
-                setBlockById(await response.json())
+                setRoomById(await response.json())
                 setTimeout(() => {
                     if (modalRef.current) {
-                        modalRef.current.openModal(blockById, "block")
+                        modalRef.current.openModal(roomById, "room")
                     }
                 }, 100);
             } else {
@@ -85,14 +85,14 @@ function BlockList() {
         }
     }
 
-    const handleDeleteById = async (blockId) => {
+    const handleDeleteById = async (roomId) => {
         try {
             var validateDelete = window.confirm('Are you sure you want to delete?')
 
             if (!validateDelete)
                 return
 
-            const { response, error } = await deleteBlockById(blockId)
+            const { response, error } = await deleteRoomById(roomId)
             if (error) {
                 alert(error)
                 return
@@ -100,7 +100,7 @@ function BlockList() {
             
             if (response.ok) {
                 alert('Successfully deleted!')
-                handleReadBlocks()
+                handleReadRooms()
             } else {
                 alert(await response.text())
             }
@@ -122,17 +122,16 @@ function BlockList() {
         }
     }
 
-    const handleEditBlockById = (blockId) => {
-        navigate(`/block/${blockId}/`)
+    const handleEditRoomById = (roomId) => {
+        navigate(`/room/${roomId}/`)
     }
-
     return (
         <>
             <Header />
             <Sidebar />
             <main id="main">
                 <div className="pagetitle">
-                    <h1>Block List</h1>
+                    <h1>Room List</h1>
                     <Breadcrumbs breadcrumb={breadcrumbData} />
                 </div>
                 <section className="section">
@@ -168,7 +167,7 @@ function BlockList() {
                                         </div>
                                         <div className="d-flex justify-content-end">
                                             <Link 
-                                                to="/block/add/" 
+                                                to="/room/add/" 
                                                 className="btn btn-primary"
                                             >Add
                                             </Link>
@@ -196,14 +195,15 @@ function BlockList() {
                                                     >Loading...
                                                     </td>
                                                 </tr>
-                                            ) : blocks.length > 0 ? (
-                                                blocks.map((block, index) => (
+                                            ) : rooms.length > 0 ? (
+                                                rooms.map((room, index) => (
                                                     <tr key={index}>
                                                         <td>{(pageNo - 1) * limit + index + 1}</td>
-                                                        <td>{block.blockCode}</td>
-                                                        <td>{block.blockLocation}</td>
-                                                        <td>{block.isActive === 1 ? 'Active' : ''}</td>
-                                                        <td>{block.createdFirstName}{block.createdLastName}</td>
+                                                        <td>{room.blockCode}</td>
+                                                        <td>{room.floorNumber}</td>
+                                                        <td>{room.roomNumber}</td>
+                                                        <td>{room.isActive === 1 ? 'Active' : ''}</td>
+                                                        <td>{room.createdFirstName}{room.createdLastName}</td>
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
@@ -212,7 +212,7 @@ function BlockList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-info-circle mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16" 
-                                                                onClick={()=> handleReadBlockById(block.blockId)}
+                                                                onClick={()=> handleReadRoomById(room.roomId)}
                                                             >
                                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
@@ -224,7 +224,7 @@ function BlockList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => handleEditBlockById(block.blockId)}
+                                                                onClick={() => handleEditRoomById(room.roomId)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 
@@ -238,7 +238,7 @@ function BlockList() {
                                                                 height="20" 
                                                                 fill="currentColor" 
                                                                 className="bi bi-trash focus" 
-                                                                onClick={()=> handleDeleteById(block.blockId)} 
+                                                                onClick={()=> handleDeleteById(room.roomId)} 
                                                                 viewBox="0 0 16 16"
                                                             >
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -258,9 +258,9 @@ function BlockList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {blockById && <DetailsModal ref={modalRef} />}
+                                    {roomById && <DetailsModal ref={modalRef} />}
                                     <Pagination 
-                                        count={blockCount} 
+                                        count={roomCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 
                                     />
@@ -275,4 +275,4 @@ function BlockList() {
     )
 }
 
-export default BlockList
+export default RoomList

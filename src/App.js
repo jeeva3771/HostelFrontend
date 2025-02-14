@@ -11,6 +11,8 @@ import { WardenPrivateRoute } from './Pages/WardenLogin/PrivateRoute'
 import BlockForm from './Pages/WardenLogin/Block/BlockForm'
 import BlockFloorList from './Pages/WardenLogin/BlockFloor/BlockFloorList'
 import BlockFloorForm from './Pages/WardenLogin/BlockFloor/BlockFloorForm'
+import RoomList from './Pages/WardenLogin/Room/RoomList'
+import RoomForm from './Pages/WardenLogin/Room/RoomForm'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -119,6 +121,33 @@ function App() {
               element={
                 <WardenPrivateRoute>
                   <BlockFloorForm />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/room/"
+              element={
+                <WardenPrivateRoute>
+                  <RoomList />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/room/add/"
+              element={
+                <WardenPrivateRoute>
+                  <RoomForm />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/room/:roomId/"
+              element={
+                <WardenPrivateRoute>
+                  <RoomForm />
                 </WardenPrivateRoute>
               }
             />

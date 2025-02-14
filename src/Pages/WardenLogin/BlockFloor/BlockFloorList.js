@@ -17,7 +17,7 @@ function BlockFloorList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("b.createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [floorById, setFloorById] = useState("")
+    const [floorById, setFloorById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
 
@@ -26,7 +26,7 @@ function BlockFloorList() {
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
         { name: 'Structure', link: '' },
-        { name: 'Blockfloor', link: '/Blockfloor/' }
+        { name: 'Blockfloor', link: '/blockfloor/' }
     ]
     const defaultColumn = [
         { key: 'bk.blockCode', label: 'Block Code' },
@@ -51,9 +51,9 @@ function BlockFloorList() {
                 alert(error)
                 return
             }
-            const data = await response.json()
-            setFloors(data.blockFloors || [])
-            setFloorCount(data.blockFloorCount || 0)
+            const floors = await response.json()
+            setFloors(floors.blockFloors || [])
+            setFloorCount(floors.blockFloorCount || 0)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
@@ -121,8 +121,8 @@ function BlockFloorList() {
         }
     }
 
-    const handleEditFloor = (floorId) => {
-        navigate(`/blockfloor/${floorId}/`)
+    const handleEditFloorById = (blockFloorId) => {
+        navigate(`/blockfloor/${blockFloorId}/`)
     }
     return (
         <>
@@ -201,7 +201,7 @@ function BlockFloorList() {
                                                         <td>{floor.blockCode}</td>
                                                         <td>{floor.floorNumber}</td>
                                                         <td>{floor.isActive === 1 ? 'Active' : ''}</td>
-                                                        <td>{floor.createdFirstName} {floor.createdLastName}</td>
+                                                        <td>{floor.createdFirstName}{floor.createdLastName}</td>
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
@@ -222,7 +222,7 @@ function BlockFloorList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => handleEditFloor(floor.blockFloorId)}
+                                                                onClick={() => handleEditFloorById(floor.blockFloorId)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 

@@ -15,28 +15,28 @@ function BlockFloorForm() {
     })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const {floorId} = useParams()
+    const {blockFloorId} = useParams()
     
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
         { name: 'Structure', link: '' },
         { name: 'Blockfloor', link: '/blockfloor/' },
-        { name: floorId ? "Edit" : "Add", link: "" }
+        { name: blockFloorId ? "Edit" : "Add", link: "" }
     ]
 
     useEffect(() => {
-       document.title = floorId ? "Edit Blockfloor" : "Add Blockfloor"
+       document.title = blockFloorId ? "Edit Blockfloor" : "Add Blockfloor"
        handleBlockCodes()
     }, [])
 
     useEffect(() => {
-        if (!floorId) return
-        handleReadFloorById(floorId)
-    }, [floorId])
+        if (!blockFloorId) return
+        handleReadFloorById(blockFloorId)
+    }, [blockFloorId])
 
-    const handleReadFloorById = async (floorId) => {
+    const handleReadFloorById = async (blockFloorId) => {
         try {
-            const { response, error } = await readFloorById(floorId)
+            const { response, error } = await readFloorById(blockFloorId)
             if (error) {
                 alert(error)
                 return
@@ -45,7 +45,7 @@ function BlockFloorForm() {
             if (response.ok) {
                 const floors = await response.json()
                 setFloor({
-                    blockCode: floors.blockCode,
+                    blockCode: floors.blockId,
                     floorNumber: floors.floorNumber,
                     isActive: floors.isActive ? 1 : 0
                 })
@@ -85,7 +85,7 @@ function BlockFloorForm() {
         }
 
         try {
-            const { response, error } = await editFloorById(floorId, payload)
+            const { response, error } = await editFloorById(blockFloorId, payload)
             if (error) {
                 alert(error)
                 return
@@ -125,7 +125,7 @@ function BlockFloorForm() {
                                         for="blockCode"
                                     >
                                         Block Code<span className="text-danger">*</span>
-                                    </label>
+                                    </label>    
                                     <div className="col-sm-10">
                                         <select
                                             className="form-select"
@@ -135,7 +135,10 @@ function BlockFloorForm() {
                                         >
                                             <option value="">Select a Block</option>
                                             {blocks.map((block) => (
-                                                <option key={block.blockId} value={block.blockId}>
+                                                <option 
+                                                    key={block.blockId} 
+                                                    value={block.blockId}
+                                                >
                                                     {block.blockCode}
                                                 </option>
                                             ))}
@@ -202,7 +205,7 @@ function BlockFloorForm() {
                                 </fieldset>
 
                                 <div className="text-center">
-                                    {!floorId && (
+                                    {!blockFloorId && (
                                         <button type="reset" className="btn btn-secondary me-2" onClick={() => {
                                             setFloor({
                                                 blockCode: '',

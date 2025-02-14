@@ -27,9 +27,36 @@ const DetailsModal = forwardRef((_, ref) => {
         { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
     ]
 
+    const room = [
+        { label: "Block Code", key: "blockCode" },
+        { label: "Floor Number", key: "floorNumber" },
+        { label: "Room Number", key: "roomNumber" },
+        { label: "Room Capacity", key: "roomCapacity" },
+        { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") },
+        { label: "Air Conditioner", key: "airConditioner", format: (val) => (val === 1 ? "Yes" : "No") },
+        { label: "Created At", key: "createdTimeStamp" },
+        { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
+        { label: "Updated At", key: "updatedTimeStamp" },
+        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+    ]
+
     useImperativeHandle(ref, () => ({
         openModal: (data, type) => {
-            const selectedFields = type === "block" ? block : floor
+            let selectedFields
+            switch (type) {
+                case "block":
+                    selectedFields = block
+                    break
+                case "floor":
+                    selectedFields = floor
+                    break
+                case "room":
+                    selectedFields = room
+                    break
+                default: 
+                    selectedFields = []
+            }
+                
             setFields(selectedFields)
             setModalData(data)
 
