@@ -4,8 +4,8 @@ import Breadcrumbs from "../../Partials/BreadCrumb"
 import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import { Link, useNavigate } from "react-router-dom"
-import Pagination from "../../../page"
-import DetailsModal from "../Model"
+import Pagination from "../Pagination"
+import DetailsModal from "../Modal"
 import { readRooms, readRoomById, deleteRoomById } from "../Api"
 
 function RoomList() {
@@ -52,9 +52,9 @@ function RoomList() {
                 alert(error)
                 return
             }
-            const rooms = await response.json()
-            setRooms(rooms.rooms || [])
-            setRoomCount(rooms.roomCount || 0)
+            const { rooms, roomCount } = await response.json()
+            setRooms(rooms || [])
+            setRoomCount(roomCount || 0)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
@@ -121,10 +121,7 @@ function RoomList() {
             setPageNo(newPage)
         }
     }
-
-    const handleEditRoomById = (roomId) => {
-        navigate(`/room/${roomId}/`)
-    }
+    
     return (
         <>
             <Header />
@@ -224,7 +221,7 @@ function RoomList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => handleEditRoomById(room.roomId)}
+                                                                onClick={() => navigate(`/room/${room.roomId}/`)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 

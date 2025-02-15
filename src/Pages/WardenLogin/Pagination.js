@@ -23,13 +23,20 @@ export default function Pagination({ count, limit, onPageChange }) {
   return (
     <ul className="pagination justify-content-center">
       <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
           Previous
         </button>
       </li>
 
       <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
-        <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(1)}
+        >1
+        </button>
       </li>
 
       {currentPage > 3 && (
@@ -45,8 +52,14 @@ export default function Pagination({ count, limit, onPageChange }) {
 
         for (let i = startPage; i <= endPage; i++) {
           pages.push(
-            <li key={i} className={`page-item ${currentPage === i ? "active" : ""}`}>
-              <button className="page-link" onClick={() => handlePageChange(i)}>
+            <li 
+              key={i} 
+              className={`page-item ${currentPage === i ? "active" : ""}`}
+            >
+              <button 
+                className="page-link" 
+                onClick={() => handlePageChange(i)}
+              >
                 {i}
               </button>
             </li>
@@ -63,14 +76,20 @@ export default function Pagination({ count, limit, onPageChange }) {
 
       {totalPages > 1 && (
         <li className={`page-item ${currentPage === totalPages ? "active" : ""}`}>
-          <button className="page-link" onClick={() => handlePageChange(totalPages)}>
+          <button 
+            className="page-link" 
+            onClick={() => handlePageChange(totalPages)}
+          >
             {totalPages}
           </button>
         </li>
       )}
 
       <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
           Next
         </button>
       </li>

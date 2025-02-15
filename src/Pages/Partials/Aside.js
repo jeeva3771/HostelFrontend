@@ -26,7 +26,7 @@ const Sidebar = () => {
         }
       }
     } catch (error) {
-      console.error("Error parsing local storage data:", error)
+        alert('Something went wrong.Please try later')
     }
 
     const wardenMenu = [

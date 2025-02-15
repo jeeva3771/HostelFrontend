@@ -2,12 +2,11 @@ import { useEffect, useState, useRef } from "react"
 import Header from "../../Partials/Header"
 import Sidebar from "../../Partials/Aside"
 import Breadcrumbs from "../../Partials/BreadCrumb"
-import Pagination from "../../../page"
+import Pagination from "../Pagination"
 import { readBlocks, readBlockById, deleteBlockById } from "../Api"
 import Footer from "../../Partials/Footer"
-import DetailsModal from "../Model"
+import DetailsModal from "../Modal"
 import { Link, useNavigate } from "react-router-dom"
-// import BlockForm from "./BlockForm"
 
 function BlockList() {  
     const [blocks, setBlocks] = useState([])
@@ -52,9 +51,9 @@ function BlockList() {
                 alert(error)
                 return
             }
-            const blocks = await response.json()
-            setBlocks(blocks.blocks || [])
-            setBlockCount(blocks.blockCount || 0)
+            const { blocks, blockCount } = await response.json()
+            setBlocks(blocks || [])
+            setBlockCount(blockCount || 0)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {

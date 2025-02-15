@@ -79,8 +79,8 @@ function BlockFloorForm() {
     const handleSubmit = async () => {
         setLoading(true)
         const payload = {
-            blockId: floor.blockCode.trim(),
-            floorNumber: floor.floorNumber,
+            blockId: floor.blockCode,
+            floorNumber: floor.floorNumber.trim(),
             isActive: floor.isActive
         }
 

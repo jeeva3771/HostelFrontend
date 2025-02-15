@@ -4,8 +4,8 @@ import Breadcrumbs from "../../Partials/BreadCrumb"
 import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import { Link, useNavigate } from "react-router-dom"
-import Pagination from "../../../page"
-import DetailsModal from "../Model"
+import Pagination from "../Pagination"
+import DetailsModal from "../Modal"
 import { readFloors, readFloorById, deleteFloorById } from "../Api"
 
 function BlockFloorList() {
@@ -51,9 +51,9 @@ function BlockFloorList() {
                 alert(error)
                 return
             }
-            const floors = await response.json()
-            setFloors(floors.blockFloors || [])
-            setFloorCount(floors.blockFloorCount || 0)
+            const { blockFloors, blockFloorCount } = await response.json()
+            setFloors(blockFloors || [])
+            setFloorCount(blockFloorCount || 0)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
@@ -121,9 +121,6 @@ function BlockFloorList() {
         }
     }
 
-    const handleEditFloorById = (blockFloorId) => {
-        navigate(`/blockfloor/${blockFloorId}/`)
-    }
     return (
         <>
             <Header />
@@ -222,7 +219,7 @@ function BlockFloorList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => handleEditFloorById(floor.blockFloorId)}
+                                                                onClick={() => navigate(`/blockfloor/${floor.blockFloorId}/`)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 

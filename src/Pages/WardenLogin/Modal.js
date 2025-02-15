@@ -1,8 +1,7 @@
-import { useRef, forwardRef, useImperativeHandle, useState } from "react";
-
+import { useRef, forwardRef, useImperativeHandle, useState, useEffect } from "react"
 
 const DetailsModal = forwardRef((_, ref) => {
-    const modalRef = useRef({})
+    const modalRef = useRef(null)
     let modalInstance = null
     const [modalData, setModalData] = useState(null)
     const [fields, setFields] = useState([])
@@ -33,7 +32,15 @@ const DetailsModal = forwardRef((_, ref) => {
         { label: "Room Number", key: "roomNumber" },
         { label: "Room Capacity", key: "roomCapacity" },
         { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") },
-        { label: "Air Conditioner", key: "airConditioner", format: (val) => (val === 1 ? "Yes" : "No") },
+        { label: "Air Conditioner", key: "isAirConditioner", format: (val) => (val === 1 ? "Yes" : "No") },
+        { label: "Created At", key: "createdTimeStamp" },
+        { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
+        { label: "Updated At", key: "updatedTimeStamp" },
+        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+    ]
+
+    const course = [
+        { label: "Course Name", key: "courseName" },
         { label: "Created At", key: "createdTimeStamp" },
         { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
         { label: "Updated At", key: "updatedTimeStamp" },
@@ -53,26 +60,30 @@ const DetailsModal = forwardRef((_, ref) => {
                 case "room":
                     selectedFields = room
                     break
+                case "course":
+                    selectedFields = course
+                    break
                 default: 
                     selectedFields = []
             }
                 
             setFields(selectedFields)
             setModalData(data)
-
-            if (modalRef.current) {
-                modalInstance = new window.bootstrap.Modal(modalRef.current)
-                modalInstance.show()
-            }
         }
     }))
+
+    useEffect(() => {
+        if (modalData && modalRef.current) {
+            modalInstance = new window.bootstrap.Modal(modalRef.current)
+            modalInstance.show()
+        }
+    }, [modalData])
 
     return (
         <div 
             ref={modalRef} 
             className="modal fade" 
             tabIndex="-1" 
-            aria-hidden="true"
         >
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div className="modal-content">

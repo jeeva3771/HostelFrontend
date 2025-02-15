@@ -13,6 +13,8 @@ import BlockFloorList from './Pages/WardenLogin/BlockFloor/BlockFloorList'
 import BlockFloorForm from './Pages/WardenLogin/BlockFloor/BlockFloorForm'
 import RoomList from './Pages/WardenLogin/Room/RoomList'
 import RoomForm from './Pages/WardenLogin/Room/RoomForm'
+import CourseList from './Pages/WardenLogin/Course/CourseList'
+import CourseForm from './Pages/WardenLogin/Course/CourseForm'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -148,6 +150,33 @@ function App() {
               element={
                 <WardenPrivateRoute>
                   <RoomForm />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/course/"
+              element={
+                <WardenPrivateRoute>
+                  <CourseList />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/course/add/"
+              element={
+                <WardenPrivateRoute>
+                  <CourseForm />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/course/:courseId/"
+              element={
+                <WardenPrivateRoute>
+                  <CourseForm />
                 </WardenPrivateRoute>
               }
             />

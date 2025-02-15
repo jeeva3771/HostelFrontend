@@ -15,6 +15,7 @@ import {
     useEffect,
     useState 
 } from "react"
+import { Link } from "react-router-dom"
 
 function Home() {
     const [state, setState] = useState({
@@ -203,7 +204,7 @@ function Home() {
         <>
         <Header />
         <Sidebar activeMenu={'Dashboard'} />
-        <main className="main" id="main">
+        <main id="main">
             <div className="pagetitle">
                 <h1>Dashboard</h1>
                 <Breadcrumbs 
@@ -219,7 +220,6 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon"
-                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -229,18 +229,18 @@ function Home() {
                                             <h6>Option</h6>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link
                                                 className="dropdown-item" 
-                                                href="/block/"
+                                                to="/block/"
                                             >Block
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link
                                                 className="dropdown-item" 
-                                                href="/block/add/"
+                                                to="/block/add/"
                                             >Add Block
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -274,7 +274,6 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon"    
-                                        href="" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -285,18 +284,18 @@ function Home() {
                                         </li>
 
                                         <li>
-                                            <a 
+                                            <Link
                                                 className="dropdown-item" 
-                                                href="/blockfloor/"
+                                                to="/blockfloor/"
                                             >Block floor
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link 
                                                 className="dropdown-item" 
-                                                href="/blockfloor/add/"
+                                                to="/blockfloor/add/"
                                             >Add Block floor
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -325,14 +324,31 @@ function Home() {
                         <div className="col-xxl-4 col-xl-6">
                             <div className="card info-card customers-card">
                                 <div className="filter">
-                                    <a className="icon" href="" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                    <a 
+                                        className="icon"
+                                        data-bs-toggle="dropdown"
+                                    >
+                                        <i className="bi bi-three-dots"></i>
+                                    </a>
                                     <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                         <li className="dropdown-header text-start">
                                         <h6>Option</h6>
                                         </li>
 
-                                        <li><a className="dropdown-item" href="/room/">Room</a></li>
-                                        <li><a className="dropdown-item" href="/room/add/">Add Room</a></li>
+                                        <li>
+                                            <Link 
+                                                className="dropdown-item" 
+                                                to="/room/"
+                                            >Room
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link 
+                                                className="dropdown-item" 
+                                                to="/room/add/"
+                                            >Add Room
+                                            </Link>
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -362,7 +378,6 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
-                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -372,18 +387,18 @@ function Home() {
                                             <h6>Option</h6>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link
                                                 className="dropdown-item" 
-                                                href="/student/"
+                                                to="/student/"
                                             >Student
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link 
                                                 className="dropdown-item" 
-                                                href="/student/add/"
+                                                to="/student/add/"
                                             >Add Student
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -414,7 +429,6 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
-                                        href="" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -425,18 +439,18 @@ function Home() {
                                         </li>
 
                                         <li>
-                                            <a 
+                                            <Link 
                                                 className="dropdown-item" 
-                                                href="/warden/"
+                                                to="/warden/"
                                             >Warden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link
                                                 className="dropdown-item" 
-                                                href="/warden/add/"
+                                                to="/warden/add/"
                                             >Add Warden
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -468,7 +482,6 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
-                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -479,18 +492,18 @@ function Home() {
                                         </li>
 
                                         <li>
-                                            <a 
+                                            <Link 
                                                 className="dropdown-item" 
-                                                href="/course/"
+                                                to="/course/"
                                             >Course
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a 
+                                            <Link 
                                                 className="dropdown-item" 
-                                                href="/course/add/"
+                                                to="/course/add/"
                                             >Add Course
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -522,7 +535,6 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
-                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -533,25 +545,13 @@ function Home() {
                                         </li>
 
                                         <li>
-                                            <a 
-                                                className="dropdown-item" 
-                                                href="#"
-                                            >Today
-                                            </a>
+                                            <a className="dropdown-item">Today</a>
                                         </li>
                                         <li>
-                                            <a 
-                                                className="dropdown-item" 
-                                                href="#"
-                                            >This Month
-                                            </a>
+                                            <a className="dropdown-item">This Month</a>
                                         </li>
                                         <li>
-                                            <a 
-                                                className="dropdown-item" 
-                                                href="#"
-                                            >This Year
-                                            </a>
+                                            <a className="dropdown-item">This Year</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -589,15 +589,11 @@ function Home() {
                                             </tr>
                                             <tr>
                                                 <th scope="row">
-                                                    <a href="#">#2147</a>
+                                                    <a>#2147</a>
                                                 </th>
                                                 <td>Bridie Kessler</td>
                                                 <td>
-                                                    <a 
-                                                        href="#" 
-                                                        className="text-primary"
-                                                    >Blanditiis dolor omnis similique
-                                                    </a>
+                                                    <a className="text-primary">Blanditiis dolor omnis similique</a>
                                                 </td>
                                                 <td>$47</td>
                                                 <td>
@@ -606,15 +602,11 @@ function Home() {
                                             </tr>
                                             <tr>
                                                 <th scope="row">
-                                                    <a href="#">#2049</a>
+                                                    <a>#2049</a>
                                                 </th>
                                                 <td>Ashleigh Langosh</td>
                                                 <td>
-                                                    <a 
-                                                        href="#" 
-                                                        className="text-primary"
-                                                    >At recusandae consectetur
-                                                    </a>
+                                                    <a className="text-primary">At recusandae consectetur</a>
                                                 </td>
                                                 <td>$147</td>
                                                 <td>
