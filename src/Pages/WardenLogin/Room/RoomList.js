@@ -71,12 +71,9 @@ function RoomList() {
             }
             
             if (response.ok) {
-                setRoomById(await response.json())
-                setTimeout(() => {
-                    if (modalRef.current) {
-                        modalRef.current.openModal(roomById, "room")
-                    }
-                }, 100);
+                const roomData = await response.json()
+                setRoomById(roomData)
+                modalRef.current?.openModal(roomById, "room")
             } else {
                 alert(await response.text())
             }
@@ -85,7 +82,7 @@ function RoomList() {
         }
     }
 
-    const handleDeleteById = async (roomId) => {
+    const handleDeleteRoomById = async (roomId) => {
         try {
             var validateDelete = window.confirm('Are you sure you want to delete?')
 
@@ -235,7 +232,7 @@ function RoomList() {
                                                                 height="20" 
                                                                 fill="currentColor" 
                                                                 className="bi bi-trash focus" 
-                                                                onClick={()=> handleDeleteById(room.roomId)} 
+                                                                onClick={()=> handleDeleteRoomById(room.roomId)} 
                                                                 viewBox="0 0 16 16"
                                                             >
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>

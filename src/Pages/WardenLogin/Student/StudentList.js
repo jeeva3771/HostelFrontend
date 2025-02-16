@@ -1,57 +1,72 @@
-import { useEffect, useState, useRef } from "react"
-import Header from "../../Partials/Header"
+import { useState, useRef, useEffect } from "react"
 import Sidebar from "../../Partials/Aside"
 import Breadcrumbs from "../../Partials/BreadCrumb"
-import Pagination from "../Pagination"
-import { readCourses, readCourseById, deleteCourseById } from "../Api"
 import Footer from "../../Partials/Footer"
-import DetailsModal from "../Modal"
+import Header from "../../Partials/Header"
 import { Link, useNavigate } from "react-router-dom"
+import Pagination from "../Pagination"
+import DetailsModal from "../Modal"
+import { 
+    readStudents, 
+    readStudentById, 
+    deleteStudentById,
+    updateStudentImage,
+    deleteStudentImage
+} from "../Api"
+import { wardenAppUrl } from "../../../config"
 
-function BlockList() {  
-    const [courses, setCourses] = useState([])
+function StudentList() {
+    const [students, setStudents] = useState([])
+    const [studentImages, setStudentImages] = useState({})
     const [pageNo, setPageNo] = useState(1)
-    const [courseCount, setCourseCount] = useState(0)
+    const [studentCount, setStudentCount] = useState(0)
     const [limit, setLimit] = useState(10)
     const [searchText, setSearchText] = useState("")
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [courseById, setCourseById] = useState({})
+    const [studentById, setStudentById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
+    const fileInputsRef = useRef({})
 
-    const totalPages = Math.ceil(courseCount / limit)
+    const totalPages = Math.ceil(studentCount / limit)
 
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
-        { name: 'Others', link: '' },
-        { name: 'Course', link: '/course/' }
+        { name: 'Student', link: '/student/' }
     ]
     const defaultColumn = [
-        { key: 'courseName', label: 'Course Name' },
+        { key: '', label: 'Profile' },
+        { key: 'name', label: 'Name' },
+        { key: 'registerNumber', label: 'Register Number' },
         { key: 'createdBy', label: 'Created By' }
     ]
 
     useEffect(() => {
-        document.title = "Course List"
+        document.title = "Student List"
     }, [])
 
     useEffect(() => {
-        handleReadCourses()
+        handleReadStudents()
     }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
-    const handleReadCourses = async () => {
+    const handleReadStudents = async () => {
         try {
             setLoading(true)
-            const { response, error } = await readCourses(limit, pageNo, sortColumn, sortOrder, searchText || '')
+            const { response, error } = await readStudents(limit, pageNo, sortColumn, sortOrder, searchText || '')
             if (error) {
                 alert(error)
                 return
             }
-            const { courses, courseCount } = await response.json()
-            setCourses(courses || [])
-            setCourseCount(courseCount || 0)
+            const { students, studentCount } = await response.json()
+            setStudents(students || [])
+            setStudentCount(studentCount || 0)
+            const images = {}
+            students.forEach(student => {
+                images[student.studentId] = `${wardenAppUrl}/api/student/${student.studentId}/image?date=${Date.now()}`
+            })
+            setStudentImages(images)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
@@ -59,22 +74,77 @@ function BlockList() {
         }
     }
 
-    const handleReadCourseById = async (courseId) => {
+    const handleUploadClick = (studentId) => {
+        if (fileInputsRef.current[studentId]) {
+            fileInputsRef.current[studentId].click()
+        }
+    }
+
+    const handleFileChange = async (event, studentId) => {
+        const file = event.target.files[0]
+        if (!file) {
+            alert("Please select an image first!")
+            return
+        }
+
         try {
-            const { response, error } = await readCourseById(courseId)
+            const { response, error } = await updateStudentImage(studentId, file)
+
+            if (error) {
+                alert(error)
+                return
+            }
+
+            if(response.ok) {
+                setStudentImages(prevImages => ({
+                    ...prevImages,
+                    [studentId]: `${wardenAppUrl}/api/student/${studentId}/image?date=${Date.now()}`
+                }))
+                alert("Image updated successfully!")
+            } else if (response.status === 400) {
+                alert(await response.text())
+            } 
+
+        } catch (error) {
+            alert('Something went wrong.Please try later')
+        }
+    }
+
+    const handleRemoveImage = async (studentId) => {
+        try {
+            const { response, error } = await deleteStudentImage(studentId)
+
+            if (error) {
+                alert(error)
+                return
+            }
+
+            if (response.ok) {
+                setStudentImages(prevImages => ({
+                    ...prevImages,
+                    [studentId]: `${wardenAppUrl}/api/student/${studentId}/image?date=${Date.now()}`
+                }))
+            } else {
+                alert('Not deleted')
+            }
+        } catch(error) {
+            alert('Something went wrong.Please try later')
+        }
+    }
+
+    const handleReadStudentById = async (studentId) => {
+        try {
+            const { response, error } = await readStudentById(studentId)
             if (error) {
                 alert(error)
                 return
             }
             
             if (response.ok) {
-                setCourseById(await response.json())
-                setTimeout(() => {
-                    if (modalRef.current) {
-                        modalRef.current.openModal(courseById, "course")
-                    }
-                }, 100);
-            } else {
+                const studentData = await response.json()
+                setStudentById(studentData)
+                modalRef.current?.openModal(studentById, "student")
+            } else {    
                 alert(await response.text())
             }
         } catch (error) {
@@ -82,14 +152,14 @@ function BlockList() {
         }
     }
 
-    const handleDeleteCourseById = async (courseId) => {
+    const handleDeleteStudentById = async (studentId) => {
         try {
             var validateDelete = window.confirm('Are you sure you want to delete?')
 
             if (!validateDelete)
                 return
 
-            const { response, error } = await deleteCourseById(courseId)
+            const { response, error } = await deleteStudentById(studentId)
             if (error) {
                 alert(error)
                 return
@@ -97,10 +167,11 @@ function BlockList() {
             
             if (response.ok) {
                 alert('Successfully deleted!')
-                handleReadCourses()
+                handleReadStudents()
             } else {
                 alert(await response.text())
             }
+            
         } catch (error) {
             alert('Something went wrong.Please try later')
         }
@@ -110,7 +181,6 @@ function BlockList() {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
         setSortOrder(newSortOrder)
-        setPageNo(1)
     }
 
     const handlePageChange = (newPage) => {
@@ -118,14 +188,14 @@ function BlockList() {
             setPageNo(newPage)
         }
     }
-
+    
     return (
         <>
             <Header />
             <Sidebar />
             <main id="main">
                 <div className="pagetitle">
-                    <h1>Course List</h1>
+                    <h1>Student List</h1>
                     <Breadcrumbs breadcrumb={breadcrumbData} />
                 </div>
                 <section className="section">
@@ -161,7 +231,7 @@ function BlockList() {
                                         </div>
                                         <div className="d-flex justify-content-end">
                                             <Link 
-                                                to="/course/add/" 
+                                                to="/student/add/" 
                                                 className="btn btn-primary"
                                             >Add
                                             </Link>
@@ -189,12 +259,43 @@ function BlockList() {
                                                     >Loading...
                                                     </td>
                                                 </tr>
-                                            ) : courses.length > 0 ? (
-                                                courses.map((course, index) => (
+                                            ) : students.length > 0 ? (
+                                                students.map((student, index) => (
                                                     <tr key={index}>
                                                         <td>{(pageNo - 1) * limit + index + 1}</td>
-                                                        <td>{course.courseName}</td>
-                                                        <td>{course.createdFirstName}{course.createdLastName}</td>
+                                                        <td>
+                                                        <img 
+                                                            src={studentImages[student.studentId]} 
+                                                            alt="Profile" 
+                                                            className="rounded-circle imageSizing me-1"
+                                                        />
+                                                        <button 
+                                                            className="btn btn-primary btn-sm me-1" 
+                                                            title="Upload new profile image"
+                                                            style={{ width: 20, height: 20, padding: 0 }} 
+                                                            onClick={() => handleUploadClick(student.studentId)}
+                                                        >
+                                                            <i className="bi bi-upload" style={{ fontSize: 12 }}></i>
+                                                        </button>
+                                                        <input 
+                                                            ref={(el) => fileInputsRef.current[student.studentId] = el}
+                                                            type="file" 
+                                                            name="studentImage" 
+                                                            style={{ display: "none" }} 
+                                                            onChange={(event) => handleFileChange(event, student.studentId)}
+                                                        />
+                                                        <button 
+                                                            className="btn btn-danger btn-sm" 
+                                                            title="Remove profile image"
+                                                            style={{ width: 20, height: 20, padding: 0 }} 
+                                                            onClick={() => handleRemoveImage(student.studentId)}
+                                                        >
+                                                            <i className="bi bi-trash" style={{ fontSize: 12 }}></i>
+                                                        </button>
+                                                        </td>
+                                                        <td>{student.name}</td>
+                                                        <td>{student.registerNumber}</td>
+                                                        <td>{student.createdFirstName}{student.createdLastName}</td>
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
@@ -203,7 +304,7 @@ function BlockList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-info-circle mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16" 
-                                                                onClick={()=> handleReadCourseById(course.courseId)}
+                                                                onClick={()=> handleReadStudentById(student.studentId)}
                                                             >
                                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
@@ -215,7 +316,7 @@ function BlockList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => navigate(`/course/${course.courseId}/`)}
+                                                                onClick={() => navigate(`/student/${student.studentId}/`)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 
@@ -229,7 +330,7 @@ function BlockList() {
                                                                 height="20" 
                                                                 fill="currentColor" 
                                                                 className="bi bi-trash focus" 
-                                                                onClick={()=> handleDeleteCourseById(course.courseId)} 
+                                                                onClick={()=> handleDeleteStudentById(student.studentId)} 
                                                                 viewBox="0 0 16 16"
                                                             >
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -249,9 +350,9 @@ function BlockList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {courseById && <DetailsModal ref={modalRef} />}
+                                    {studentById && <DetailsModal ref={modalRef} />}
                                     <Pagination 
-                                        count={courseCount} 
+                                        count={studentCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 
                                     />
@@ -266,4 +367,4 @@ function BlockList() {
     )
 }
 
-export default BlockList
+export default StudentList

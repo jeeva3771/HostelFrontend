@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import { Authentication } from "./Api"
+import { authentication } from "./Api"
 import { useAuth } from "../AuthContext"
 
 const { useState, useEffect } = require("react")
@@ -27,7 +27,7 @@ function WardenLogin() {
     const loginUser = async () => {
         setIsLoading(true)
         try {
-            const { response, error } = await Authentication(email, password)
+            const { response, error } = await authentication(email, password)
 
             if (error) {
                 alert(error)

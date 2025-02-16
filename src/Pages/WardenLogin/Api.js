@@ -2,8 +2,9 @@ import { wardenAppUrl } from '../../config/index'
 
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
+var formdata = new FormData()
 
-export async function Authentication(email, password) {
+export async function authentication(email, password) {
     try {
         const raw = JSON.stringify({
             "emailId": email,
@@ -575,5 +576,140 @@ export async function deleteCourseById(courseId) {
     } 
 }
 
+export async function readStudents(limit, pageNo, sortColumn, sortOrder, searchText) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
 
+        let url = `${wardenAppUrl}/api/student/?limit=${limit}&page=${pageNo}&orderby=s.${sortColumn}&sort=${sortOrder}`
+        if (searchText) {
+            url += `&search=${searchText.trim()}`
+        }
+
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readStudentById(studentId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+export async function editStudentById(studentId, payload) {
+    try {
+        const requestOptions = {
+            method: studentId ? "PUT" : "POST",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/student${studentId ? `/${studentId}/` : "/"}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function deleteStudentById(studentId) {
+    try {
+        var requestOptions = {
+            method: 'DELETE',
+            credentials: 'include'
+        }
+        
+        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function updateStudentImage(studentId, file) {
+    try {
+        var formdata = new FormData()
+        formdata.append("studentImage", file)
+
+        var requestOptions = {
+            method: 'PUT',
+            body: formdata,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/editimage/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function deleteStudentImage(studentId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/deleteimage/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
