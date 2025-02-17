@@ -245,6 +245,7 @@ function BlockList() {
                                     </table>
                                     {courseById && <DetailsModal ref={modalRef} />}
                                     <Pagination 
+                                        currentPage={pageNo}
                                         count={courseCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 

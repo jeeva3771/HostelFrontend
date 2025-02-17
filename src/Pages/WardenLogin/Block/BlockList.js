@@ -17,7 +17,6 @@ function BlockList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [blockById, setBlockById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
 
@@ -67,15 +66,10 @@ function BlockList() {
             if (error) {
                 alert(error)
                 return
-            }
-            
+            }            
             if (response.ok) {
-                setBlockById(await response.json())
-                setTimeout(() => {
-                    if (modalRef.current) {
-                        modalRef.current.openModal(blockById, "block")
-                    }
-                }, 100);
+                const data = await response.json()
+                modalRef.current.openModal(data, "block")
             } else {
                 alert(await response.text())
             }
@@ -251,7 +245,7 @@ function BlockList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {blockById && <DetailsModal ref={modalRef} />}
+                                    <DetailsModal ref={modalRef} />
                                     <Pagination 
                                         count={blockCount} 
                                         limit={limit} 

@@ -2,7 +2,6 @@ import { useRef, forwardRef, useImperativeHandle, useState, useEffect } from "re
 
 const DetailsModal = forwardRef((_, ref) => {
     const modalRef = useRef(null)
-    let modalInstance = null
     const [modalData, setModalData] = useState(null)
     const [fields, setFields] = useState([])
     const defaultLabel = [
@@ -88,14 +87,16 @@ const DetailsModal = forwardRef((_, ref) => {
             }
                 
             setFields([...selectedFields, ...defaultLabel])
+            console.log('data', data)
             setModalData(data)
         }
     }))
 
     useEffect(() => {
         if (modalData && modalRef.current) {
-            modalInstance = new window.bootstrap.Modal(modalRef.current)
+            const modalInstance = new window.bootstrap.Modal(modalRef.current)
             modalInstance.show()
+            console.log(modalData)
         }
     }, [modalData])
 

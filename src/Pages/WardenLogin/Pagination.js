@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react"
 
-export default function Pagination({ count, limit, onPageChange }) {
+export default function Pagination({ currentPage, count, limit, onPageChange }) {
   const totalPages = Math.ceil(count / limit)
-  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     if (totalPages > 0) {
-      setCurrentPage(1)
       onPageChange(1)
     }
   }, [count, limit]) 
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page)
       onPageChange(page)
     }
   }
