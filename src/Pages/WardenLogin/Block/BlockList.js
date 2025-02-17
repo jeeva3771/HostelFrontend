@@ -206,10 +206,8 @@ function BlockList() {
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-info-circle mr-2 focus me-1" 
+                                                                className="bi bi-info-circle mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16" 
                                                                 onClick={()=> handleReadBlockById(block.blockId)}
                                                             >
@@ -218,10 +216,8 @@ function BlockList() {
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-pencil-square mr-2 focus me-1" 
+                                                                className="bi bi-pencil-square mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16"
                                                                 onClick={() => handleEditBlockById(block.blockId)}
                                                             >
@@ -233,10 +229,8 @@ function BlockList() {
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-trash focus" 
+                                                                className="bi bi-trash focus iconSizing" 
                                                                 onClick={()=> handleDeleteBlockById(block.blockId)} 
                                                                 viewBox="0 0 16 16"
                                                             >

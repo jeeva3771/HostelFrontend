@@ -213,7 +213,7 @@ export async function readBlockById(blockId) {
     }  
 }
 
-export async function editBlockById(blockId, payload) {
+export async function saveOrUpdateBlock(blockId, payload) {
     try {
         const requestOptions = {
             method: blockId ? "PUT" : "POST",
@@ -255,7 +255,7 @@ export async function deleteBlockById(blockId) {
     } 
 }
 
-export async function readFloors(limit, pageNo, sortColumn, sortOrder, searchText) {  
+export async function readBlockFloors(limit, pageNo, sortColumn, sortOrder, searchText) {  
     try {
         var myHeaders = new Headers()
         var requestOptions = {
@@ -326,7 +326,7 @@ export async function readBlockCodes() {
     }  
 }
 
-export async function editFloorById(floorId, payload) {
+export async function saveOrUpdateFloor(floorId, payload) {
     try {
         const requestOptions = {
             method: floorId ? "PUT" : "POST",
@@ -417,7 +417,7 @@ export async function readRoomById(roomId) {
     }  
 }
 
-export async function editRoomById(roomId, payload) {
+export async function saveOrUpdateRoom(roomId, payload) {
     try {
         const requestOptions = {
             method: roomId ? "PUT" : "POST",
@@ -459,7 +459,7 @@ export async function deleteRoomById(roomId) {
     } 
 }
 
-export async function readBlockFloors(blockId, blockFloor = false) {
+export async function readFloorNumbers(blockId, blockFloor = false) {
     try {
         var myHeaders = new Headers()
         var requestOptions = {
@@ -494,7 +494,11 @@ export async function readCourses(limit, pageNo, sortColumn, sortOrder, searchTe
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/course/?limit=${limit}&page=${pageNo}&orderby=c.${sortColumn}&sort=${sortOrder}`
+        let url = `${wardenAppUrl}/api/course/`
+        if (limit !== undefined && pageNo !== undefined && sortColumn && sortOrder) {
+            url += `?limit=${limit}&page=${pageNo}&orderby=c.${sortColumn}&sort=${sortOrder}`
+        }
+
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -511,6 +515,34 @@ export async function readCourses(limit, pageNo, sortColumn, sortOrder, searchTe
         }
     } 
 }
+
+
+// export async function readCourses(limit, pageNo, sortColumn, sortOrder, searchText) {  
+//     try {
+//         var myHeaders = new Headers()
+//         var requestOptions = {
+//             method: 'GET',
+//             headers: myHeaders,
+//             credentials: 'include'
+//         }
+
+//         let url = `${wardenAppUrl}/api/course/?limit=${limit}&page=${pageNo}&orderby=c.${sortColumn}&sort=${sortOrder}`
+//         if (searchText) {
+//             url += `&search=${searchText.trim()}`
+//         }
+
+//         const response = await fetch(url, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }
 
 export async function readCourseById(courseId) {
     try {
@@ -534,7 +566,7 @@ export async function readCourseById(courseId) {
     }  
 }
 
-export async function editCourseById(courseId, payload) {
+export async function saveOrUpdateCourse(courseId, payload) {
     try {
         const requestOptions = {
             method: courseId ? "PUT" : "POST",
@@ -625,7 +657,7 @@ export async function readStudentById(studentId) {
     }  
 }
 
-export async function editStudentById(studentId, payload) {
+export async function saveOrUpdateStudent(studentId, payload) {
     try {
         const requestOptions = {
             method: studentId ? "PUT" : "POST",
@@ -669,7 +701,6 @@ export async function deleteStudentById(studentId) {
 
 export async function updateStudentImage(studentId, file) {
     try {
-        var formdata = new FormData()
         formdata.append("studentImage", file)
 
         var requestOptions = {
@@ -712,4 +743,164 @@ export async function deleteStudentImage(studentId) {
         }
     } 
 }
+
+export async function readRoomNumbers(floorId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let url = `${wardenAppUrl}/api/room/roomnumber/?blockFloorId=${floorId}`
+        
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+export async function readWardens(limit, pageNo, sortColumn, sortOrder, searchText) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let url = `${wardenAppUrl}/api/warden/?limit=${limit}&page=${pageNo}&orderby=w.${sortColumn}&sort=${sortOrder}`
+        if (searchText) {
+            url += `&search=${searchText.trim()}`
+        }
+
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readWardenById(wardenId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+export async function saveOrUpdateWarden(wardenId, payload) {
+    try {
+        const requestOptions = {
+            method: wardenId ? "PUT" : "POST",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden${wardenId ? `/${wardenId}/` : "/"}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function deleteWardenById(wardenId) {
+    try {
+        var requestOptions = {
+            method: 'DELETE',
+            credentials: 'include'
+        }
+        
+        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+// export async function updateWardenImage(wardenId, file) {
+//     try {
+//         formdata.append("image", file)
+
+//         var requestOptions = {
+//             method: 'PUT',
+//             body: formdata,
+//             credentials: 'include'
+//         }
+
+//         const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/editimage/`, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }
+
+// export async function deleteWardenImage(studentId) {
+//     try {
+//         var myHeaders = new Headers()
+//         var requestOptions = {
+//             method: 'DELETE',
+//             headers: myHeaders,
+//             credentials: 'include'
+//         }
+
+//         const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/deleteimage/`, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }
 

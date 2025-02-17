@@ -6,54 +6,63 @@ import Header from "../../Partials/Header"
 import { Link, useNavigate } from "react-router-dom"
 import Pagination from "../Pagination"
 import DetailsModal from "../Modal"
-import { readBlockFloors, readFloorById, deleteFloorById } from "../Api"
+import { 
+    readWardens, 
+    readWardenById, 
+    deleteWardenById    
+} from "../Api"
+import { wardenAppUrl } from "../../../config"
 
-function BlockFloorList() {
-    const [floors, setFloors] = useState([])
+function WardenList() {
+    const [wardens, setWardens] = useState([])
+    const [wardenImages, setWardenImages] = useState({})
     const [pageNo, setPageNo] = useState(1)
-    const [floorCount, setFloorCount] = useState(0)
+    const [wardenCount, setWardenCount] = useState(0)
     const [limit, setLimit] = useState(10)
     const [searchText, setSearchText] = useState("")
     const [loading, setLoading] = useState(false)
-    const [sortColumn, setSortColumn] = useState("b.createdAt")
+    const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [floorById, setFloorById] = useState({})
+    const [wardenById, setWardenById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
-
-    const totalPages = Math.ceil(floorCount / limit)
+    const totalPages = Math.ceil(wardenCount / limit)
 
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
-        { name: 'Structure', link: '' },
-        { name: 'Blockfloor', link: '/blockfloor/' }
+        { name: 'Warden', link: '/warden/' }
     ]
     const defaultColumn = [
-        { key: 'bk.blockCode', label: 'Block Code' },
-        { key: 'b.floorNumber', label: 'Floor Number' },
-        { key: 'b.isActive', label: 'Status' },
-        { key: 'b.createdBy', label: 'Created By' }
+        { key: 'firstName', label: 'First Name' },
+        { key: 'lastName', label: 'Last Name' },
+        { key: 'superAdmin', label: 'Admin' },
+        { key: 'createdBy', label: 'Created By' }
     ]
 
     useEffect(() => {
-        document.title = "Blockfloor List"
+        document.title = "Warden List"
     }, [])
 
     useEffect(() => {
-        handleReadFloors()
+        handleReadWardens()
     }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
-    const handleReadFloors = async () => {
+    const handleReadWardens = async () => {
         try {
             setLoading(true)
-            const { response, error } = await readBlockFloors(limit, pageNo, sortColumn, sortOrder, searchText || '')
+            const { response, error } = await readWardens(limit, pageNo, sortColumn, sortOrder, searchText || '')
             if (error) {
                 alert(error)
                 return
             }
-            const { blockFloors, blockFloorCount } = await response.json()
-            setFloors(blockFloors || [])
-            setFloorCount(blockFloorCount || 0)
+            const { wardens, wardenCount } = await response.json()
+            setWardens(wardens || [])
+            setWardenCount(wardenCount || 0)
+            const images = {}
+            wardens.forEach(warden => {
+                images[warden.wardenId] = `${wardenAppUrl}/api/warden/${warden.wardenId}/avatar?date=${Date.now()}`
+            })
+            setWardenImages(images)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
@@ -61,22 +70,19 @@ function BlockFloorList() {
         }
     }
 
-    const handleReadFloorById = async (blockId) => {
+    const handleReadWardenById = async (wardenId) => {
         try {
-            const { response, error } = await readFloorById(blockId)
+            const { response, error } = await readWardenById(wardenId)
             if (error) {
                 alert(error)
                 return
             }
             
             if (response.ok) {
-                setFloorById(await response.json())
-                setTimeout(() => {
-                    if (modalRef.current) {
-                        modalRef.current.openModal(floorById, "floor")
-                    }
-                }, 100);
-            } else {
+                const wardenData = await response.json()
+                setWardenById(wardenData)
+                modalRef.current?.openModal(wardenById, "warden")
+            } else {    
                 alert(await response.text())
             }
         } catch (error) {
@@ -84,14 +90,14 @@ function BlockFloorList() {
         }
     }
 
-    const handleDeleteFloorById = async (blockId) => {
+    const handleDeleteWardenById = async (wardenId) => {
         try {
             var validateDelete = window.confirm('Are you sure you want to delete?')
 
             if (!validateDelete)
                 return
 
-            const { response, error } = await deleteFloorById(blockId)
+            const { response, error } = await deleteWardenById(wardenId)
             if (error) {
                 alert(error)
                 return
@@ -99,7 +105,7 @@ function BlockFloorList() {
             
             if (response.ok) {
                 alert('Successfully deleted!')
-                handleReadFloors()
+                handleReadWardens()
             } else {
                 alert(await response.text())
             }
@@ -120,14 +126,14 @@ function BlockFloorList() {
             setPageNo(newPage)
         }
     }
-
+    
     return (
         <>
             <Header />
             <Sidebar />
             <main id="main">
                 <div className="pagetitle">
-                    <h1>Block floor List</h1>
+                    <h1>Warden List</h1>
                     <Breadcrumbs breadcrumb={breadcrumbData} />
                 </div>
                 <section className="section">
@@ -163,7 +169,7 @@ function BlockFloorList() {
                                         </div>
                                         <div className="d-flex justify-content-end">
                                             <Link 
-                                                to="/blockfloor/add/" 
+                                                to="/warden/add/" 
                                                 className="btn btn-primary"
                                             >Add
                                             </Link>
@@ -173,6 +179,7 @@ function BlockFloorList() {
                                         <thead>
                                             <tr>
                                                 <th>Sno</th>
+                                                <th>Profile</th>
                                                 {defaultColumn.map(({ key, label }) => (
                                                     <th key={key} onClick={() => handleSort(key)}>
                                                         {label}
@@ -191,21 +198,28 @@ function BlockFloorList() {
                                                     >Loading...
                                                     </td>
                                                 </tr>
-                                            ) : floors.length > 0 ? (
-                                                floors.map((floor, index) => (
+                                            ) : wardens.length > 0 ? (
+                                                wardens.map((warden, index) => (
                                                     <tr key={index}>
                                                         <td>{(pageNo - 1) * limit + index + 1}</td>
-                                                        <td>{floor.blockCode}</td>
-                                                        <td>{floor.floorNumber}</td>
-                                                        <td>{floor.isActive === 1 ? 'Active' : ''}</td>
-                                                        <td>{floor.createdFirstName}{floor.createdLastName}</td>
+                                                        <td>
+                                                            <img 
+                                                                src={wardenImages[warden.wardenId]} 
+                                                                alt="Profile" 
+                                                                className="rounded-circle imageSizing me-2"
+                                                            />
+                                                        </td>
+                                                        <td>{warden.firstName}</td>
+                                                        <td>{warden.lastName}</td>
+                                                        <td>{warden.superAdmin === 1 ? 'Admin' : ''}</td>
+                                                        <td>{warden.createdFirstName}{warden.createdLastName}</td>
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
                                                                 fill="currentColor" 
                                                                 className="bi bi-info-circle mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16" 
-                                                                onClick={()=> handleReadFloorById(floor.blockFloorId)}
+                                                                onClick={()=> handleReadWardenById(warden.wardenId)}
                                                             >
                                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
@@ -215,7 +229,7 @@ function BlockFloorList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => navigate(`/blockfloor/${floor.blockFloorId}/`)}
+                                                                onClick={() => navigate(`/warden/${warden.wardenId}/`)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 
@@ -227,7 +241,7 @@ function BlockFloorList() {
                                                                 xmlns="http://www.w3.org/2000/svg" 
                                                                 fill="currentColor" 
                                                                 className="bi bi-trash focus iconSizing" 
-                                                                onClick={()=> handleDeleteFloorById(floor.blockFloorId)} 
+                                                                onClick={()=> handleDeleteWardenById(warden.wardenId)} 
                                                                 viewBox="0 0 16 16"
                                                             >
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -247,9 +261,9 @@ function BlockFloorList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {floorById && <DetailsModal ref={modalRef} />}
+                                    {wardenById && <DetailsModal ref={modalRef} />}
                                     <Pagination 
-                                        count={floorCount} 
+                                        count={wardenCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 
                                     />
@@ -264,4 +278,4 @@ function BlockFloorList() {
     )
 }
 
-export default BlockFloorList
+export default WardenList

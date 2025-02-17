@@ -91,10 +91,16 @@
   right: 0;
 }
 
-td {  
+td, .upperCase {  
   text-transform: capitalize;
 }
 
-.upperCase {
-  text-transform: capitalize;
+.iconSizing {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+}
+
+.iconFontSizing {
+  font-size: 12px;
 }

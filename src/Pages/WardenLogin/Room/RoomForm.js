@@ -4,7 +4,7 @@ import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
-import { readRoomById, editRoomById, readBlockCodes,readBlockFloors } from "../Api"
+import { readRoomById, saveOrUpdateRoom, readBlockCodes, readFloorNumbers } from "../Api"
 
 function RoomForm() {
     const [blocks, setBlocks] = useState([])
@@ -48,16 +48,16 @@ function RoomForm() {
             }
             
             if (response.ok) {
-                const rooms = await response.json()
+                const room = await response.json()
                 setRoom({
-                    blockCode: rooms.blockId,
-                    floorNumber: rooms.blockFloorId,
-                    roomNumber: rooms.roomNumber,
-                    roomCapacity: rooms.roomCapacity,
-                    isActive: rooms.isActive ? 1 : 0,
-                    isAirConditioner: rooms.isAirConditioner ? 1 : 0
+                    blockCode: room.blockId,
+                    floorNumber: room.blockFloorId,
+                    roomNumber: room.roomNumber,
+                    roomCapacity: room.roomCapacity,
+                    isActive: room.isActive ? 1 : 0,
+                    isAirConditioner: room.isAirConditioner ? 1 : 0
                 })
-                handleFloorNumbers(rooms.blockId)
+                handleFloorNumbers(room.blockId)
             } else {
                 alert(await response.text())
             }
@@ -87,7 +87,7 @@ function RoomForm() {
 
     const handleFloorNumbers = async (blockId, isBlockFloor) => {
         try {
-            const { response, error } = await readBlockFloors(blockId, isBlockFloor)
+            const { response, error } = await readFloorNumbers(blockId, isBlockFloor)
             if (error) {
                 alert(error)
                 return
@@ -116,7 +116,7 @@ function RoomForm() {
         }
 
         try {
-            const { response, error } = await editRoomById(roomId, payload)
+            const { response, error } = await saveOrUpdateRoom(roomId, payload)
             if (error) {
                 alert(error)
                 return
@@ -171,13 +171,16 @@ function RoomForm() {
                                             }}
                                         >
                                             <option value="">Select a Block</option>
-                                            {blocks.map((block) => (
-                                                <option 
-                                                    key={block.blockId} 
-                                                    value={block.blockId}
-                                                >
-                                                    {block.blockCode}
-                                                </option>
+                                            {blocks
+                                                .sort((a, b) => (a.floorCount === 0) - (b.floorCount === 0)) // Move floorCount 0 to bottom
+                                                .map((block) => (
+                                                    <option 
+                                                        key={block.blockId} 
+                                                        value={block.blockId}
+                                                        disabled={block.floorCount === 0}
+                                                    >
+                                                        {block.blockCode} (Floors Count: {block.floorCount})    
+                                                    </option>
                                             ))}
                                         </select>
                                     </div>
@@ -200,9 +203,11 @@ function RoomForm() {
                                             {floors.length > 0 && (
                                                 <>
                                                     <option value="">Select a Floor</option>
-                                                    {floors.map((floor) => (
+                                                    {floors
+                                                        .sort((a, b) => (a.roomCount === 0) - (b.roomCount === 0)) 
+                                                        .map((floor) => (
                                                         <option key={floor.blockFloorId} value={floor.blockFloorId}>
-                                                            {floor.floorNumber}
+                                                            {floor.floorNumber} (Rooms Count: {floor.roomCount})
                                                         </option>
                                                     ))}
                                                 </>

@@ -37,7 +37,6 @@ function StudentList() {
         { name: 'Student', link: '/student/' }
     ]
     const defaultColumn = [
-        { key: '', label: 'Profile' },
         { key: 'name', label: 'Name' },
         { key: 'registerNumber', label: 'Register Number' },
         { key: 'createdBy', label: 'Created By' }
@@ -241,6 +240,7 @@ function StudentList() {
                                         <thead>
                                             <tr>
                                                 <th>Sno</th>
+                                                <th>Profile</th>
                                                 {defaultColumn.map(({ key, label }) => (
                                                     <th key={key} onClick={() => handleSort(key)}>
                                                         {label}
@@ -267,30 +267,28 @@ function StudentList() {
                                                         <img 
                                                             src={studentImages[student.studentId]} 
                                                             alt="Profile" 
-                                                            className="rounded-circle imageSizing me-1"
+                                                            className="rounded-circle imageSizing me-2"
                                                         />
                                                         <button 
-                                                            className="btn btn-primary btn-sm me-1" 
+                                                            className="btn btn-primary btn-sm me-1 iconSizing" 
                                                             title="Upload new profile image"
-                                                            style={{ width: 20, height: 20, padding: 0 }} 
                                                             onClick={() => handleUploadClick(student.studentId)}
                                                         >
-                                                            <i className="bi bi-upload" style={{ fontSize: 12 }}></i>
+                                                            <i className="bi bi-upload iconFontSizing"></i>
                                                         </button>
                                                         <input 
                                                             ref={(el) => fileInputsRef.current[student.studentId] = el}
                                                             type="file" 
                                                             name="studentImage" 
-                                                            style={{ display: "none" }} 
+                                                            className="none"
                                                             onChange={(event) => handleFileChange(event, student.studentId)}
                                                         />
                                                         <button 
-                                                            className="btn btn-danger btn-sm" 
+                                                            className="btn btn-danger btn-sm iconSizing" 
                                                             title="Remove profile image"
-                                                            style={{ width: 20, height: 20, padding: 0 }} 
                                                             onClick={() => handleRemoveImage(student.studentId)}
                                                         >
-                                                            <i className="bi bi-trash" style={{ fontSize: 12 }}></i>
+                                                            <i className="bi bi-trash iconFontSizing"></i>
                                                         </button>
                                                         </td>
                                                         <td>{student.name}</td>
@@ -299,10 +297,8 @@ function StudentList() {
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-info-circle mr-2 focus me-1" 
+                                                                className="bi bi-info-circle mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16" 
                                                                 onClick={()=> handleReadStudentById(student.studentId)}
                                                             >
@@ -311,10 +307,8 @@ function StudentList() {
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-pencil-square mr-2 focus me-1" 
+                                                                className="bi bi-pencil-square mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16"
                                                                 onClick={() => navigate(`/student/${student.studentId}/`)}
                                                             >
@@ -326,10 +320,8 @@ function StudentList() {
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-trash focus" 
+                                                                className="bi bi-trash focus iconSizing" 
                                                                 onClick={()=> handleDeleteStudentById(student.studentId)} 
                                                                 viewBox="0 0 16 16"
                                                             >

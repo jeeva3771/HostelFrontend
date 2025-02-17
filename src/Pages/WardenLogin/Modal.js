@@ -5,25 +5,23 @@ const DetailsModal = forwardRef((_, ref) => {
     let modalInstance = null
     const [modalData, setModalData] = useState(null)
     const [fields, setFields] = useState([])
-
-    const block = [
-        { label: "Block Code", key: "blockCode" },
-        { label: "Location", key: "blockLocation" },
-        { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") },
+    const defaultLabel = [
         { label: "Created At", key: "createdTimeStamp" },
         { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
         { label: "Updated At", key: "updatedTimeStamp" },
         { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
     ]
 
+    const block = [
+        { label: "Block Code", key: "blockCode" },
+        { label: "Location", key: "blockLocation" },
+        { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") }
+    ]
+
     const floor = [
         { label: "Block Code", key: "blockCode" },
         { label: "Floor Number", key: "floorNumber" },
-        { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") },
-        { label: "Created At", key: "createdTimeStamp" },
-        { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
-        { label: "Updated At", key: "updatedTimeStamp" },
-        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+        { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") }
     ]
 
     const room = [
@@ -32,19 +30,35 @@ const DetailsModal = forwardRef((_, ref) => {
         { label: "Room Number", key: "roomNumber" },
         { label: "Room Capacity", key: "roomCapacity" },
         { label: "Status", key: "isActive", format: (val) => (val === 1 ? "Active" : "Inactive") },
-        { label: "Air Conditioner", key: "isAirConditioner", format: (val) => (val === 1 ? "Yes" : "No") },
-        { label: "Created At", key: "createdTimeStamp" },
-        { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
-        { label: "Updated At", key: "updatedTimeStamp" },
-        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+        { label: "Air Conditioner", key: "isAirConditioner", format: (val) => (val === 1 ? "Yes" : "No") }
     ]
 
     const course = [
+        { label: "Course Name", key: "courseName" }
+    ]
+
+    const student = [
+        { label: "Name", key: "name" },
+        { label: "RegNo", key: "registerNumber" },
+        { label: "Room Number", key: "roomNumber" },
+        { label: "Floor Number", key: "floorNumber" },
+        { label: "Block Code", key: "blockCode" },
+        { label: "DOB", key: "birth" },
         { label: "Course Name", key: "courseName" },
-        { label: "Created At", key: "createdTimeStamp" },
-        { label: "Created By", key: "createdFirstName", key2: "createdLastName" },
-        { label: "Updated At", key: "updatedTimeStamp" },
-        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+        { label: "Joined Date", key: "joinDate" },
+        { label: "Phone Number", key: "phoneNumber" },
+        { label: "Email Id", key: "emailId" },
+        { label: "Father Name", key: "fatherName" },
+        { label: "Father Number", key: "fatherNumber" },
+        { label: "Address", key: "address" }
+    ]
+
+    const warden = [
+        { label: "First Name", key: "firstName" },
+        { label: "Last Name", key: "lastName" },
+        { label: "DOB", key: "birth" },
+        { label: "Email Id", key: "emailId" },
+        { label: "Super Admin", key: "superAdmin", format: (val) => (val === 1 ? "Admin" : "---") }
     ]
 
     useImperativeHandle(ref, () => ({
@@ -63,11 +77,17 @@ const DetailsModal = forwardRef((_, ref) => {
                 case "course":
                     selectedFields = course
                     break
+                case "student":
+                    selectedFields = student
+                    break
+                case "warden":
+                    selectedFields = warden
+                    break
                 default: 
                     selectedFields = []
             }
                 
-            setFields(selectedFields)
+            setFields([...selectedFields, ...defaultLabel])
             setModalData(data)
         }
     }))

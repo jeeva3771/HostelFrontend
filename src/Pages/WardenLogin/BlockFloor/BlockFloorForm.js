@@ -4,7 +4,7 @@ import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
-import { readFloorById, editFloorById, readBlockCodes } from "../Api"
+import { readFloorById, saveOrUpdateFloor, readBlockCodes } from "../Api"
 
 function BlockFloorForm() {
     const [blocks, setBlocks] = useState([])
@@ -43,11 +43,11 @@ function BlockFloorForm() {
             }
             
             if (response.ok) {
-                const floors = await response.json()
+                const floor = await response.json()
                 setFloor({
-                    blockCode: floors.blockId,
-                    floorNumber: floors.floorNumber,
-                    isActive: floors.isActive ? 1 : 0
+                    blockCode: floor.blockId,
+                    floorNumber: floor.floorNumber,
+                    isActive: floor.isActive ? 1 : 0
                 })
             } else {
                 alert(await response.text())
@@ -85,7 +85,7 @@ function BlockFloorForm() {
         }
 
         try {
-            const { response, error } = await editFloorById(blockFloorId, payload)
+            const { response, error } = await saveOrUpdateFloor(blockFloorId, payload)
             if (error) {
                 alert(error)
                 return
@@ -134,12 +134,14 @@ function BlockFloorForm() {
                                             onChange={(e) => setFloor({ ...floor, blockCode: e.target.value })}
                                         >
                                             <option value="">Select a Block</option>
-                                            {blocks.map((block) => (
+                                            {blocks
+                                                .sort((a, b) => (a.floorCount === 0) - (b.floorCount === 0)) // Move floorCount 0 to bottom
+                                                .map((block) => (
                                                 <option 
                                                     key={block.blockId} 
                                                     value={block.blockId}
                                                 >
-                                                    {block.blockCode}
+                                                    {block.blockCode} (Floors Count: {block.floorCount})
                                                 </option>
                                             ))}
                                         </select>

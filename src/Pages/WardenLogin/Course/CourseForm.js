@@ -4,7 +4,7 @@ import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
-import { readCourseById, editCourseById } from "../Api"
+import { readCourseById, saveOrUpdateCourse } from "../Api"
 
 function CourseForm() {
     const [course, setCourse] = useState('')
@@ -54,7 +54,7 @@ function CourseForm() {
         }
 
         try {
-            const { response, error } = await editCourseById(courseId, payload)
+            const { response, error } = await saveOrUpdateCourse(courseId, payload)
             if (error) {
                 alert(error)
                 return

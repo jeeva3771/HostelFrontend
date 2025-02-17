@@ -4,7 +4,7 @@ import Footer from "../../Partials/Footer"
 import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
-import { readBlockById, editBlockById } from "../Api"
+import { readBlockById, saveOrUpdateBlock } from "../Api"
 
 function BlockForm() {
     const [block, setBlock] = useState({
@@ -41,11 +41,11 @@ function BlockForm() {
             }
             
             if (response.ok) {
-                const blocks = await response.json();
+                const block = await response.json();
                 setBlock({
-                    blockCode: blocks.blockCode,
-                    location: blocks.blockLocation,
-                    isActive: blocks.isActive
+                    blockCode: block.blockCode,
+                    location: block.blockLocation,
+                    isActive: block.isActive
                 })
             } else {
                 alert(await response.text())
@@ -64,7 +64,7 @@ function BlockForm() {
         }
 
         try {
-            const { response, error } = await editBlockById(blockId, payload)
+            const { response, error } = await saveOrUpdateBlock(blockId, payload)
             if (error) {
                 alert(error)
                 return

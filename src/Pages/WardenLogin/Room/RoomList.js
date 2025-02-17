@@ -201,10 +201,8 @@ function RoomList() {
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-info-circle mr-2 focus me-1" 
+                                                                className="bi bi-info-circle mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16" 
                                                                 onClick={()=> handleReadRoomById(room.roomId)}
                                                             >
@@ -213,10 +211,8 @@ function RoomList() {
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-pencil-square mr-2 focus me-1" 
+                                                                className="bi bi-pencil-square mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16"
                                                                 onClick={() => navigate(`/room/${room.roomId}/`)}
                                                             >
@@ -228,10 +224,8 @@ function RoomList() {
                                                             </svg>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
-                                                                width="20" 
-                                                                height="20" 
                                                                 fill="currentColor" 
-                                                                className="bi bi-trash focus" 
+                                                                className="bi bi-trash focus iconSizing" 
                                                                 onClick={()=> handleDeleteRoomById(room.roomId)} 
                                                                 viewBox="0 0 16 16"
                                                             >
