@@ -13,8 +13,10 @@ import {
     readCourses
 } from "../Api"
 import formatDate from "../DateFormat"
+import { useAuth } from "../../AuthContext"
 
 function StudentForm() {
+    const { userLogout } = useAuth()
     const [blocks, setBlocks] = useState([])
     const [floors, setFloors] = useState([])
     const [rooms, setRooms] = useState([])
@@ -36,7 +38,7 @@ function StudentForm() {
     })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const {studentId} = useParams()
+    const { studentId } = useParams()
     
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
@@ -62,6 +64,12 @@ function StudentForm() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 const student = await response.json()
@@ -81,7 +89,7 @@ function StudentForm() {
                     joinDate: formatDate(student.joinDate)
                 })
                 handleBlockCodes()
-                handleFloorNumbers(student.blockId, true)
+                handleFloorNumbers(student.blockId)
                 handleRoomNumbers(student.blockFloorId)
             } else {
                 alert(await response.text())
@@ -96,6 +104,12 @@ function StudentForm() {
             const { response, error } = await readCourses()
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -115,6 +129,12 @@ function StudentForm() {
             const { response, error } = await readBlockCodes()
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -137,6 +157,12 @@ function StudentForm() {
                 return
             }
 
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if (response.ok) {
                 const floorNumbers = await response.json()
                 setFloors(floorNumbers)
@@ -153,6 +179,12 @@ function StudentForm() {
             const { response, error } = await readRoomNumbers(floorId)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
 
@@ -192,11 +224,22 @@ function StudentForm() {
                 return
             }
 
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if ([200, 201].includes(response.status)) {
                 navigate('/student/')
             } else {
                 const responseData = await response.json()
-                alert(Array.isArray(responseData) ? responseData[0] : responseData.error || responseData)
+                if (Array.isArray(responseData)) {
+                    const errorMessage = responseData.join('\n');
+                    alert(errorMessage);
+                } else {
+                    alert(responseData.error || responseData);
+                }
             }
         } catch (error) {
             alert("Something went wrong. Please try later.");

@@ -5,8 +5,10 @@ import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
 import { readCourseById, saveOrUpdateCourse } from "../Api"
+import { useAuth } from "../../AuthContext"
 
 function CourseForm() {
+    const { userLogout } = useAuth()
     const [course, setCourse] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
@@ -36,6 +38,12 @@ function CourseForm() {
                 return
             }
             
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if (response.ok) {
                 const course = await response.json();
                 setCourse(course.courseName)
@@ -60,6 +68,12 @@ function CourseForm() {
                 return
             }
 
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if ([200, 201].includes(response.status)) {
                 navigate('/course/')
             } else {
@@ -71,7 +85,7 @@ function CourseForm() {
         } finally {
             setLoading(false)
         }
-    };
+    }
 
     return (
         <>

@@ -7,8 +7,10 @@ import { Link, useNavigate } from "react-router-dom"
 import Pagination from "../Pagination"
 import DetailsModal from "../Modal"
 import { readBlockFloors, readFloorById, deleteFloorById } from "../Api"
+import { useAuth } from "../../AuthContext"
 
 function BlockFloorList() {
+    const { userLogout } = useAuth()
     const [floors, setFloors] = useState([])
     const [pageNo, setPageNo] = useState(1)
     const [floorCount, setFloorCount] = useState(0)
@@ -17,7 +19,6 @@ function BlockFloorList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("b.createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [floorById, setFloorById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
 
@@ -51,6 +52,13 @@ function BlockFloorList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             const { blockFloors, blockFloorCount } = await response.json()
             setFloors(blockFloors || [])
             setFloorCount(blockFloorCount || 0)
@@ -68,14 +76,16 @@ function BlockFloorList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
-                setFloorById(await response.json())
-                setTimeout(() => {
-                    if (modalRef.current) {
-                        modalRef.current.openModal(floorById, "floor")
-                    }
-                }, 100);
+                const data = await response.json()
+                modalRef.current.openModal(data, "floor")
             } else {
                 alert(await response.text())
             }
@@ -96,6 +106,12 @@ function BlockFloorList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 alert('Successfully deleted!')
@@ -113,6 +129,7 @@ function BlockFloorList() {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
         setSortOrder(newSortOrder)
+        setPageNo(1)
     }
 
     const handlePageChange = (newPage) => {
@@ -174,7 +191,11 @@ function BlockFloorList() {
                                             <tr>
                                                 <th>Sno</th>
                                                 {defaultColumn.map(({ key, label }) => (
-                                                    <th key={key} onClick={() => handleSort(key)}>
+                                                    <th 
+                                                        key={key} 
+                                                        onClick={() => handleSort(key)} 
+                                                        className="cursor"
+                                                    >
                                                         {label}
                                                         {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
                                                     </th>
@@ -247,8 +268,9 @@ function BlockFloorList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {floorById && <DetailsModal ref={modalRef} />}
+                                    <DetailsModal ref={modalRef} />
                                     <Pagination 
+                                        currentPage={pageNo}
                                         count={floorCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 

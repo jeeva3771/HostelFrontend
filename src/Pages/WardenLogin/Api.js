@@ -817,28 +817,6 @@ export async function readWardenById(wardenId) {
     }  
 }
 
-export async function saveOrUpdateWarden(wardenId, payload) {
-    try {
-        const requestOptions = {
-            method: wardenId ? "PUT" : "POST",
-            headers,
-            body: JSON.stringify(payload),
-            credentials: 'include'
-        }
-
-        const response = await fetch(`${wardenAppUrl}/api/warden${wardenId ? `/${wardenId}/` : "/"}`, requestOptions)
-        return {
-            response,
-            error: null,
-        }
-    } catch (error) {
-        return {
-            response: null,
-            error: 'Something went wrong. Please try again later.'
-        }
-    } 
-}
-
 export async function deleteWardenById(wardenId) {
     try {
         var requestOptions = {
@@ -858,6 +836,114 @@ export async function deleteWardenById(wardenId) {
         }
     } 
 }
+
+export async function saveOrUpdateWarden(wardenId, payload) {
+    const method = wardenId ? "PUT" : "POST"
+    let requestBody
+    let headers = {}
+
+    if (payload.image) {
+        const formData = new FormData()
+        formData.append("firstName", payload.firstName)
+        formData.append("lastName", payload.lastName)
+        formData.append("dob", payload.dob)
+        formData.append("emailId", payload.emailId)
+        formData.append("superAdmin", payload.superAdmin)
+        formData.append("password", payload.password)
+
+        if (payload.image) {
+            formData.append("image", payload.image)
+        }
+        requestBody = formData
+    } else {
+        headers = { "Content-Type": "application/json" }
+        const updatePayload = {
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            dob: payload.dob,
+            emailId: payload.emailId,
+            superAdmin: payload.superAdmin,
+        }
+        requestBody = JSON.stringify(updatePayload)
+    }
+
+    try {
+        const requestOptions = {
+            method,
+            body: requestBody,
+            headers: payload.image ? undefined : headers,
+            credentials: "include",
+        };
+
+        const response = await fetch(
+            `${wardenAppUrl}/api/warden${wardenId ? `/${wardenId}/` : "/"}`,
+            requestOptions
+        )
+
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: "Something went wrong. Please try again later.",
+        }
+    }
+}
+
+export async function readAttendances(limit, pageNo, sortColumn, sortOrder, searchText) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let url = `${wardenAppUrl}/api/attendance/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
+        if (searchText) {
+            url += `&search=${searchText.trim()}`
+        }
+
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function readAttendanceById(attendanceId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/attendance/${attendanceId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+
+
+
 
 // export async function updateWardenImage(wardenId, file) {
 //     try {

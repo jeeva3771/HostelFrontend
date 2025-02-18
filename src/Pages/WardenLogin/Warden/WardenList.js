@@ -12,8 +12,10 @@ import {
     deleteWardenById    
 } from "../Api"
 import { wardenAppUrl } from "../../../config"
+import { useAuth } from "../../AuthContext"
 
 function WardenList() {
+    const { userLogout } = useAuth()
     const [wardens, setWardens] = useState([])
     const [wardenImages, setWardenImages] = useState({})
     const [pageNo, setPageNo] = useState(1)
@@ -23,7 +25,6 @@ function WardenList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [wardenById, setWardenById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
     const totalPages = Math.ceil(wardenCount / limit)
@@ -55,6 +56,12 @@ function WardenList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             const { wardens, wardenCount } = await response.json()
             setWardens(wardens || [])
             setWardenCount(wardenCount || 0)
@@ -77,11 +84,16 @@ function WardenList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
-                const wardenData = await response.json()
-                setWardenById(wardenData)
-                modalRef.current?.openModal(wardenById, "warden")
+                const data = await response.json()
+                modalRef.current.openModal(data, "warden")
             } else {    
                 alert(await response.text())
             }
@@ -102,6 +114,12 @@ function WardenList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 alert('Successfully deleted!')
@@ -119,6 +137,7 @@ function WardenList() {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
         setSortOrder(newSortOrder)
+        setPageNo(1)
     }
 
     const handlePageChange = (newPage) => {
@@ -181,7 +200,11 @@ function WardenList() {
                                                 <th>Sno</th>
                                                 <th>Profile</th>
                                                 {defaultColumn.map(({ key, label }) => (
-                                                    <th key={key} onClick={() => handleSort(key)}>
+                                                    <th 
+                                                        key={key} 
+                                                        onClick={() => handleSort(key)} 
+                                                        className="cursor"
+                                                    >
                                                         {label}
                                                         {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
                                                     </th>
@@ -261,8 +284,9 @@ function WardenList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {wardenById && <DetailsModal ref={modalRef} />}
+                                    <DetailsModal ref={modalRef} />
                                     <Pagination 
+                                        currentPage={pageNo}
                                         count={wardenCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 

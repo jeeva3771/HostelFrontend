@@ -5,8 +5,10 @@ import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
 import { readRoomById, saveOrUpdateRoom, readBlockCodes, readFloorNumbers } from "../Api"
+import { useAuth } from "../../AuthContext"
 
 function RoomForm() {
+    const { userLogout } = useAuth()
     const [blocks, setBlocks] = useState([])
     const [floors, setFloors] = useState([])
     const [room, setRoom] = useState({
@@ -31,7 +33,6 @@ function RoomForm() {
     useEffect(() => {
        document.title = roomId ? "Edit Room" : "Add Room"
        handleBlockCodes()
-       
     }, [])
 
     useEffect(() => {
@@ -44,6 +45,12 @@ function RoomForm() {
             const { response, error } = await readRoomById(roomId)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -73,6 +80,12 @@ function RoomForm() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 const blockCode = await response.json()
@@ -90,6 +103,12 @@ function RoomForm() {
             const { response, error } = await readFloorNumbers(blockId, isBlockFloor)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
 
@@ -119,6 +138,12 @@ function RoomForm() {
             const { response, error } = await saveOrUpdateRoom(roomId, payload)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
 

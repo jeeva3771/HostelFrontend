@@ -60,6 +60,20 @@ const DetailsModal = forwardRef((_, ref) => {
         { label: "Super Admin", key: "superAdmin", format: (val) => (val === 1 ? "Admin" : "---") }
     ]
 
+    const attendance = [
+        { label: "Name", key: "name" },
+        { label: "Register Number", key: "registerNumber" },
+        { label: "Check-in Date", key: "checkIn" },
+        { label: "Block Code", key: "blockCode" },
+        { label: "Floor Number", key: "floorNumber" },
+        { label: "Room Number", key: "roomNumber" },
+        { label: "Is Present", key: "isPresent", format: (val) => (val === 1 ? "Present" : "Absent")},
+        { label: "Reviewed At", key: "createdTimeStamp" },
+        { label: "Reviewed By", key: "reviewedWardenFirstName", key2: "reviewedWardenLastName" },
+        { label: "Updated At", key: "updatedTimeStamp" },
+        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+    ]
+
     useImperativeHandle(ref, () => ({
         openModal: (data, type) => {
             let selectedFields
@@ -82,12 +96,19 @@ const DetailsModal = forwardRef((_, ref) => {
                 case "warden":
                     selectedFields = warden
                     break
+                case "attendance":
+                    selectedFields = attendance
+                    break
                 default: 
                     selectedFields = []
             }
                 
-            setFields([...selectedFields, ...defaultLabel])
-            console.log('data', data)
+            if (type === "attendance") {
+                setFields(selectedFields)
+            } else {
+                setFields([...selectedFields, ...defaultLabel])
+            }
+            
             setModalData(data)
         }
     }))
@@ -122,7 +143,7 @@ const DetailsModal = forwardRef((_, ref) => {
                             fields.map(({ label, key, key2, format, fallback }) => {
                                 const value = format 
                                 ? format(modalData[key]) 
-                                : key === "createdFirstName" || key === "updatedFirstName"
+                                : key === ("createdFirstName" || "reviewedWardenFirstName" ) || key === ("updatedFirstName" || "reviewedWardenLastName")
                                 ? modalData[key]?.charAt(0).toUpperCase() + modalData[key]?.slice(1) || fallback || ""
                                 : modalData[key] || fallback || ""
 

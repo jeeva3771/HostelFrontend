@@ -7,8 +7,10 @@ import { readCourses, readCourseById, deleteCourseById } from "../Api"
 import Footer from "../../Partials/Footer"
 import DetailsModal from "../Modal"
 import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../../AuthContext"
 
 function BlockList() {  
+    const { userLogout } = useAuth()
     const [courses, setCourses] = useState([])
     const [pageNo, setPageNo] = useState(1)
     const [courseCount, setCourseCount] = useState(0)
@@ -17,7 +19,6 @@ function BlockList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [courseById, setCourseById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
 
@@ -49,6 +50,13 @@ function BlockList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             const { courses, courseCount } = await response.json()
             setCourses(courses || [])
             setCourseCount(courseCount || 0)
@@ -66,14 +74,16 @@ function BlockList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
-                setCourseById(await response.json())
-                setTimeout(() => {
-                    if (modalRef.current) {
-                        modalRef.current.openModal(courseById, "course")
-                    }
-                }, 100);
+                const data = await response.json()
+                modalRef.current.openModal(data, "course")
             } else {
                 alert(await response.text())
             }
@@ -92,6 +102,12 @@ function BlockList() {
             const { response, error } = await deleteCourseById(courseId)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -172,7 +188,11 @@ function BlockList() {
                                             <tr>
                                                 <th>Sno</th>
                                                 {defaultColumn.map(({ key, label }) => (
-                                                    <th key={key} onClick={() => handleSort(key)}>
+                                                    <th 
+                                                        key={key} 
+                                                        onClick={() => handleSort(key)}
+                                                        className="cursor"
+                                                    >
                                                         {label}
                                                         {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
                                                     </th>
@@ -243,7 +263,7 @@ function BlockList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {courseById && <DetailsModal ref={modalRef} />}
+                                    <DetailsModal ref={modalRef} />
                                     <Pagination 
                                         currentPage={pageNo}
                                         count={courseCount} 

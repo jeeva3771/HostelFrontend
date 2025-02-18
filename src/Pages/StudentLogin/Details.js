@@ -72,7 +72,7 @@ function Details() {
             }
 
             if (response.status === 401) {
-                userLogout()
+                userLogout('student')
                 navigate('/student/login/')
                 return
             }
@@ -100,7 +100,7 @@ function Details() {
             }
 
             if (response.status === 401) {
-                userLogout()
+                userLogout('student')
                 navigate('/student/login/')
                 return
             }

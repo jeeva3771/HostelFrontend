@@ -3,51 +3,50 @@ import Header from "../../Partials/Header"
 import Sidebar from "../../Partials/Aside"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Pagination from "../Pagination"
-import { readBlocks, readBlockById, deleteBlockById } from "../Api"
+import { readAttendances, readAttendanceById } from "../Api"
 import Footer from "../../Partials/Footer"
 import DetailsModal from "../Modal"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../../AuthContext"
 
-function BlockList() {  
-    const [blocks, setBlocks] = useState([])
+function AttendanceList() {  
+    const [attendances, setAttendances] = useState([])
     const [pageNo, setPageNo] = useState(1)
-    const [blockCount, setBlockCount] = useState(0)
-    const [limit, setLimit] = useState(10)
+    const [attendanceCount, setAttendanceCount] = useState(0)
+    const [limit, setLimit] = useState(100)
     const [searchText, setSearchText] = useState("")
     const [loading, setLoading] = useState(false)
-    const [sortColumn, setSortColumn] = useState("createdAt")
+    const [sortColumn, setSortColumn] = useState("a.createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
     const modalRef = useRef(null)
     const navigate = useNavigate()
     const { userLogout } = useAuth()
 
-    const totalPages = Math.ceil(blockCount / limit)
+    const totalPages = Math.ceil(attendanceCount / limit)
 
     const breadcrumbData = [
         { name: 'Home', link: '/home/' },
-        { name: 'Structure', link: '' },
-        { name: 'Block', link: '/block/' }
+        { name: 'Attendance', link: '' },
     ]
     const defaultColumn = [
-        { key: 'blockCode', label: 'Block Code' },
-        { key: 'blockLocation', label: 'Location' },
-        { key: 'isActive', label: 'Status' },
-        { key: 'createdBy', label: 'Created By' }
+        { key: 's.name', label: 'Student Name' },
+        { key: 's2.registerNumber', label: 'Register Number' },
+        { key: 'a.checkInDate', label: 'Check-in Date' },
+        { key: 'a.isPresent', label: 'Is Present' }
     ]
 
     useEffect(() => {
-        document.title = "Block List"
+        document.title = "Attendance List"
     }, [])
 
     useEffect(() => {
-        handleReadBlocks()
+        handleReadAttendances()
     }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
-    const handleReadBlocks = async () => {
+    const handleReadAttendances = async () => {
         try {
             setLoading(true)
-            const { response, error } = await readBlocks(limit, pageNo, sortColumn, sortOrder, searchText || '')
+            const { response, error } = await readAttendances(limit, pageNo, sortColumn, sortOrder, searchText || '')
             if (error) {
                 alert(error)
                 return
@@ -59,19 +58,19 @@ function BlockList() {
                 return
             }
 
-            const { blocks, blockCount } = await response.json()
-            setBlocks(blocks || [])
-            setBlockCount(blockCount || 0)
+            const { attendances, attendanceCount } = await response.json()
+            setAttendances(attendances || [])
+            setAttendanceCount(attendanceCount || 0)
         } catch (error) {
             alert('Something went wrong.Please try later')
         } finally {
             setLoading(false)
         }
     }
-
-    const handleReadBlockById = async (blockId) => {
+    
+    const handleReadAttendanceById = async (attendanceId) => {
         try {
-            const { response, error } = await readBlockById(blockId)
+            const { response, error } = await readAttendanceById(attendanceId)
             if (error) {
                 alert(error)
                 return
@@ -85,7 +84,7 @@ function BlockList() {
 
             if (response.ok) {
                 const data = await response.json()
-                modalRef.current.openModal(data, "block")
+                modalRef.current.openModal(data, "attendance")
             } else {
                 alert(await response.text())
             }
@@ -94,37 +93,6 @@ function BlockList() {
         }
     }
 
-    const handleDeleteBlockById = async (blockId) => {
-        try {
-            var validateDelete = window.confirm('Are you sure you want to delete?')
-
-            if (!validateDelete)
-                return
-
-            const { response, error } = await deleteBlockById(blockId)
-            if (error) {
-                alert(error)
-                return
-            }
-
-            if (response.status === 401) {
-                userLogout('warden')
-                navigate('/login/')
-                return
-            }
-            
-            if (response.ok) {
-                alert('Successfully deleted!')
-                handleReadBlocks()
-            } else {
-                alert(await response.text())
-            }
-            
-        } catch (error) {
-            alert('Something went wrong.Please try later')
-        }
-    }
-    
     const handleSort = (column) => {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
@@ -144,7 +112,7 @@ function BlockList() {
             <Sidebar />
             <main id="main">
                 <div className="pagetitle">
-                    <h1>Block List</h1>
+                    <h1>Attendance List</h1>
                     <Breadcrumbs breadcrumb={breadcrumbData} />
                 </div>
                 <section className="section">
@@ -166,23 +134,24 @@ function BlockList() {
                                                 </div>
                                                 <div className="datatable-dropdown">
                                                     <select 
-                                                        className="datatable-selector" 
+                                                        className="datatable-selector me-1" 
                                                         onChange={(e) => setLimit(Number(e.target.value))} 
                                                         value={limit}
                                                     >
-                                                        <option value="5">5</option>
-                                                        <option value="10">10</option>
-                                                        <option value="15">15</option>
+                                                        <option value="50">50</option>
+                                                        <option value="100">100</option>
+                                                        <option value="200">200</option>
                                                         <option value="-1">All</option>
-                                                    </select>
+                                                    </select> entries per page
+                                                    <Link to="/attendance/report/" class="btn btn-secondary">Report</Link>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="d-flex justify-content-end">
                                             <Link 
-                                                to="/block/add/" 
+                                                to="/attendance/add/" 
                                                 className="btn btn-primary"
-                                            >Add
+                                            >Take Attendance
                                             </Link>
                                         </div>
                                     </div>
@@ -212,21 +181,21 @@ function BlockList() {
                                                     >Loading...
                                                     </td>
                                                 </tr>
-                                            ) : blocks.length > 0 ? (
-                                                blocks.map((block, index) => (
+                                            ) : attendances.length > 0 ? (
+                                                attendances.map((attendance, index) => (
                                                     <tr key={index}>
                                                         <td>{(pageNo - 1) * limit + index + 1}</td>
-                                                        <td>{block.blockCode}</td>
-                                                        <td>{block.blockLocation}</td>
-                                                        <td>{block.isActive === 1 ? 'Active' : ''}</td>
-                                                        <td>{block.createdFirstName}{block.createdLastName}</td>
+                                                        <td>{attendance.name}</td>
+                                                        <td>{attendance.registerNumber}</td>
+                                                        <td>{attendance.checkIn}</td>
+                                                        <td>{attendance.isPresent === 1 ? 'Present' : 'Absent'}</td>
                                                         <td>
                                                             <svg 
                                                                 xmlns="http://www.w3.org/2000/svg" 
                                                                 fill="currentColor" 
                                                                 className="bi bi-info-circle mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16" 
-                                                                onClick={()=> handleReadBlockById(block.blockId)}
+                                                                onClick={()=> handleReadAttendanceById(attendance.attendanceId)}
                                                             >
                                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
@@ -236,23 +205,13 @@ function BlockList() {
                                                                 fill="currentColor" 
                                                                 className="bi bi-pencil-square mr-2 focus me-1 iconSizing" 
                                                                 viewBox="0 0 16 16"
-                                                                onClick={() => navigate(`/block/${block.blockId}/`)}
+                                                                onClick={() => navigate(`/attendance/${attendance.attendanceId}/`)}
                                                             >
                                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                                 <path 
                                                                     fill-rule="evenodd" 
                                                                     d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
                                                                 />
-                                                            </svg>
-                                                            <svg 
-                                                                xmlns="http://www.w3.org/2000/svg" 
-                                                                fill="currentColor" 
-                                                                className="bi bi-trash focus iconSizing" 
-                                                                onClick={()=> handleDeleteBlockById(block.blockId)} 
-                                                                viewBox="0 0 16 16"
-                                                            >
-                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                                                             </svg>
                                                         </td>
                                                     </tr>
@@ -271,7 +230,7 @@ function BlockList() {
                                     <DetailsModal ref={modalRef} />
                                     <Pagination 
                                         currentPage={pageNo}
-                                        count={blockCount} 
+                                        count={attendanceCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 
                                     />
@@ -286,4 +245,4 @@ function BlockList() {
     )
 }
 
-export default BlockList
+export default AttendanceList

@@ -5,8 +5,10 @@ import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
 import { readFloorById, saveOrUpdateFloor, readBlockCodes } from "../Api"
+import { useAuth } from "../../AuthContext"
 
 function BlockFloorForm() {
+    const { userLogout } = useAuth()
     const [blocks, setBlocks] = useState([])
     const [floor, setFloor] = useState({
         blockCode: '',
@@ -42,6 +44,12 @@ function BlockFloorForm() {
                 return
             }
             
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if (response.ok) {
                 const floor = await response.json()
                 setFloor({
@@ -62,6 +70,12 @@ function BlockFloorForm() {
             const { response, error } = await readBlockCodes()
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -88,6 +102,12 @@ function BlockFloorForm() {
             const { response, error } = await saveOrUpdateFloor(blockFloorId, payload)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
 

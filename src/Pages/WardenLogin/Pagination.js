@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 
 export default function Pagination({ currentPage, count, limit, onPageChange }) {
   const totalPages = Math.ceil(count / limit)

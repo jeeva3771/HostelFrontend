@@ -14,8 +14,10 @@ import {
     deleteStudentImage
 } from "../Api"
 import { wardenAppUrl } from "../../../config"
+import { useAuth } from "../../AuthContext"
 
 function StudentList() {
+    const { userLogout } = useAuth()
     const [students, setStudents] = useState([])
     const [studentImages, setStudentImages] = useState({})
     const [pageNo, setPageNo] = useState(1)
@@ -25,7 +27,6 @@ function StudentList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [studentById, setStudentById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
     const fileInputsRef = useRef({})
@@ -56,6 +57,12 @@ function StudentList() {
             const { response, error } = await readStudents(limit, pageNo, sortColumn, sortOrder, searchText || '')
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             const { students, studentCount } = await response.json()
@@ -94,6 +101,12 @@ function StudentList() {
                 return
             }
 
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if(response.ok) {
                 setStudentImages(prevImages => ({
                     ...prevImages,
@@ -118,6 +131,12 @@ function StudentList() {
                 return
             }
 
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if (response.ok) {
                 setStudentImages(prevImages => ({
                     ...prevImages,
@@ -138,11 +157,16 @@ function StudentList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
-                const studentData = await response.json()
-                setStudentById(studentData)
-                modalRef.current?.openModal(studentById, "student")
+                const data = await response.json()
+                modalRef.current.openModal(data, "student")
             } else {    
                 alert(await response.text())
             }
@@ -163,6 +187,12 @@ function StudentList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 alert('Successfully deleted!')
@@ -180,6 +210,7 @@ function StudentList() {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
         setSortOrder(newSortOrder)
+        setPageNo(1)
     }
 
     const handlePageChange = (newPage) => {
@@ -242,7 +273,11 @@ function StudentList() {
                                                 <th>Sno</th>
                                                 <th>Profile</th>
                                                 {defaultColumn.map(({ key, label }) => (
-                                                    <th key={key} onClick={() => handleSort(key)}>
+                                                    <th 
+                                                        key={key} 
+                                                        onClick={() => handleSort(key)} 
+                                                        className="cursor"
+                                                    >
                                                         {label}
                                                         {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
                                                     </th>
@@ -342,8 +377,9 @@ function StudentList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {studentById && <DetailsModal ref={modalRef} />}
+                                    <DetailsModal ref={modalRef} />
                                     <Pagination 
+                                        currentPage={pageNo}
                                         count={studentCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 

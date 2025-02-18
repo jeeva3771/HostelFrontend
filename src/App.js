@@ -18,6 +18,8 @@ import CourseForm from './Pages/WardenLogin/Course/CourseForm'
 import StudentList from './Pages/WardenLogin/Student/StudentList'
 import StudentForm from './Pages/WardenLogin/Student/StudentForm'
 import WardenList from './Pages/WardenLogin/Warden/WardenList'
+import WardenForm from './Pages/WardenLogin/Warden/WardenForm'
+import AttendanceList from './Pages/WardenLogin/Attendance/AttendanceList'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -220,20 +222,47 @@ function App() {
               }
             />
 
-            {/* <Route
-              path="/student/add/"
+            <Route
+              path="/warden/add/"
               element={
                 <WardenPrivateRoute>
-                  <StudentForm />
+                  <WardenForm />
                 </WardenPrivateRoute>
               }
-            /> */}
+            />
 
-            {/* <Route
-              path="/student/:studentId/"
+            <Route
+              path="/warden/:wardenId/"
               element={
                 <WardenPrivateRoute>
-                  <StudentForm />
+                  <WardenForm />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/attendance/"
+              element={
+                <WardenPrivateRoute>
+                  <AttendanceList />
+                </WardenPrivateRoute>
+              }
+            />
+
+            {/* <Route
+              path="/attendance/add/"
+              element={
+                <WardenPrivateRoute>
+                  < />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/attendance/:attendanceId/"
+              element={
+                <WardenPrivateRoute>
+                  <Att />
                 </WardenPrivateRoute>
               }
             /> */}

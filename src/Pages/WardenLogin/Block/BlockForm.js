@@ -5,8 +5,10 @@ import Header from "../../Partials/Header"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
 import { readBlockById, saveOrUpdateBlock } from "../Api"
+import { useAuth } from "../../AuthContext"
 
 function BlockForm() {
+    const { userLogout } = useAuth()
     const [block, setBlock] = useState({
         blockCode: '',
         location: '',
@@ -39,6 +41,12 @@ function BlockForm() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 const block = await response.json();
@@ -67,6 +75,12 @@ function BlockForm() {
             const { response, error } = await saveOrUpdateBlock(blockId, payload)
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
 

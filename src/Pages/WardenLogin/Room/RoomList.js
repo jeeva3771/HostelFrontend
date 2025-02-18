@@ -7,8 +7,10 @@ import { Link, useNavigate } from "react-router-dom"
 import Pagination from "../Pagination"
 import DetailsModal from "../Modal"
 import { readRooms, readRoomById, deleteRoomById } from "../Api"
+import { useAuth } from "../../AuthContext"
 
 function RoomList() {
+    const { userLogout } = useAuth()
     const [rooms, setRooms] = useState([])
     const [pageNo, setPageNo] = useState(1)
     const [roomCount, setRoomCount] = useState(0)
@@ -17,7 +19,6 @@ function RoomList() {
     const [loading, setLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState("r.createdAt")
     const [sortOrder, setSortOrder] = useState("DESC")
-    const [roomById, setRoomById] = useState({})
     const modalRef = useRef(null)
     const navigate = useNavigate()
 
@@ -52,6 +53,12 @@ function RoomList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             const { rooms, roomCount } = await response.json()
             setRooms(rooms || [])
             setRoomCount(roomCount || 0)
@@ -69,11 +76,16 @@ function RoomList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
-                const roomData = await response.json()
-                setRoomById(roomData)
-                modalRef.current?.openModal(roomById, "room")
+                const data = await response.json()
+                modalRef.current.openModal(data, "room")
             } else {
                 alert(await response.text())
             }
@@ -94,6 +106,12 @@ function RoomList() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if (response.ok) {
                 alert('Successfully deleted!')
@@ -111,6 +129,7 @@ function RoomList() {
         const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
         setSortColumn(column)
         setSortOrder(newSortOrder)
+        setPageNo(1)
     }
 
     const handlePageChange = (newPage) => {
@@ -172,7 +191,11 @@ function RoomList() {
                                             <tr>
                                                 <th>Sno</th>
                                                 {defaultColumn.map(({ key, label }) => (
-                                                    <th key={key} onClick={() => handleSort(key)}>
+                                                    <th 
+                                                        key={key}   
+                                                        onClick={() => handleSort(key)} 
+                                                        className="cursor"
+                                                    >
                                                         {label}
                                                         {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
                                                     </th>
@@ -246,8 +269,9 @@ function RoomList() {
                                             )}
                                         </tbody>
                                     </table>
-                                    {roomById && <DetailsModal ref={modalRef} />}
+                                    <DetailsModal ref={modalRef} />
                                     <Pagination 
+                                        currentPage={pageNo}
                                         count={roomCount} 
                                         limit={limit} 
                                         onPageChange={handlePageChange} 

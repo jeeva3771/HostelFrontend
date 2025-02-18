@@ -16,8 +16,11 @@ import {
     useState 
 } from "react"
 import { Link } from "react-router-dom"
-
+import { useAuth } from "../AuthContext"
+import { useNavigate } from "react-router-dom"
 function Home() {
+    const navigate = useNavigate()
+    const { userLogout } = useAuth()
     const [state, setState] = useState({
         blockCount: '',
         isBlockLoad: false,
@@ -67,6 +70,12 @@ function Home() {
                 return
             }
 
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
+
             if(response.ok) {
                 const block = await response.json()
                 setState(prev => ({ ...prev, blockCount: block.totalBlockCount }))
@@ -88,6 +97,12 @@ function Home() {
 
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -114,6 +129,12 @@ function Home() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if(response.ok) {
                 const room = await response.json()
@@ -136,6 +157,12 @@ function Home() {
 
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             
@@ -162,6 +189,12 @@ function Home() {
                 alert(error)
                 return
             }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
+                return
+            }
             
             if(response.ok) {
                 const warden = await response.json()
@@ -183,6 +216,12 @@ function Home() {
 
             if (error) {
                 alert(error)
+                return
+            }
+
+            if (response.status === 401) {
+                userLogout('warden')
+                navigate('/login/')
                 return
             }
             

@@ -64,7 +64,7 @@ function Report() {
                 }
 
                 if (response.status === 401) {
-                    userLogout()
+                    userLogout('student')
                     navigate('/student/login/')
                     return
                 }
