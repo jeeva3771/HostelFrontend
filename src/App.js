@@ -7,7 +7,7 @@ import Details from './Pages/StudentLogin/Details'
 import { AuthProvider, useAuth } from './Pages/AuthContext'
 import Home from './Pages/WardenLogin/Home'
 import BlockList from './Pages/WardenLogin/Block/BlockList'
-import { WardenPrivateRoute } from './Pages/WardenLogin/PrivateRoute'
+import { WardenPrivateRoute, SuperAdminPrivateRoute } from './Pages/WardenLogin/PrivateRoute'
 import BlockForm from './Pages/WardenLogin/Block/BlockForm'
 import BlockFloorList from './Pages/WardenLogin/BlockFloor/BlockFloorList'
 import BlockFloorForm from './Pages/WardenLogin/BlockFloor/BlockFloorForm'
@@ -20,6 +20,7 @@ import StudentForm from './Pages/WardenLogin/Student/StudentForm'
 import WardenList from './Pages/WardenLogin/Warden/WardenList'
 import WardenForm from './Pages/WardenLogin/Warden/WardenForm'
 import AttendanceList from './Pages/WardenLogin/Attendance/AttendanceList'
+import ErrorPage from './Pages/ErrorPage'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -217,7 +218,9 @@ function App() {
               path="/warden/"
               element={
                 <WardenPrivateRoute>
-                  <WardenList />
+                  <SuperAdminPrivateRoute>
+                    <WardenList />
+                  </SuperAdminPrivateRoute>
                 </WardenPrivateRoute>
               }
             />
@@ -226,7 +229,9 @@ function App() {
               path="/warden/add/"
               element={
                 <WardenPrivateRoute>
-                  <WardenForm />
+                  <SuperAdminPrivateRoute>
+                    <WardenForm />
+                  </SuperAdminPrivateRoute>
                 </WardenPrivateRoute>
               }
             />
@@ -235,10 +240,13 @@ function App() {
               path="/warden/:wardenId/"
               element={
                 <WardenPrivateRoute>
-                  <WardenForm />
+                  <SuperAdminPrivateRoute>
+                    <WardenForm />
+                  </SuperAdminPrivateRoute>
                 </WardenPrivateRoute>
               }
             />
+
 
             <Route
               path="/attendance/"
@@ -292,10 +300,16 @@ function App() {
               }
             >
             </Route>
+
+            <Route
+              path="/error/"
+              element={<ErrorPage />}
+            >
+            </Route>
           </Routes>
       </BrowserRouter>
     </AuthProvider>
   )
 }
 
-export default App;
+export default App
