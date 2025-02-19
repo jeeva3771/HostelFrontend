@@ -1,4 +1,4 @@
-import { wardenAppUrl } from '../../config/index'
+import { studentAppUrl, wardenAppUrl } from '../../config/index'
 
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
@@ -989,4 +989,53 @@ export async function readAttendanceById(attendanceId) {
 //         }
 //     } 
 // }
+
+// export async function readWardenDetails(wardenId) {  
+//     try {
+//         var myHeaders = new Headers()
+//         var requestOptions = {
+//             method: 'GET',
+//             headers: myHeaders,
+//             credentials: 'include'
+//         }
+
+//         let url = `${wardenAppUrl}/api/warden/wardendetails/${wardenId}?date=${Date.now()}/`
+    
+//         const response = await fetch(url, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }
+
+// export async function readStudentDetails() {  
+//     try {
+//         var myHeaders = new Headers()
+//         var requestOptions = {
+//             method: 'GET',
+//             headers: myHeaders,
+//             credentials: 'include'
+//         }
+
+//         let url = `${studentAppUrl}/api/student/name/?date=${Date.now()}/`
+    
+//         const response = await fetch(url, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }
+
 

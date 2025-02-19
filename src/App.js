@@ -21,6 +21,7 @@ import WardenList from './Pages/WardenLogin/Warden/WardenList'
 import WardenForm from './Pages/WardenLogin/Warden/WardenForm'
 import AttendanceList from './Pages/WardenLogin/Attendance/AttendanceList'
 import ErrorPage from './Pages/ErrorPage'
+import AttendanceForm from './Pages/WardenLogin/Attendance/AttendanceForm'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -257,11 +258,11 @@ function App() {
               }
             />
 
-            {/* <Route
+            <Route
               path="/attendance/add/"
               element={
                 <WardenPrivateRoute>
-                  < />
+                  < AttendanceForm/>
                 </WardenPrivateRoute>
               }
             />
@@ -270,10 +271,10 @@ function App() {
               path="/attendance/:attendanceId/"
               element={
                 <WardenPrivateRoute>
-                  <Att />
+                  <AttendanceForm />
                 </WardenPrivateRoute>
               }
-            /> */}
+            />
 
             <Route
               path="/student/login/"

@@ -10,11 +10,11 @@ import { useNavigate } from 'react-router-dom'
 import './App.css'
 
 function Details() {
-    const [details, setDetails] = useState(null)
+    const { studentDetails, userLogout } = useAuth()
+    const [details, setDetails] = useState(studentDetails)
     const fileInputRef = useRef(null)
     const [imageUrl, setImageUrl] = useState(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
     const [isUploading, setIsUploading] = useState(false)
-    const { studentDetails, userLogout } = useAuth()
     const { navigate } = useNavigate()
     const breadcrumbData = [
         { name: 'Pages', link: '' },
@@ -41,7 +41,10 @@ function Details() {
     }, [])
     
     useEffect(() => {
-        setDetails(studentDetails)
+        const storedDetails = localStorage.getItem("studentDetails")
+        if (storedDetails) {
+            setDetails(JSON.parse(storedDetails))
+        }
     }, [studentDetails])
     
     useEffect(() => {

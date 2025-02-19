@@ -173,16 +173,18 @@ function WardenList() {
                                                     />
                                                 </div>
                                                 <div className="datatable-dropdown">
-                                                    <select 
-                                                        className="datatable-selector" 
-                                                        onChange={(e) => setLimit(Number(e.target.value))} 
-                                                        value={limit}
-                                                    >
-                                                        <option value="5">5</option>
-                                                        <option value="10">10</option>
-                                                        <option value="15">15</option>
-                                                        <option value="-1">All</option>
-                                                    </select>
+                                                    <label className="me-1">
+                                                        <select 
+                                                            className="datatable-selector" 
+                                                            onChange={(e) => setLimit(Number(e.target.value))} 
+                                                            value={limit}
+                                                        >
+                                                            <option value="5">5</option>
+                                                            <option value="10">10</option>
+                                                            <option value="15">15</option>
+                                                            <option value="-1">All</option>
+                                                        </select> entries per page
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>

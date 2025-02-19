@@ -104,3 +104,8 @@ td, .upperCase {
 .iconFontSizing {
   font-size: 12px;
 }
+
+.controlDateInputField {
+  width: 260px;
+  font-size: large;
+}

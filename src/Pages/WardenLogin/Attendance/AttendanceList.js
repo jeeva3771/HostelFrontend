@@ -133,16 +133,18 @@ function AttendanceList() {
                                                     />
                                                 </div>
                                                 <div className="datatable-dropdown">
-                                                    <select 
-                                                        className="datatable-selector me-1" 
-                                                        onChange={(e) => setLimit(Number(e.target.value))} 
-                                                        value={limit}
-                                                    >
-                                                        <option value="50">50</option>
-                                                        <option value="100">100</option>
-                                                        <option value="200">200</option>
-                                                        <option value="-1">All</option>
-                                                    </select> entries per page
+                                                    <label className="me-1">
+                                                        <select 
+                                                            className="datatable-selector" 
+                                                            onChange={(e) => setLimit(Number(e.target.value))} 
+                                                            value={limit}
+                                                        >
+                                                            <option value="50">50</option>
+                                                            <option value="100">100</option>
+                                                            <option value="200">200</option>
+                                                            <option value="-1">All</option>
+                                                        </select> entries per page
+                                                    </label>
                                                     <Link to="/attendance/report/" class="btn btn-secondary">Report</Link>
                                                 </div>
                                             </div>

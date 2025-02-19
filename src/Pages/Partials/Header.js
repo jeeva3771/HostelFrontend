@@ -8,7 +8,10 @@ function Header() {
     const [showBackToTop, setShowBackToTop] = useState(false)
     const [details, setDetails] = useState({
         image: '',
-        role: ''
+        role: '',
+        studentInfo: '',
+        wardenInfo: '',
+        superAdmin: ''
     })
     const { userLogout } = useAuth() 
     
@@ -332,34 +335,40 @@ function Header() {
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6 className="upperCase">{details.role === "warden" ? `${details.wardenInfo.firstName}${details.wardenInfo?.lastName}`: details.studentInfo?.name}</h6>
-                            <span>{details.role === "warden" ? "Warden" : "Student"}</span>
+                            <h6 className="upperCase">
+                                {details.role === "warden" ? `${details.wardenInfo.firstName}${details.wardenInfo?.lastName}`: details.studentInfo?.name}
+                            </h6>
+                            <span>{details.wardenInfo?.superAdmin === 1 
+                                ? "Admin" 
+                                : details.role === "warden" 
+                                    ? "Warden" 
+                                    : "Student"}</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
 
                         <li>
-                            <a 
+                            <Link 
                                 class="dropdown-item d-flex align-items-center" 
-                                href="/warden/details/"
+                                to="/warden/details/"
                             >
                                 <i class="bi bi-person"></i>
                                 <span>User Details</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
 
                         <li>
-                            <a 
+                            <Link 
                                 class="dropdown-item d-flex align-items-center" 
-                                href="/faq/"
+                                to="/faq/"
                             >
                                 <i class="bi bi-question-circle"></i>
                                 <span>Need Help?</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <hr class="dropdown-divider" />

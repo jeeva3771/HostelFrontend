@@ -8,9 +8,15 @@ function WardenLogin() {
     const [email, setEmail] = useState('prem123@gmail.com')
     const [password, setPassword] = useState('123123')
     const [isLoading, setIsLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const { userLogged } = useAuth()
     const navigate = useNavigate()
     const isFormValid = email.trim().length > 0 && password.trim().length > 0
+
+    
+    useEffect(() => {
+        document.title = "Warden Login"
+    }, [])
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value)
@@ -20,9 +26,10 @@ function WardenLogin() {
         setPassword(e.target.value)
     }
 
-    useEffect(() => {
-        document.title = "Warden Login"
-    }, [])
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev)
+    };
+
 
     const loginUser = async () => {
         setIsLoading(true)
@@ -98,7 +105,7 @@ function WardenLogin() {
                                     >Password
                                     </label>
                                     <input 
-                                        type="password" 
+                                        type={showPassword ? "text" : "password"}
                                         name="password" 
                                         className="form-control" 
                                         id="password"
@@ -111,21 +118,24 @@ function WardenLogin() {
                                 </div>
 
                             <div className="col-12">
-                                <div className="form-check">
-                                    <input 
-                                        className="form-check-input" 
-                                        type="checkbox" 
-                                        name="remember" 
-                                        id="rememberMe" 
-                                        value="true"
-                                    />
-                                    <label 
-                                        className="form-check-label me-2 me-5" 
-                                        for="rememberMe" 
-                                    >Remember me
-                                    </label>
-                                    <small>
-                                        <a href="/warden/resetpassword/">Forgotten password?</a>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <input 
+                                            className="form-check-input me-2" 
+                                            type="checkbox" 
+                                            name="remember" 
+                                            id="rememberMe" 
+                                            value="true"
+                                            onChange={togglePasswordVisibility}
+                                        />
+                                        <label 
+                                            className="form-check-label" 
+                                            for="rememberMe" 
+                                        >Remember me
+                                        </label>
+                                    </div>
+                                    <small className="text">
+                                        <Link to="/warden/resetpassword/">Forgotten password?</Link>
                                     </small>
                                 </div>
                             </div>
