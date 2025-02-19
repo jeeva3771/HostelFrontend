@@ -27,6 +27,15 @@ const AttendanceForm = () => {
     setCheckIn(e.target.value)
   }
 
+  const getPriority = (item) => {
+    if (item.studentsCount === 0) return 4
+                                            let percentage = Math.floor((item.attendanceCount / item.studentsCount) * 100)
+                                            if (percentage === 100) return 1
+                                            if (percentage > 0 && percentage <= 90) return 2
+                                            if (percentage === 0) return 3
+                                            return 4
+  }
+
   const populateBlockCode = async () => {
     try {
         var myHeaders = new Headers();
@@ -119,111 +128,104 @@ const AttendanceForm = () => {
                             <p><strong>Block</strong></p>
                             <div className="col-12">
                                 <div className="row row-cols-6 g-3 justify-content-center">
-                                    {blocksData.map((block) => {
-                                        let blockBasedPercentage = block.studentsCount > 0
-                                            ? Math.floor((block.attendanceCount / block.studentsCount) * 100)
-                                            : 0
+                                    {[...blocksData]
+                                      .sort((a, b) => getPriority(a) - getPriority(b))
+                                      .map((block) => {
+                                          let backgroundColor = ""
+                                          let displayText = block.blockCode
 
-                                        let backgroundColor = ""
-                                        if (block.studentsCount > 0) {
-                                            if (blockBasedPercentage === 100) {
-                                              backgroundColor = "green"
-                                            } else if (block.attendanceCount > 0 && blockBasedPercentage <= 99) {
-                                              backgroundColor = "orange"
-                                            } else {
-                                              backgroundColor = "red"
-                                            }
+                                          if (block.studentsCount > 0) {
+                                              let percentage = Math.floor((block.attendanceCount / block.studentsCount) * 100)
+                                              if (percentage === 100) backgroundColor = "green"
+                                              else if (percentage > 0 && percentage <= 90) backgroundColor = "orange"
+                                              else backgroundColor = "red"
+                                              displayText += ` - ${percentage}%`
                                           }
 
-                                        return (
-                                            <button
-                                                key={block.blockId}
-                                                className={`btn btn-secondary me-2 ${block.studentsCount === 0 ? "disabled" : ""}`}
-                                                style={{ backgroundColor }}
-                                                onClick={() => handleBlockClick(block.blockId)}
-                                                disabled={block.studentsCount === 0}
-                                            >
-                                                {block.blockCode} - {blockBasedPercentage}%
-                                            </button>
-                                        )
-                                    })}
+                                          return (
+                                              <button
+                                                  key={block.blockId}
+                                                  className={`btn btn-secondary me-2 ${block.studentsCount === 0 ? "disabled" : ""}`}
+                                                  style={{ backgroundColor }}
+                                                  onClick={() => handleBlockClick(block.blockId)}
+                                                  disabled={block.studentsCount === 0}
+                                              >
+                                                  {displayText}
+                                              </button>
+                                          )
+                                        })
+                                      }
                                 </div>
                             </div>
                         </div>
-                        )}
+                      )}
                         {showFloors && (
                         <div className="container text-center mt-3">
-                            <div className="row justify-content-center">
-                                <p><strong>Floor Number</strong></p>
-                                <div className="col-12 mx-auto">
-                                    <div className="row row-cols-6 g-3 justify-content-center">
-                                    {floorsData.map((floor) => {
-                                        let floorBasedPercentage = floor.studentsCount > 0
-                                            ? Math.floor((floor.attendanceCount / floor.studentsCount) * 100)
-                                            : 0
+                              <p><strong>Floor Number</strong></p>
+                              <div className="col-12 mx-auto">
+                                  <div className="row row-cols-6 g-3 justify-content-center">
+                                  {[...floorsData]
+                                    .sort((a, b) => getPriority(a) - getPriority(b))        
+                                    .map((floor) => {
+                                      let backgroundColor = ""
+                                      let displayText = floor.floorNumber
 
-                                        let backgroundColor = ""
-                                        if (floor.studentsCount > 0) {
-                                            if (floorBasedPercentage === 100) {
-                                              backgroundColor = "green"
-                                            } else if (floor.attendanceCount > 0 && floorBasedPercentage <= 99) {
-                                              backgroundColor = "orange"
-                                            } else {
-                                              backgroundColor = "red"
-                                            }
-                                          }
-
-                                        return (
-                                            <button
-                                                key={floor.blockFloorId}
-                                                className={`btn btn-secondary me-2 ${floor.studentsCount === 0 ? "disabled" : ""}`}
-                                                style={{ backgroundColor }}
-                                                onClick={() => handleFloorClick(floor.blockFloorId)}
-                                                disabled={floor.studentsCount === 0}
-                                            >
-                                                {floor.floorNumber} - {floorBasedPercentage}%
-                                            </button>
-                                        )
-                                    })}
-                                    </div>
-                                </div>
-                            </div>
+                                      if (floor.studentsCount > 0) {
+                                          let percentage = Math.floor((floor.attendanceCount / floor.studentsCount) * 100)
+                                          if (percentage === 100) backgroundColor = "green"
+                                          else if (percentage > 0 && percentage <= 90) backgroundColor = "orange"
+                                          else backgroundColor = "red"
+                                          displayText += ` - ${percentage}%`
+                                      }                     
+                                      return (
+                                        <button
+                                            key={floor.blockFloorId}
+                                            className={`btn btn-secondary me-2 ${floor.studentsCount === 0 ? "disabled" : ""}`}
+                                            style={{ backgroundColor }}
+                                            onClick={() => handleFloorClick(floor.blockFloorId)}
+                                            disabled={floor.studentsCount === 0}
+                                        >
+                                            {displayText}
+                                        </button>
+                                    )
+                                  })
+                                }         
+                              </div>
+                          </div>
                         </div>
-                        )}
+                      )}
                         {showRooms && (
                         <div className="container text-center mt-3">
                             <div className="row justify-content-center">
                                 <p><strong>Room Number</strong></p>
                                 <div className="col-12 mx-auto">
                                     <div className="row row-cols-6 g-3 justify-content-center">
-                                    {roomsData.map((room) => {
-                                        let roomBasedPercentage = room.studentsCount > 0
-                                            ? Math.floor((room.attendanceCount / room.studentsCount) * 100)
-                                            : 0
-
+                                    {[...roomsData]
+                                      .sort((a, b) => getPriority(a) - getPriority(b))
+                                      .map((room) => {
                                         let backgroundColor = ""
+                                        let displayText = room.roomNumber
+  
                                         if (room.studentsCount > 0) {
-                                            if (roomBasedPercentage === 100) {
-                                              backgroundColor = "green"
-                                            } else if (room.attendanceCount > 0 && roomBasedPercentage <= 99) {
-                                              backgroundColor = "orange"
-                                            } else {
-                                              backgroundColor = "red"
-                                            }
-                                          }
-
+                                            let percentage = Math.floor((room.attendanceCount / room.studentsCount) * 100)
+                                            if (percentage === 100) backgroundColor = "green"
+                                            else if (percentage > 0 && percentage <= 90) backgroundColor = "orange"
+                                            else backgroundColor = "red"
+                                            displayText += ` - ${percentage}%`
+                                        }                     
                                         return (
-                                            <button
-                                                key={room.roomId}
-                                                className={`btn btn-secondary me-2 ${room.studentsCount === 0 ? "disabled" : ""}`}
-                                                style={{ backgroundColor }}
-                                                onClick={() => handleRoomClick(room.roomId)}
-                                                disabled={room.studentsCount === 0}
-                                            >
-                                                {room.roomNumber} - {roomBasedPercentage}%
-                                            </button>
-                                        )
-                                    })}
+                                          <button
+                                              key={room.roomId}
+                                              className={`btn btn-secondary me-2 ${room.studentsCount === 0 ? "disabled" : ""}`}
+                                              style={{ backgroundColor }}
+                                              onClick={() => handleRoomClick(room.roomId)}
+                                              disabled={room.studentsCount === 0}
+                                          >
+                                              {displayText}
+                                          </button>
+                                      )
+                                    })
+                                  }      
                                     </div>
                                 </div>
                             </div>
