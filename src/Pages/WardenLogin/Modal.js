@@ -117,7 +117,6 @@ const DetailsModal = forwardRef((_, ref) => {
         if (modalData && modalRef.current) {
             const modalInstance = new window.bootstrap.Modal(modalRef.current)
             modalInstance.show()
-            console.log(modalData)
         }
     }, [modalData])
 

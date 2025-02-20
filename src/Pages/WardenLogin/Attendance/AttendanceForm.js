@@ -4,23 +4,89 @@ import Footer from "../../Partials/Footer"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
 import { wardenAppUrl } from "../../../config"
+import { useNavigate, useLocation } from "react-router-dom"
+import formatDate from "../DateFormat"
 
 const AttendanceForm = () => {
-  const [checkIn, setCheckIn] = useState(new Date().toISOString().split("T")[0])
+  let date
+  const location = useLocation()
+  const getQueryParams = () => {
+    const params = new URLSearchParams(location.search)
+    return {
+      blockId: params.get("blockId"),
+      blockFloorId: params.get("blockFloorId"),
+      roomId: params.get("roomId"),
+      checkInDate: params.get("checkInDate"),
+    }
+  }
+
+  const { blockId, blockFloorId, roomId, checkInDate } = getQueryParams()
+  if (checkInDate) {
+    date = formatDate(checkInDate)
+  }
+  const [checkIn, setCheckIn] = useState(date ? date : new Date().toISOString().split("T")[0])
   const [blocksData, setBlocksData] = useState([])
   const [showBlocks, setShowBlocks] = useState(true)
   const [floorsData, setFloorsData] = useState([])
   const [showFloors, setShowFloors] = useState(false)
   const [roomsData, setRoomsData] = useState([])
   const [showRooms, setShowRooms] = useState(false)
-
+  const [students, setStudents] = useState([])
+  const [showStudents, setShowStudents] = useState(false)
+  const [attendance, setAttendance] = useState([])
+  const [isLoading, setLoading] = useState(false)
+  const [allId, setAllId] = useState({
+    blockId: null,
+    floorId: null,
+    roomId: null
+  })
+  const navigate = useNavigate()
   const breadcrumbData = [
     { name: 'Home', link: '/home/' },
     { name: 'Attendance', link: '' },
   ]
 
   useEffect(() => {
-    populateBlockCode()
+    if (blockId) {
+      setShowBlocks(false)
+      setShowFloors(true)
+      populateFloorNumber(blockId)
+    }
+  }, [blockId])
+
+  useEffect(() => {
+    if (blockFloorId) {
+      setShowFloors(false)
+      setShowRooms(true)
+      populateRoomNumber(blockFloorId);
+    }
+  }, [blockFloorId]);
+
+  useEffect(() => {
+    if (roomId) {
+      setShowRooms(false)
+      setShowStudents(true)
+      fetchStudents(roomId)
+    }
+  }, [roomId])
+
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0]
+    if (checkIn > today) {
+      alert('Not allowed to take attendance for a future date.')
+      setCheckIn(today)
+      return
+    }
+    if (showBlocks) {
+      populateBlockCode()
+    } else if (showFloors) {
+      populateFloorNumber(allId.blockId)
+    } else if (showRooms) {
+      populateRoomNumber(allId.floorId)
+    } else if (showStudents) {
+      fetchStudents(allId.roomId)
+    }
   }, [checkIn])
 
   const handleDateChange = (e) => {
@@ -29,19 +95,19 @@ const AttendanceForm = () => {
 
   const getPriority = (item) => {
     if (item.studentsCount === 0) return 4
-                                            let percentage = Math.floor((item.attendanceCount / item.studentsCount) * 100)
-                                            if (percentage === 100) return 1
-                                            if (percentage > 0 && percentage <= 90) return 2
-                                            if (percentage === 0) return 3
-                                            return 4
+    let percentage = Math.floor((item.attendanceCount / item.studentsCount) * 100)
+    if (percentage === 100) return 1
+    if (percentage > 0 && percentage <= 90) return 2
+    if (percentage === 0) return 3
+    return 4
   }
 
   const populateBlockCode = async () => {
     try {
-        var myHeaders = new Headers();
-      const response = await fetch(`${wardenAppUrl}/api/attendance/block?date=${checkIn}`,{method:'GET',credentials: 'include', myHeaders});
-      const blocks = await response.json();
-      setBlocksData(blocks);
+        var myHeaders = new Headers()
+      const response = await fetch(`${wardenAppUrl}/api/attendance/block?date=${checkIn}`,{method:'GET',credentials: 'include', myHeaders})
+      const blocks = await response.json()
+      setBlocksData(blocks)
     } catch (error) {
       alert("Something went wrong. Please try later.")
     }
@@ -49,10 +115,13 @@ const AttendanceForm = () => {
 
   const populateFloorNumber = async (blockId) => {
     try {
+      setAllId((prev) => ({ ...prev, blockId: blockId }));
+
         var myHeaders = new Headers();
       const response = await fetch(`${wardenAppUrl}/api/attendance/blockfloor?date=${checkIn}&blockId=${blockId}`,{method:'GET',credentials: 'include', myHeaders});
       const floors = await response.json();
       setFloorsData(floors);
+
     } catch (error) {
       alert("Something went wrong. Please try later.")
     }
@@ -60,14 +129,99 @@ const AttendanceForm = () => {
 
   const populateRoomNumber = async (floorId) => {
     try {
+      setAllId((prev) => ({ ...prev, floorId: floorId }));
+
         var myHeaders = new Headers();
       const response = await fetch(`${wardenAppUrl}/api/attendance/room?date=${checkIn}&blockFloorId=${floorId}`,{method:'GET',credentials: 'include', myHeaders});
       const rooms = await response.json();
       setRoomsData(rooms);
+
     } catch (error) {
       alert("Something went wrong. Please try later.")
     }
   }
+
+  const fetchStudents = async (roomId) => {
+    setStudents([])
+
+    try {
+      setAllId((prev) => ({ ...prev, roomId: roomId }));
+
+      var myHeaders = new Headers()
+      const response = await fetch(
+        `${wardenAppUrl}/api/attendance/student/${roomId}?checkIn=${checkIn}`
+        ,{method:'GET',credentials: 'include', myHeaders});
+      const data = await response.json()
+      setStudents(data)
+
+      const newAttendance = data.map((student) => ({
+        studentId: student.studentId,
+        isPresent: student.isPresent ?? 1, 
+      }));
+  
+      setAttendance(newAttendance);
+    } catch (error) {
+      alert("Something went wrong. Please try later.")
+    } 
+  }
+
+  function saveOrUpdateAttendance() {
+    setLoading(true)
+    var myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
+
+    const finalBlockId = blockId || allId.blockId;
+    const finalBlockFloorId = blockFloorId || allId.floorId;
+    const finalRoomId = roomId || allId.roomId;
+
+    if (!finalBlockId || !finalBlockFloorId || !finalRoomId) {
+        alert("Missing required parameters.");
+        return;
+    }
+
+    var raw = JSON.stringify({
+        "blockId": finalBlockId,
+        "blockFloorId": finalBlockFloorId,
+        "roomId": finalRoomId,
+        "checkInDate": checkIn,
+        "attendance": attendance
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        credentials: 'include'
+    };
+
+    fetch(`${wardenAppUrl}/api/attendance/${finalBlockId}/${finalBlockFloorId}/${finalRoomId}`,
+        requestOptions)
+        .then(async (response) => {
+            if (response.status === 200) {
+                navigate('/attendance/')
+            } else {
+                alert(await response.text())
+                setLoading(false)
+            }
+        })
+        .catch(() => {
+            alert('Something went wrong.Please try later.')
+            setLoading(false)
+        })
+}
+
+  const handleAttendanceChange = (studentId, isPresent) => {
+    setAttendance((prevAttendance) => {
+      const updatedAttendance = prevAttendance.some((entry) => entry.studentId === studentId)
+        ? prevAttendance.map((entry) =>
+            entry.studentId === studentId ? { ...entry, isPresent } : entry
+          )
+        : [...prevAttendance, { studentId, isPresent }]
+
+      return updatedAttendance
+    })
+  }
+
 
   const handleBlockClick = (blockId) => {
     populateFloorNumber(blockId)
@@ -82,7 +236,26 @@ const AttendanceForm = () => {
   }
   
   const handleRoomClick = (roomId) => {
+    fetchStudents(roomId)
     setShowRooms(false)
+    setShowStudents(true)
+  }
+
+  const backToView = () => {
+    if (showStudents) {
+      setShowStudents(false);
+      setStudents([]);
+      setShowRooms(true);
+    } else if (showRooms) {
+      setShowRooms(false);
+      setRoomsData([]);
+      setShowFloors(true);
+    } else if (showFloors) {
+      setShowFloors(false);
+      setFloorsData([]);
+      setShowBlocks(true);
+      setAllId(prev => ({ ...prev, blockId: null, floorNumber: null, roomId: null }))
+    }
   }
   return (
     <>
@@ -99,12 +272,14 @@ const AttendanceForm = () => {
                 <div className="card">
                     <div className="card-body">
                         <div className="mt-3">
+                          {!showBlocks && (
                             <button 
-                                onclick="" 
-                                className="btn btn-outline-secondary btn-sm"
-                                id="backToView"
-                            >Back
+                              onClick={backToView}
+                              className="btn btn-outline-secondary btn-sm"
+                            >
+                              Back
                             </button>
+                          )}
                         </div>
                         <div className="row justify-content-center">
                             <div className="col-2 text-center mt-4">
@@ -119,6 +294,7 @@ const AttendanceForm = () => {
                                         className="form-control controlDateInputField" 
                                         value={checkIn} 
                                         onChange={handleDateChange}
+                                        readOnly={blockId}
                                     />
                                 </div>
                             </div>
@@ -145,7 +321,7 @@ const AttendanceForm = () => {
                                           return (
                                               <button
                                                   key={block.blockId}
-                                                  className={`btn btn-secondary me-2 ${block.studentsCount === 0 ? "disabled" : ""}`}
+                                                  className={`btn btn-secondary me-2 upperCase ${block.studentsCount === 0 ? "disabled" : ""}`}
                                                   style={{ backgroundColor }}
                                                   onClick={() => handleBlockClick(block.blockId)}
                                                   disabled={block.studentsCount === 0}
@@ -205,7 +381,7 @@ const AttendanceForm = () => {
                                       .map((room) => {
                                         let backgroundColor = ""
                                         let displayText = room.roomNumber
-  
+                                        
                                         if (room.studentsCount > 0) {
                                             let percentage = Math.floor((room.attendanceCount / room.studentsCount) * 100)
                                             if (percentage === 100) backgroundColor = "green"
@@ -231,6 +407,7 @@ const AttendanceForm = () => {
                             </div>
                         </div>
                         )}
+                        {(showBlocks || showFloors || showRooms) && (
                         <div className="d-flex flex-row mb-3 align-items-center justify-content-center mt-4">
                             <b className="me-2">Attendance Taken :</b>
                             <div className="p-2 smallBox mt-0 clr1"></div>
@@ -245,19 +422,66 @@ const AttendanceForm = () => {
                             <div className="p-2 smallBox mt-0 ms-3 rounded-0 border border-1 clr4"></div>
                             <span className="ms-2">No Field</span>
                         </div>
-                        <div className="container text-center">
-                            <div className="hidden">
-                                <p><strong>Students</strong></p>
-                                <div className="mb-4">
-                                </div>
-                                <button 
-                                    type="button" 
-                                    onclick="saveOrUpdateAttendance()" 
-                                    className="btn btn-primary"
-                                    id="submitButton"
-                                >Submit</button>
-                            </div>
+                        )}
+                        {showStudents && (
+                        <div className="container text-center my-5 ">
+                          {students.length > 0 && (
+                            <>
+                            <table className="table table-striped table-hover table-bordered border">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Sno</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {students.map((student, index) => (
+                                  <tr key={student.studentId}>
+                                    <td>{index + 1}</td>
+                                    <td>{student.name}</td>
+                                    <td>
+                                      <div className="form-check form-check-inline">
+                                        <input
+                                          className="form-check-input"
+                                          type="radio"
+                                          name={`isPresent_${student.studentId}`}
+                                          value="1"
+                                          id="present"
+                                          checked={attendance.some((entry) => entry.studentId === student.studentId && entry.isPresent === 1)}
+                                          onChange={() => handleAttendanceChange(student.studentId, 1)}
+                                        />
+                                        <label className="form-check-label" for="present">Present</label>
+                                      </div>
+                                      <div className="form-check form-check-inline">
+                                        <input
+                                          className="form-check-input"
+                                          type="radio"
+                                          name={`isPresent_${student.studentId}`}
+                                          value="0"
+                                          id="absent"
+                                          checked={attendance.some((entry) => entry.studentId === student.studentId && entry.isPresent === 0)}
+                                          onChange={() => handleAttendanceChange(student.studentId, 0)}
+                                        />
+                                        <label className="form-check-label" for="absent">Absent</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                              
+                            </table>
+                            <button 
+                              type="button"
+                              onClick={() => saveOrUpdateAttendance()}
+                              className="btn btn-primary"
+                              disabled={isLoading}
+                            >Submit
+                            </button>
+                          </>
+                          )}
                         </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -266,7 +490,7 @@ const AttendanceForm = () => {
     </main>
     <Footer />
     </>
-  );
-};
+  )
+}
 
-export default AttendanceForm;
+export default AttendanceForm

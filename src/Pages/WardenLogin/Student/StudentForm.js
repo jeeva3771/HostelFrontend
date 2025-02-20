@@ -34,7 +34,7 @@ function StudentForm() {
         blockCode: '',
         floorNum: '',
         roomNum: '',
-        joinDate: ''
+        joinDate: new Date().toISOString().split("T")[0]
     })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
