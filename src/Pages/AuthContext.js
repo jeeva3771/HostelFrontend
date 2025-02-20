@@ -21,7 +21,13 @@ export const AuthProvider = ({children}) => {
     }, [isStudentLogged])
 
     const userLogged = (user, role) => {
-        localStorage.clear()
+        if (role === "student") {
+        localStorage.removeItem("wardenDetails");
+        localStorage.removeItem("isWardenLogged");
+    } else if (role === "warden") {
+        localStorage.removeItem("studentDetails");
+        localStorage.removeItem("isStudentLogged");
+    }
         if (role === "student") {
             setIsStudentLogged(true)
             localStorage.setItem("isStudentLogged", "true")

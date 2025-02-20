@@ -272,7 +272,7 @@ const AttendanceForm = () => {
                 <div className="card">
                     <div className="card-body">
                         <div className="mt-3">
-                          {!showBlocks && (
+                          {!(blockId && blockFloorId && roomId) && !showBlocks && (
                             <button 
                               onClick={backToView}
                               className="btn btn-outline-secondary btn-sm"
@@ -447,11 +447,11 @@ const AttendanceForm = () => {
                                           type="radio"
                                           name={`isPresent_${student.studentId}`}
                                           value="1"
-                                          id="present"
+                                          id={`present_${student.studentId}`}
                                           checked={attendance.some((entry) => entry.studentId === student.studentId && entry.isPresent === 1)}
                                           onChange={() => handleAttendanceChange(student.studentId, 1)}
                                         />
-                                        <label className="form-check-label" for="present">Present</label>
+                                        <label className="form-check-label" for={`present_${student.studentId}`}>Present</label>
                                       </div>
                                       <div className="form-check form-check-inline">
                                         <input
@@ -459,11 +459,11 @@ const AttendanceForm = () => {
                                           type="radio"
                                           name={`isPresent_${student.studentId}`}
                                           value="0"
-                                          id="absent"
+                                          id={`absent_${student.studentId}`}
                                           checked={attendance.some((entry) => entry.studentId === student.studentId && entry.isPresent === 0)}
                                           onChange={() => handleAttendanceChange(student.studentId, 0)}
                                         />
-                                        <label className="form-check-label" for="absent">Absent</label>
+                                        <label className="form-check-label" for={`absent_${student.studentId}`}>Absent</label>
                                       </div>
                                     </td>
                                   </tr>

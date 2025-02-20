@@ -290,7 +290,7 @@ function WardenForm() {
                                         className="col-sm-2 col-form-label"
                                         for="image" 
                                     >
-                                        Image Upload<span className="text-danger">*</span>
+                                        Image Upload
                                     </label>
                                     <div className="col-sm-10">
                                         <input
@@ -333,6 +333,8 @@ function WardenForm() {
                                             !warden.emailId ||
                                             warden.isAdmin === null ||
                                             (!wardenId && (!warden.password || warden.password !== warden.confirmPassword)) ||
+                                            warden.password.length <= 6 ||
+                                            warden.confirmPassword.length <= 6 ||
                                             loading
                                         }
                                     >
