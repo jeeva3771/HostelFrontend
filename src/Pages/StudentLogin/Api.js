@@ -15,9 +15,6 @@ export async function generateOtp(email) {
             credentials: 'include'
         }
         const response = await fetch(`${studentAppUrl}/api/student/generateotp/`, requestOptions)
-        // if (!response.ok) {
-        //     throw new Error(await response.text())
-        // }
         return {
             response,
             error: null,
@@ -44,10 +41,6 @@ export async function verifyOtpAndLogin(otp) {
         }
 
         const response = await fetch(`${studentAppUrl}/api/student/verifyotp/authentication/`, requestOptions)
-        // if (!response.ok) {
-        //     throw new Error(await response.text())
-        //}
-
         return {
             response,
             error: null
@@ -67,10 +60,6 @@ export async function report(month, year) {
             credentials: 'include'
         })
 
-        // if (!response.ok) {
-        //     throw new Error(await response.text())
-        // }
-    
         return {
             response,
             error: null,
@@ -95,9 +84,6 @@ export async function updateImage(file) {
         }
 
         const response = await fetch(`${studentAppUrl}/api/student/editimage`, requestOptions)
-        // if (!response.ok) {
-        //     throw new Error(response.text())
-        // }
         return {
             response,
             error: null

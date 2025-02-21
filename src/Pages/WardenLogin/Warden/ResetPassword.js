@@ -1,8 +1,6 @@
 import { useState } from "react"
-import { wardenAppUrl } from "../../../config"
 import { useNavigate } from "react-router-dom"
-var headers = new Headers()
-headers.append("Content-Type", "application/json")
+import { generateOtp, resetPassword } from "../Api"
 
 function ResetPassword() {
     const [email, setEmail] = useState("")
@@ -19,47 +17,51 @@ function ResetPassword() {
     const canSendOtp = email.length > 0
     const canSubmit =
         otp.length === 6 &&
-        password.length >= 6 &&
+        password.length >=  6 &&
         confirmPassword.length >= 6 &&
         password === confirmPassword
 
-    const generateOtp = async () => {
+    const handleGenerateOtp = async () => {
         setLoading(true)
         setEmailError("")
-
+        const payload = {
+            emailId: email
+        }
         try {
-            const response = await fetch(`${wardenAppUrl}/api/warden/generateotp/`, {
-                method: "POST",
-                headers,
-                body: JSON.stringify({ emailId: email }),
-                credentials: 'include'
-            });
+            const { response, error } = await generateOtp(payload)
+            if (error) {
+                alert(error)
+                return
+            }
 
             if (response.status === 200) {
-                setShowOtpFields(true);
+                setShowOtpFields(true)
             } else {
-                setEmailError(await response.text());
+                setEmailError(await response.text())
             }
         } catch (error) {
-            alert("Something went wrong. Please try again later.");
+            alert("Something went wrong. Please try again later.")
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     // Reset Password API call
-    const resetPassword = async () => {
+    const handleResetPassword = async () => {
         setLoading(true);
         setOtpError("");
         setPasswordError("");
+        const payload = {
+            otp: otp,
+            password: password
+        }
 
         try {
-            const response = await fetch(`${wardenAppUrl}/api/warden/resetpassword/`, {
-                method: "PUT",
-                headers,
-                body: JSON.stringify({ otp, password }),
-                credentials: 'include'
-            });
+            const { response, error } = await resetPassword(payload)
+            if (error) {
+                alert(error)
+                return
+            }
 
             if (response.status === 200) {
                 navigate('/login/')
@@ -75,9 +77,9 @@ function ResetPassword() {
                 navigate('/login/')
             }
         } catch (error) {
-            alert("Something went wrong. Please try again later.");
+            alert("Something went wrong. Please try again later.")
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
     };
     
@@ -100,32 +102,41 @@ function ResetPassword() {
                         </div>
                         <div className="card mb-3">
                             <div className="card-body pt-4 pb-2">
-                                <div className="row g-3 needs-validation" novalidate>
+                                <div className="row needs-validation" novalidate>
                                     {!showOtpFields && (
-                                        <div className="col-12 mb-2">
+                                        <>
+                                        <div className="col-12">
                                             <label htmlFor="emailId" className="form-label">Email</label>
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                placeholder="Enter email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                            />
-                                            {emailError && <span className="text-danger">{emailError}</span>}
-                                            <div className="col d-flex justify-content-center mt-3">
-                                                <button
-                                                    className="btn btn-primary"
-                                                    onClick={generateOtp}
-                                                    disabled={!canSendOtp || loading}
-                                                >
-                                                    {loading ? "Sending OTP..." : "Generate OTP"}
-                                                </button>
+                                                <div class="input-group has-validation">
+                                                <input
+                                                    type="email"
+                                                    className="form-control"
+                                                    placeholder="Enter email"
+                                                    value={email}
+                                                    onChange={(e) => {
+                                                        setEmail(e.target.value)
+                                                        setEmailError("")
+                                                    }}
+                                                />
+                                                </div>
                                             </div>
-                                        </div>
+                                            {emailError && <span className="text-danger small">{emailError}</span>}
+                                            <div>
+                                                <div className="col d-flex justify-content-center mt-3 mb-2">
+                                                    <button
+                                                        className="btn btn-primary"
+                                                        onClick={handleGenerateOtp}
+                                                        disabled={!canSendOtp || loading}
+                                                    >
+                                                        {loading ? "Sending OTP..." : "Generate OTP"}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            </>
                                     )}
                                     {showOtpFields && (
                                         <>
-                                            <p><b>Please enter the 6-digit code sent to your email.</b></p>
+                                            <p><strong>Please enter the 6-digit code sent to your email.</strong></p>
                                             <div className="col-12">
                                                 <label htmlFor="otp" className="form-label">OTP</label>
                                                 <input
@@ -133,13 +144,17 @@ function ResetPassword() {
                                                     className="form-control"
                                                     placeholder="OTP"
                                                     value={otp}
-                                                    onChange={(e) => setOtp(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setOtp(e.target.value)
+                                                        setOtpError("")
+                                                    }}
                                                 />
-                                                {otpError && <span className="text-danger">{otpError}</span>}
+                                                
                                                 <div className="position-relative">
+                                                {otpError && <span className="text-danger small">{otpError}</span>}
                                                 <button
                                                     type="button"
-                                                    onClick={generateOtp}
+                                                    onClick={handleGenerateOtp}
                                                     className="position-absolute end-0 link-primary small border-0 bg-transparent text-decoration-none"
                                                 >
                                                     Resend OTP
@@ -148,36 +163,42 @@ function ResetPassword() {
                                                 </div>
                                             </div>
 
-                                            <div className="col-12 mt-2">
+                                            <div className="col-12 mt-3">
                                                 <label htmlFor="password" className="form-label">New Password</label>
                                                 <input
                                                     type="password"
                                                     className="form-control"
                                                     placeholder="New password"
                                                     value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setPassword(e.target.value)
+                                                        setPasswordError("")
+                                                    }}
                                                 />
                                             </div>
 
-                                            <div className="col-12 mt-2">
+                                            <div className="col-12 mt-3">
                                                 <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                                                 <input
                                                     type="password"
                                                     className="form-control"
                                                     placeholder="Confirm password"
                                                     value={confirmPassword}
-                                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setConfirmPassword(e.target.value)
+                                                        setPasswordError("")
+                                                    }}
                                                 />
                                                 {passwordError && <span className="text-danger">{passwordError}</span>}
                                             </div>
 
-                                            <div className="col d-flex justify-content-center mt-3">
+                                            <div className="col d-flex justify-content-center mt-4 mb-3">
                                                 <button
                                                     className="btn btn-primary"
-                                                    onClick={resetPassword}
+                                                    onClick={handleResetPassword}
                                                     disabled={!canSubmit || loading}
                                                 >
-                                                    {loading ? "Processing..." : "Verify OTP & Save Password"}
+                                                    {loading && canSubmit ? "Processing..." : "Verify OTP & Save Password"}
                                                 </button>
                                             </div>
                                         </>

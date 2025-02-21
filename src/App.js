@@ -3,7 +3,7 @@ import { StudentPrivateRoute } from './Pages/StudentLogin/PrivateRoute'
 import StudentLogin from './Pages/StudentLogin/Login'
 import WardenLogin from './Pages/WardenLogin/Login'
 import Report from './Pages/StudentLogin/Report'
-import Details from './Pages/StudentLogin/Details'
+import Detail from './Pages/StudentLogin/Detail'
 import { AuthProvider, useAuth } from './Pages/AuthContext'
 import Home from './Pages/WardenLogin/Home'
 import BlockList from './Pages/WardenLogin/Block/BlockList'
@@ -23,6 +23,7 @@ import AttendanceList from './Pages/WardenLogin/Attendance/AttendanceList'
 import ErrorPage from './Pages/ErrorPage'
 import AttendanceForm from './Pages/WardenLogin/Attendance/AttendanceForm'
 import ResetPassword from './Pages/WardenLogin/Warden/ResetPassword'
+import UserDetail from './Pages/WardenLogin/Warden/UserDetail'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -249,6 +250,15 @@ function App() {
               }
             />
 
+            <Route
+              path="/warden/details/"
+              element={
+                <WardenPrivateRoute>
+                    <UserDetail />
+                </WardenPrivateRoute>
+              }
+            />
+
 
             <Route
               path="/attendance/"
@@ -302,7 +312,7 @@ function App() {
               path="/student/details/"
               element={
                 <StudentPrivateRoute>
-                  <Details />
+                  <Detail />
                 </StudentPrivateRoute>
               }
             >

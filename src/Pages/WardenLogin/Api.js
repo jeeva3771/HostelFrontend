@@ -1,4 +1,4 @@
-import { studentAppUrl, wardenAppUrl } from '../../config/index'
+import { wardenAppUrl } from '../../config/index'
 
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
@@ -52,7 +52,6 @@ export async function readBlockCount() {
         }
     } 
 }
-
 
 export async function readBlockFloorCount() {  
     try {
@@ -941,101 +940,274 @@ export async function readAttendanceById(attendanceId) {
     }  
 }
 
+export async function populateBlockCode(checkIn) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
 
+        const response = await fetch(`${wardenAppUrl}/api/attendance/block?date=${checkIn}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
 
+export async function populateFloorNumber(checkIn, blockId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
 
+        const response = await fetch(`${wardenAppUrl}/api/attendance/blockfloor?date=${checkIn}&blockId=${blockId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
 
-// export async function updateWardenImage(wardenId, file) {
-//     try {
-//         formdata.append("image", file)
+export async function populateRoomNumber(checkIn, floorId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
 
-//         var requestOptions = {
-//             method: 'PUT',
-//             body: formdata,
-//             credentials: 'include'
-//         }
+        const response = await fetch(`${wardenAppUrl}/api/attendance/room?date=${checkIn}&blockFloorId=${floorId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
 
-//         const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/editimage/`, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }
+export async function fetchStudents(roomId, checkIn) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
 
-// export async function deleteWardenImage(studentId) {
-//     try {
-//         var myHeaders = new Headers()
-//         var requestOptions = {
-//             method: 'DELETE',
-//             headers: myHeaders,
-//             credentials: 'include'
-//         }
+        const response = await fetch(`${wardenAppUrl}/api/attendance/student/${roomId}?checkIn=${checkIn}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
 
-//         const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/deleteimage/`, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }
+export async function saveOrUpdateAttendance(finalBlockId, finalBlockFloorId, finalRoomId, payload) {
+    try {
+        const requestOptions = {
+            method: "POST",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
 
-// export async function readWardenDetails(wardenId) {  
-//     try {
-//         var myHeaders = new Headers()
-//         var requestOptions = {
-//             method: 'GET',
-//             headers: myHeaders,
-//             credentials: 'include'
-//         }
+        const response = await fetch(`${wardenAppUrl}/api/attendance/${finalBlockId}/${finalBlockFloorId}/${finalRoomId}`,
+            requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
-//         let url = `${wardenAppUrl}/api/warden/wardendetails/${wardenId}?date=${Date.now()}/`
+export async function updateImage(file, wardenId) {
+    try {
+        var formdata = new FormData()
+        formdata.append("image", file)
+
+        var requestOptions = {
+            method: 'PUT',
+            body: formdata,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/editavatar/`, requestOptions)
+        return {
+            response,
+            error: null
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }
+}
+
+export async function deleteImage(wardenId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/deleteavatar`, requestOptions)
+
+        return {
+            response,
+            error: null
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }
+}   
+
+export async function readWardenDetails(wardenId) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
     
-//         const response = await fetch(url, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }
-
-// export async function readStudentDetails() {  
-//     try {
-//         var myHeaders = new Headers()
-//         var requestOptions = {
-//             method: 'GET',
-//             headers: myHeaders,
-//             credentials: 'include'
-//         }
-
-//         let url = `${studentAppUrl}/api/student/name/?date=${Date.now()}/`
-    
-//         const response = await fetch(url, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }
+        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}?date=${Date.now()}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
 
+export async function editUserData(wardenId, payload) {
+    try {
+        const requestOptions = {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/edituserwarden/${wardenId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function changePassword(wardenId, payload) {
+    try {
+        const requestOptions = {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/changepassword/${wardenId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+
+
+
+export async function generateOtp(payload) {
+    try {
+        const requestOptions = {
+            method: "POST",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/generateotp/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export const resetPassword = async (payload) => { 
+    try {
+        const requestOptions = {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${wardenAppUrl}/api/warden/resetpassword/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}

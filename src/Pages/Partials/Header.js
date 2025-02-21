@@ -42,8 +42,8 @@ function Header() {
             console.error("Error parsing local storage data:", error)
         }
 
-        const imageUrl = auth === "warden"
-            ? `${wardenAppUrl}/api/warden/${wardenId}/avatar?date=${Date.now()}`
+        let imageUrl = auth === "warden"
+            ? `${wardenAppUrl}/api/warden/${wardenId}/avatar?date=${Date.now()}/`
             : `${studentAppUrl}/api/student/image?date=${Date.now()}`
 
         setDetails({

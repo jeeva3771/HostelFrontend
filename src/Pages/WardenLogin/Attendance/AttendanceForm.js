@@ -3,13 +3,22 @@ import Header from "../../Partials/Header"
 import Footer from "../../Partials/Footer"
 import Breadcrumbs from "../../Partials/BreadCrumb"
 import Sidebar from "../../Partials/Aside"
-import { wardenAppUrl } from "../../../config"
 import { useNavigate, useLocation } from "react-router-dom"
 import formatDate from "../DateFormat"
+import { useAuth } from "../../AuthContext"
+import { 
+  fetchStudents, 
+  populateBlockCode, 
+  populateFloorNumber, 
+  populateRoomNumber,
+  saveOrUpdateAttendance 
+} from "../Api"
 
 const AttendanceForm = () => {
   let date
   const location = useLocation()
+  const { userLogout } = useAuth()
+
   const getQueryParams = () => {
     const params = new URLSearchParams(location.search)
     return {
@@ -49,24 +58,20 @@ const AttendanceForm = () => {
   useEffect(() => {
     if (blockId) {
       setShowBlocks(false)
-      setShowFloors(true)
-      populateFloorNumber(blockId)
+      handlePopulateFloorNumber(blockId)
     }
   }, [blockId])
 
   useEffect(() => {
     if (blockFloorId) {
-      setShowFloors(false)
-      setShowRooms(true)
-      populateRoomNumber(blockFloorId);
+      handlePopulateRoomNumber(blockFloorId)
     }
-  }, [blockFloorId]);
+  }, [blockFloorId])
 
   useEffect(() => {
     if (roomId) {
-      setShowRooms(false)
       setShowStudents(true)
-      fetchStudents(roomId)
+      handleFetchStudents(roomId)
     }
   }, [roomId])
 
@@ -79,13 +84,13 @@ const AttendanceForm = () => {
       return
     }
     if (showBlocks) {
-      populateBlockCode()
+      handlePopulateBlockCode()
     } else if (showFloors) {
-      populateFloorNumber(allId.blockId)
+      handlePopulateFloorNumber(allId.blockId)
     } else if (showRooms) {
-      populateRoomNumber(allId.floorId)
+      handlePopulateRoomNumber(allId.floorId)
     } else if (showStudents) {
-      fetchStudents(allId.roomId)
+      handleFetchStudents(allId.roomId)
     }
   }, [checkIn])
 
@@ -102,10 +107,19 @@ const AttendanceForm = () => {
     return 4
   }
 
-  const populateBlockCode = async () => {
+  const handlePopulateBlockCode = async () => {
     try {
-        var myHeaders = new Headers()
-      const response = await fetch(`${wardenAppUrl}/api/attendance/block?date=${checkIn}`,{method:'GET',credentials: 'include', myHeaders})
+      const { response, error } = await populateBlockCode(checkIn)
+      if (error) {
+          alert(error)
+          return
+      }
+
+      if (response.status === 401) {
+          userLogout('warden')
+          navigate('/login/')
+          return
+      }
       const blocks = await response.json()
       setBlocksData(blocks)
     } catch (error) {
@@ -113,101 +127,121 @@ const AttendanceForm = () => {
     }
   }
 
-  const populateFloorNumber = async (blockId) => {
+  const handlePopulateFloorNumber = async (blockId) => {
     try {
       setAllId((prev) => ({ ...prev, blockId: blockId }));
 
-        var myHeaders = new Headers();
-      const response = await fetch(`${wardenAppUrl}/api/attendance/blockfloor?date=${checkIn}&blockId=${blockId}`,{method:'GET',credentials: 'include', myHeaders});
-      const floors = await response.json();
-      setFloorsData(floors);
+      const { response, error } = await populateFloorNumber(checkIn, blockId)
+      if (error) {
+          alert(error)
+          return
+      }
 
+      if (response.status === 401) {
+          userLogout('warden')
+          navigate('/login/')
+          return
+      }
+      const floors = await response.json()
+      setFloorsData(floors)
     } catch (error) {
       alert("Something went wrong. Please try later.")
     }
   }
 
-  const populateRoomNumber = async (floorId) => {
+  const handlePopulateRoomNumber = async (floorId) => {
     try {
       setAllId((prev) => ({ ...prev, floorId: floorId }));
 
-        var myHeaders = new Headers();
-      const response = await fetch(`${wardenAppUrl}/api/attendance/room?date=${checkIn}&blockFloorId=${floorId}`,{method:'GET',credentials: 'include', myHeaders});
-      const rooms = await response.json();
-      setRoomsData(rooms);
+      const { response, error } = await populateRoomNumber(checkIn, floorId)
+      if (error) {
+          alert(error)
+          return
+      }
+
+      if (response.status === 401) {
+          userLogout('warden')
+          navigate('/login/')
+          return
+      }
+      const rooms = await response.json()
+      setRoomsData(rooms)
 
     } catch (error) {
       alert("Something went wrong. Please try later.")
     }
   }
 
-  const fetchStudents = async (roomId) => {
+  const handleFetchStudents = async (roomId) => {
     setStudents([])
 
     try {
       setAllId((prev) => ({ ...prev, roomId: roomId }));
+      const { response, error } = await fetchStudents(roomId, checkIn)
 
-      var myHeaders = new Headers()
-      const response = await fetch(
-        `${wardenAppUrl}/api/attendance/student/${roomId}?checkIn=${checkIn}`
-        ,{method:'GET',credentials: 'include', myHeaders});
+      if (error) {
+          alert(error)
+          return
+      }
+
+      if (response.status === 401) {
+          userLogout('warden')
+          navigate('/login/')
+          return
+      }
       const data = await response.json()
       setStudents(data)
 
       const newAttendance = data.map((student) => ({
         studentId: student.studentId,
         isPresent: student.isPresent ?? 1, 
-      }));
+      }))
   
-      setAttendance(newAttendance);
+      setAttendance(newAttendance)
     } catch (error) {
       alert("Something went wrong. Please try later.")
     } 
   }
 
-  function saveOrUpdateAttendance() {
-    setLoading(true)
-    var myHeaders = new Headers()
-    myHeaders.append("Content-Type", "application/json")
+  const handleSaveOrUpdateAttendance = async () => {
+    try {
+      setLoading(true)
+      const finalBlockId = blockId || allId.blockId;
+      const finalBlockFloorId = blockFloorId || allId.floorId;
+      const finalRoomId = roomId || allId.roomId;
 
-    const finalBlockId = blockId || allId.blockId;
-    const finalBlockFloorId = blockFloorId || allId.floorId;
-    const finalRoomId = roomId || allId.roomId;
+      if (!finalBlockId || !finalBlockFloorId || !finalRoomId) return
 
-    if (!finalBlockId || !finalBlockFloorId || !finalRoomId) {
-        alert("Missing required parameters.");
-        return;
+      const payload = {
+        blockId: finalBlockId,
+        blockFloorId: finalBlockFloorId,
+        roomId: finalRoomId,
+        checkInDate: checkIn,
+        attendance: attendance
+      }
+
+      const { response, error } = await saveOrUpdateAttendance(finalBlockId, finalBlockFloorId, finalRoomId, payload)
+      if (error) {
+        alert(error)
+        return
+      }
+
+      if (response.status === 401) {
+        userLogout('warden')
+        navigate('/login/')
+        return
+      }
+   
+      if (response.status === 200) {
+        navigate('/attendance/')
+      } else {
+        alert(await response.text())
+        setLoading(false)
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try later.")
+      setLoading(false)
     }
-
-    var raw = JSON.stringify({
-        "blockId": finalBlockId,
-        "blockFloorId": finalBlockFloorId,
-        "roomId": finalRoomId,
-        "checkInDate": checkIn,
-        "attendance": attendance
-    });
-
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        credentials: 'include'
-    };
-
-    fetch(`${wardenAppUrl}/api/attendance/${finalBlockId}/${finalBlockFloorId}/${finalRoomId}`,
-        requestOptions)
-        .then(async (response) => {
-            if (response.status === 200) {
-                navigate('/attendance/')
-            } else {
-                alert(await response.text())
-                setLoading(false)
-            }
-        })
-        .catch(() => {
-            alert('Something went wrong.Please try later.')
-            setLoading(false)
-        })
 }
 
   const handleAttendanceChange = (studentId, isPresent) => {
@@ -222,38 +256,37 @@ const AttendanceForm = () => {
     })
   }
 
-
   const handleBlockClick = (blockId) => {
-    populateFloorNumber(blockId)
+    handlePopulateFloorNumber(blockId)
     setShowBlocks(false)
     setShowFloors(true)
   }
 
   const handleFloorClick = (floorId) => {
-    populateRoomNumber(floorId)
+    handlePopulateRoomNumber(floorId)
     setShowFloors(false)
     setShowRooms(true)
   }
   
   const handleRoomClick = (roomId) => {
-    fetchStudents(roomId)
+    handleFetchStudents(roomId)
     setShowRooms(false)
     setShowStudents(true)
   }
 
   const backToView = () => {
     if (showStudents) {
-      setShowStudents(false);
-      setStudents([]);
-      setShowRooms(true);
+      setShowStudents(false)
+      setStudents([])
+      setShowRooms(true)
     } else if (showRooms) {
-      setShowRooms(false);
-      setRoomsData([]);
-      setShowFloors(true);
+      setShowRooms(false)
+      setRoomsData([])
+      setShowFloors(true)
     } else if (showFloors) {
-      setShowFloors(false);
-      setFloorsData([]);
-      setShowBlocks(true);
+      setShowFloors(false)
+      setFloorsData([])
+      setShowBlocks(true)
       setAllId(prev => ({ ...prev, blockId: null, floorNumber: null, roomId: null }))
     }
   }
@@ -473,7 +506,7 @@ const AttendanceForm = () => {
                             </table>
                             <button 
                               type="button"
-                              onClick={() => saveOrUpdateAttendance()}
+                              onClick={() => handleSaveOrUpdateAttendance()}
                               className="btn btn-primary"
                               disabled={isLoading}
                             >Submit
