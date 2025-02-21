@@ -259,6 +259,7 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon"
+                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -313,6 +314,7 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon"    
+                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -365,6 +367,7 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon"
+                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -417,6 +420,7 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
+                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -468,6 +472,7 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
+                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>
@@ -521,6 +526,7 @@ function Home() {
                                 <div className="filter">
                                     <a 
                                         className="icon" 
+                                        href="#" 
                                         data-bs-toggle="dropdown"
                                     >
                                         <i className="bi bi-three-dots"></i>

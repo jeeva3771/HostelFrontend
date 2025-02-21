@@ -351,7 +351,7 @@ function Header() {
                         <li>
                             <Link 
                                 class="dropdown-item d-flex align-items-center" 
-                                to="/warden/details/"
+                                to={details.role === 'warden' ? "/warden/details/" : "/student/details/"}
                             >
                                 <i class="bi bi-person"></i>
                                 <span>User Details</span>
@@ -360,8 +360,9 @@ function Header() {
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-
-                        <li>
+                        {details.role === "warden" && (
+                            <>                        
+                            <li>
                             <Link 
                                 class="dropdown-item d-flex align-items-center" 
                                 to="/faq/"
@@ -373,7 +374,9 @@ function Header() {
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
+                        </>
 
+                            )}
                         <li>
                         <Link 
                             onClick={() => {

@@ -1165,9 +1165,6 @@ export async function changePassword(wardenId, payload) {
     } 
 }
 
-
-
-
 export async function generateOtp(payload) {
     try {
         const requestOptions = {
@@ -1211,3 +1208,45 @@ export const resetPassword = async (payload) => {
         }
     } 
 }
+
+export async function readStudentNameAndRegNo() {
+    try {
+        const response = await fetch(`${wardenAppUrl}/api/student/getstudent/`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        return {
+            response,
+            error: null,
+        } 
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }
+}
+
+
+export async function report(month, year, studentName) {
+    try {
+        const response = await fetch(`${wardenAppUrl}/api/attendance/studentattendancereport/?month=${month}&year=${year}&studentName=${studentName}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        return {
+            response,
+            error: null,
+        } 
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }
+}
+
+
+

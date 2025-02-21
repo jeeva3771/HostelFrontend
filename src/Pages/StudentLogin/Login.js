@@ -38,7 +38,7 @@ function StudentLogin() {
         setIsEmailButtonEnabled(false)
         
         try {
-            const { response, error} = await generateOtp(email, studentAppUrl)
+            const { response, error} = await generateOtp(email)
 
             if (error) {
                 alert(error)

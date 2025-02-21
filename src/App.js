@@ -24,6 +24,9 @@ import ErrorPage from './Pages/ErrorPage'
 import AttendanceForm from './Pages/WardenLogin/Attendance/AttendanceForm'
 import ResetPassword from './Pages/WardenLogin/Warden/ResetPassword'
 import UserDetail from './Pages/WardenLogin/Warden/UserDetail'
+import AttendanceReport from './Pages/WardenLogin/Attendance/AttendanceReport'
+import Faq from './Pages/WardenLogin/Faq'
+import Contact from './Pages/WardenLogin/Contact'
 
 function App() {
   const RedirectIfLoggedInWarden = ({ children }) => {
@@ -288,8 +291,35 @@ function App() {
             />
 
             <Route
+              path="/attendance/report/"
+              element={
+                <WardenPrivateRoute>
+                  <AttendanceReport />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
               path="/warden/resetpassword/"
               element={<ResetPassword />}
+            />
+
+            <Route
+              path="/faq/"
+              element={
+                <WardenPrivateRoute>
+                  <Faq />
+                </WardenPrivateRoute>
+              }
+            />
+
+            <Route
+              path="/contact/"
+              element={
+                <WardenPrivateRoute>
+                  <Contact />
+                </WardenPrivateRoute>
+              }
             />
 
             <Route

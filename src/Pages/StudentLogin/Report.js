@@ -5,7 +5,6 @@ import Header from '../Partials/Header'
 import * as XLSX from 'xlsx'
 import Breadcrumbs from '../Partials/BreadCrumb'
 import { useAuth } from "../AuthContext"
-import { studentAppUrl } from '../../config/index'
 import { useNavigate } from 'react-router-dom'
 import { report } from './Api'
 
@@ -30,7 +29,7 @@ function Report() {
     ]
 
     useEffect(() => {
-        document.title = "Report"
+        document.title = "Attendance Report"
     }, [])
 
     useEffect(() => {
@@ -56,7 +55,7 @@ function Report() {
     useEffect(() => {
         const renderReport = async () => {
             try {
-                const { response, error } = await report(month, year, studentAppUrl)
+                const { response, error } = await report(month, year)
 
                 if (error) {
                     alert(error)
@@ -153,7 +152,8 @@ function Report() {
                                         className="form-control upperCase" 
                                         id="student" 
                                         value={studentDetails.name} 
-                                        disabled />
+                                        disabled
+                                    />
                                 </div>
                             </div>
                             <div className="row g-3 justify-content-center mb-5">
