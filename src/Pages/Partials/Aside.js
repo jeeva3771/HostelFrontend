@@ -113,15 +113,15 @@ const Sidebar = () => {
                 </>
               ) : (
                 <Link
-                  to={item.url}
-                  className={`nav-link ${
-                    location.pathname.startsWith(item.url) ? "active" : "collapsed"
-                  }`}
-                  style={{ transition: "0.2s ease" }}
-                >
-                  <i className={item.icon}></i>
-                  <span>{item.name}</span>
-                </Link>
+                    to={item.url}
+                    className={`nav-link ${
+                      location.pathname === item.url ? "active" : "collapsed"
+                    }`}
+                    style={{ transition: "0.2s ease" }}
+                  >
+                    <i className={item.icon}></i>
+                    <span>{item.name}</span>
+                  </Link>
               )}
             </li>
           )

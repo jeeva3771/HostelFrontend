@@ -79,7 +79,7 @@ function WardenLogin() {
                                 >
                                 <div className="col-12">
                                     <label 
-                                        for="email" 
+                                        htmlFor="email" 
                                         className="form-label"
                                     >Email
                                     </label>
@@ -100,7 +100,7 @@ function WardenLogin() {
 
                                 <div className="col-12">
                                     <label 
-                                        for="password" 
+                                        htmlFor="password" 
                                         className="form-label"
                                     >Password
                                     </label>
@@ -130,7 +130,7 @@ function WardenLogin() {
                                         />
                                         <label 
                                             className="form-check-label" 
-                                            for="rememberMe" 
+                                            htmlFor="rememberMe" 
                                         >Remember me
                                         </label>
                                     </div>

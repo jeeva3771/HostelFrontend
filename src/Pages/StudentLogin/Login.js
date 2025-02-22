@@ -151,7 +151,7 @@ function StudentLogin() {
                                     <>
                                         <div className="col-12">
                                             <label 
-                                                for="otp" 
+                                                htmlFor="otp" 
                                                 className="form-label"
                                             >OTP
                                             </label>

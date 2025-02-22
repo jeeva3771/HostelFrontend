@@ -159,7 +159,7 @@ function Report() {
                             <div className="row g-3 justify-content-center mb-5">
                                 <div className="col-auto">
                                     <label 
-                                        for="month" 
+                                        htmlFor="month" 
                                         className="visually-hidden"
                                     >Month
                                     </label>
@@ -179,7 +179,7 @@ function Report() {
                                 </div>
                                 <div className="col-auto">
                                     <label 
-                                        for="year" 
+                                        htmlFor="year" 
                                         className="visually-hidden"
                                     >Year
                                     </label>

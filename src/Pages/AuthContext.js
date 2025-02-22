@@ -6,11 +6,23 @@ export const AuthProvider = ({children}) => {
     const [isStudentLogged, setIsStudentLogged] = useState(
         () => JSON.parse(localStorage.getItem("isStudentLogged")) || false
     )
-    const [studentDetails,  setStudentDetails] = useState({})
+    const [studentDetails, setStudentDetails] = useState(
+        () => JSON.parse(localStorage.getItem("studentDetails")) || {}
+    )
     const [isWardenLogged, setIsWardenLogged] = useState(
         () => JSON.parse(localStorage.getItem("isWardenLogged")) || false
     )
-    const [wardenDetails, setWardenDetails] = useState({})
+    const [wardenDetails, setWardenDetails] = useState(
+        () => JSON.parse(localStorage.getItem("wardenDetails")) || {}
+    )
+
+    useEffect(() => {
+        localStorage.setItem("studentDetails", JSON.stringify(studentDetails))
+    }, [studentDetails])
+
+    useEffect(() => {
+        localStorage.setItem("wardenDetails", JSON.stringify(wardenDetails))
+    }, [wardenDetails])
 
     useEffect(() => {
         localStorage.setItem("isWardenLogged", JSON.stringify(isWardenLogged))
@@ -22,12 +34,13 @@ export const AuthProvider = ({children}) => {
 
     const userLogged = (user, role) => {
         if (role === "student") {
-        localStorage.removeItem("wardenDetails");
-        localStorage.removeItem("isWardenLogged");
-    } else if (role === "warden") {
-        localStorage.removeItem("studentDetails");
-        localStorage.removeItem("isStudentLogged");
-    }
+            localStorage.removeItem("wardenDetails")
+            localStorage.removeItem("isWardenLogged")
+        } else if (role === "warden") {
+            localStorage.removeItem("studentDetails")
+            localStorage.removeItem("isStudentLogged")
+        }
+        
         if (role === "student") {
             setIsStudentLogged(true)
             localStorage.setItem("isStudentLogged", "true")
@@ -54,28 +67,6 @@ export const AuthProvider = ({children}) => {
             localStorage.removeItem("wardenDetails")
         }
     }
-    
-    useEffect(() => {
-        if (studentDetails.role === "student") {
-            const loggedStatus = localStorage.getItem("isStudentLogged") === "true"
-            setIsStudentLogged(loggedStatus)
-            if (loggedStatus) {
-                var user = localStorage.getItem("studentDetails")
-                setStudentDetails(JSON.parse(user))
-            } else {
-                setStudentDetails({})
-            }
-        } else if (studentDetails.role === "warden") {
-            const loggedStatus = localStorage.getItem("isWardenLogged") === "true"
-            setIsWardenLogged(loggedStatus)
-            if (loggedStatus) {
-                var user = localStorage.getItem("wardenDetails")
-                setWardenDetails(JSON.parse(user))
-            } else {
-                setWardenDetails({})
-            }
-        }
-    }, [])
     
     return (
         <AuthContext.Provider value={{ 

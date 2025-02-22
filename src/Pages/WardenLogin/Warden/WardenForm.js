@@ -137,7 +137,7 @@ function WardenForm() {
                                 <div className="row mb-3 mt-5">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="fistName"
+                                        htmlFor="fistName"
                                     >
                                         First Name<span className="text-danger">*</span>
                                     </label>
@@ -155,7 +155,7 @@ function WardenForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="lastName" 
+                                        htmlFor="lastName" 
                                     >
                                         Last Name<span className="text-danger">*</span>
                                     </label>
@@ -173,7 +173,7 @@ function WardenForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="dob" 
+                                        htmlFor="dob" 
                                     >
                                         DOB<span className="text-danger">*</span>
                                     </label>
@@ -205,7 +205,7 @@ function WardenForm() {
                                             />
                                             <label 
                                                 className="form-check-label" 
-                                                for="admin"
+                                                htmlFor="admin"
                                             >Yes
                                             </label>
                                         </div>
@@ -221,7 +221,7 @@ function WardenForm() {
                                             />
                                             <label 
                                                 className="form-check-label" 
-                                                for="notAdmin"
+                                                htmlFor="notAdmin"
                                             >No
                                             </label>
                                         </div>
@@ -232,7 +232,7 @@ function WardenForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="email" 
+                                        htmlFor="email" 
                                     >
                                         Email Id<span className="text-danger">*</span>
                                     </label>
@@ -252,7 +252,7 @@ function WardenForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="password" 
+                                        htmlFor="password" 
                                     >
                                         Password<span className="text-danger">*</span>
                                     </label>
@@ -270,7 +270,7 @@ function WardenForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="confirmPassword" 
+                                        htmlFor="confirmPassword" 
                                     >
                                         Confirm Password<span className="text-danger">*</span>
                                     </label>
@@ -288,7 +288,7 @@ function WardenForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="image" 
+                                        htmlFor="image" 
                                     >
                                         Image Upload
                                     </label>

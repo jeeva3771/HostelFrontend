@@ -165,6 +165,7 @@ function AttendanceReport() {
             <Breadcrumbs breadcrumb={breadcrumbData}/>
         </div>
         <section className="section">
+            <div className="col-lg-12">
                 <div className="card">
                     <div className="card-body">
                         <div className="container d-flex flex-column align-items-center mt-2">
@@ -172,30 +173,31 @@ function AttendanceReport() {
                                 <div className="col-auto">
                                     <label 
                                         class="visually-hidden" 
-                                        for="student"
-                                    >
+                                        htmlFor="student"
+                                    >Student
                                     </label>    
-                                        <select
-                                            className="form-select"
-                                            id="student"
-                                            value={studentName}
-                                            onChange={(e) => setStudentName(e.target.value)}
-                                        >
-                                            <option value="">Select a Student</option>
-                                            {studentInfo.map((student) => (
-                                                <option 
-                                                    key={student.name} 
-                                                    value={student.name}
-                                                >
-                                                    {student.name} - RegNo: {student.registerNumber}
-                                                </option>
-                                            ))}
-                                        </select>
+                                    <select
+                                        className="form-select"
+                                        id="student"
+                                        value={studentName}
+                                        onChange={(e) => setStudentName(e.target.value)}
+                                    >
+                                        <option value="">Select a Student</option>
+                                        {studentInfo.map((student) => (
+                                            <option 
+                                                key={student.name} 
+                                                value={student.name}
+                                            >
+                                                {student.name} - RegNo: <b>{student.registerNumber}</b>
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                             <div className="row g-3 justify-content-center mb-5">
                                 <div className="col-auto">
                                     <label 
-                                        for="month" 
+                                        htmlFor="month" 
                                         className="visually-hidden"
                                     >Month
                                     </label>
@@ -215,7 +217,7 @@ function AttendanceReport() {
                                 </div>
                                 <div className="col-auto">
                                     <label 
-                                        for="year" 
+                                        htmlFor="year" 
                                         className="visually-hidden"
                                     >Year
                                     </label>
@@ -319,10 +321,10 @@ function AttendanceReport() {
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
-    <Footer />
-    </>       
+    </section>
+</main>
+<Footer />
+</>       
     )
 }
 

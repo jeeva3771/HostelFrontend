@@ -6,55 +6,27 @@ import { studentAppUrl, wardenAppUrl } from "../../config"
 
 function Header() {
     const [showBackToTop, setShowBackToTop] = useState(false)
-    const [details, setDetails] = useState({
-        image: '',
-        role: '',
-        studentInfo: '',
-        wardenInfo: '',
-        superAdmin: ''
-    })
-    const { userLogout } = useAuth() 
-    
-    useEffect(() => {
-        let auth = ''
-        let wardenId = ''
-        let parsedStudent = null
-        let parsedWarden = null
-        
-        try {
-            const studentData = localStorage.getItem("studentDetails")
-            if (studentData) {
-                parsedStudent = JSON.parse(studentData)
-                if (parsedStudent.role) {
-                    auth = parsedStudent.role
-                }
-            }
-
-            const wardenData = localStorage.getItem("wardenDetails")
-            if (wardenData) {
-                parsedWarden = JSON.parse(wardenData)
-                if (parsedWarden.role) {
-                    auth = parsedWarden.role
-                    wardenId = parsedWarden.wardenId
-                }
-            }
-        } catch (error) {
-            console.error("Error parsing local storage data:", error)
-        }
-
-        let imageUrl = auth === "warden"
-            ? `${wardenAppUrl}/api/warden/${wardenId}/avatar?date=${Date.now()}/`
-            : `${studentAppUrl}/api/student/image?date=${Date.now()}`
-
-        setDetails({
-            image: imageUrl,
-            role: auth === "warden" ? "warden" : "student",
-            studentInfo: parsedStudent,
-            wardenInfo: parsedWarden
-        })
-    }, [])
-
+    const { 
+        userLogout, 
+        studentDetails, 
+        wardenDetails 
+    } = useAuth() 
     const navigate = useNavigate()
+    
+    const [details, setDetails] = useState(wardenDetails?.role === "warden" ? wardenDetails : studentDetails)
+    const [imageUrl, setImageUrl] = useState("")
+
+    useEffect(() => {
+        if (wardenDetails?.role === "warden") {
+            setImageUrl(`${wardenAppUrl}/api/warden/${wardenDetails.wardenId}/avatar?date=${Date.now()}`)
+        } else if (studentDetails) {
+            setImageUrl(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
+        }
+    }, [wardenDetails, studentDetails])
+
+    useEffect(() => {
+        setDetails(wardenDetails?.role === "warden" ? wardenDetails : studentDetails)
+    }, [wardenDetails, studentDetails])
 
     const logoutHandler = async (role) => {
         try {
@@ -324,21 +296,21 @@ function Header() {
                         data-bs-toggle="dropdown"
                     >
                         <img 
-                            src={details.image} 
+                            src={imageUrl} 
                             alt="Profile" 
                             class="rounded-circle" 
                         />
                         <span class="d-none d-md-block dropdown-toggle ps-2 upperCase">
-                            {details.role === "warden" ? `${details.wardenInfo.firstName}${details.wardenInfo?.lastName}` : details.studentInfo?.name }
+                            {details.role === "warden" ? `${details.firstName}${details.lastName}` : details.name }
                         </span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <h6 className="upperCase">
-                                {details.role === "warden" ? `${details.wardenInfo.firstName}${details.wardenInfo?.lastName}`: details.studentInfo?.name}
+                                {details.role === "warden" ? `${details.firstName}${details.lastName}`: details.name}
                             </h6>
-                            <span>{details.wardenInfo?.superAdmin === 1 
+                            <span>{details.superAdmin === 1 
                                 ? "Admin" 
                                 : details.role === "warden" 
                                     ? "Warden" 

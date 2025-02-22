@@ -200,7 +200,7 @@ function Detail() {
                                 >
                                     <div className="row mb-3">
                                         <label 
-                                            for="profileImage" 
+                                            htmlFor="profileImage" 
                                             className="col-md-4 col-lg-3 col-form-label"
                                         >Student Image
                                         </label>

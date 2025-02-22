@@ -178,7 +178,7 @@ function RoomForm() {
                                 <div className="row mb-3 mt-5">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="blockCode"
+                                        htmlFor="blockCode"
                                     >
                                         Block Code<span className="text-danger">*</span>
                                     </label>
@@ -214,7 +214,7 @@ function RoomForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="floorNum"
+                                        htmlFor="floorNum"
                                     >
                                         Floor Number<span className="text-danger">*</span>
                                     </label>
@@ -244,7 +244,7 @@ function RoomForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="roomNum" 
+                                        htmlFor="roomNum" 
                                     >
                                         Room Number<span className="text-danger">*</span>
                                     </label>
@@ -262,7 +262,7 @@ function RoomForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="roomCapacity" 
+                                        htmlFor="roomCapacity" 
                                     >
                                         Room Capacity<span className="text-danger">*</span>
                                     </label>
@@ -294,7 +294,7 @@ function RoomForm() {
                                             />
                                             <label 
                                                 className="form-check-label" 
-                                                for="active"
+                                                htmlFor="active"
                                             >Active
                                             </label>
                                         </div>
@@ -310,7 +310,7 @@ function RoomForm() {
                                             />
                                             <label 
                                                 className="form-check-label" 
-                                                for="inActive"
+                                                htmlFor="inActive"
                                             >Inactive
                                             </label>
                                         </div>
@@ -334,7 +334,7 @@ function RoomForm() {
                                             />
                                             <label 
                                                 className="form-check-label" 
-                                                for="airConditioner"
+                                                htmlFor="airConditioner"
                                             >Yes
                                             </label>
                                         </div>
@@ -350,7 +350,7 @@ function RoomForm() {
                                             />
                                             <label 
                                                 className="form-check-label" 
-                                                for="noAirConditioner"
+                                                htmlFor="noAirConditioner"
                                             >No
                                             </label>
                                         </div>

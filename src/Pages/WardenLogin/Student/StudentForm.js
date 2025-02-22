@@ -266,7 +266,7 @@ function StudentForm() {
                                 <div className="row mb-3 mt-5">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="name"
+                                        htmlFor="name"
                                     >
                                         Name<span className="text-danger">*</span>
                                     </label>
@@ -284,7 +284,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="regNum" 
+                                        htmlFor="regNum" 
                                     >
                                         Register Number<span className="text-danger">*</span>
                                     </label>
@@ -302,7 +302,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="dob" 
+                                        htmlFor="dob" 
                                     >
                                         DOB<span className="text-danger">*</span>
                                     </label>
@@ -320,7 +320,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="courseName"
+                                        htmlFor="courseName"
                                     >
                                         Course Name<span className="text-danger">*</span>
                                     </label>    
@@ -348,7 +348,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="email" 
+                                        htmlFor="email" 
                                     >
                                         Email Id<span className="text-danger">*</span>
                                     </label>
@@ -366,7 +366,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="phoneNum" 
+                                        htmlFor="phoneNum" 
                                     >
                                         Phone Number<span className="text-danger">*</span>
                                     </label>
@@ -384,7 +384,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="fatherName" 
+                                        htmlFor="fatherName" 
                                     >
                                         Father Name<span className="text-danger">*</span>
                                     </label>
@@ -402,7 +402,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="fatherNum" 
+                                        htmlFor="fatherNum" 
                                     >
                                         Father Number<span className="text-danger">*</span>
                                     </label>
@@ -420,7 +420,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="address" 
+                                        htmlFor="address" 
                                     >
                                         Address<span className="text-danger">*</span>
                                     </label>
@@ -438,7 +438,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="blockCode"
+                                        htmlFor="blockCode"
                                     >
                                         Block Code<span className="text-danger">*</span>
                                     </label>
@@ -448,7 +448,9 @@ function StudentForm() {
                                             id="blockCode"
                                             value={student.blockCode}
                                             onChange={(e) => {
-                                                const selectedBlock = e.target.value;
+                                                const selectedBlock = e.target.value
+                                                setFloors({ ...floors, floorNumber: '' })
+                                                setRooms({ ...rooms, roomNumber: '' })
                                                 setStudent({ ...student, blockCode: selectedBlock })
                                                 if (selectedBlock) {
                                                     handleFloorNumbers(selectedBlock, true)
@@ -474,7 +476,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="floorNum"
+                                        htmlFor="floorNum"
                                     >
                                         Floor Number<span className="text-danger">*</span>
                                     </label>
@@ -484,7 +486,8 @@ function StudentForm() {
                                             id="floorNum"
                                             value={student.floorNum}
                                             onChange={(e) => {
-                                                const selectedFloor = e.target.value;
+                                                const selectedFloor = e.target.value
+                                                setRooms({ ...rooms, roomNumber: '' })
                                                 setStudent({ ...student, floorNum: selectedFloor })
                                                 if (selectedFloor) {
                                                     handleRoomNumbers(selectedFloor)
@@ -514,7 +517,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="roomNum"
+                                        htmlFor="roomNum"
                                     >
                                         Room Number<span className="text-danger">*</span>
                                     </label>
@@ -564,7 +567,7 @@ function StudentForm() {
                                 <div className="row mb-3">
                                     <label 
                                         className="col-sm-2 col-form-label"
-                                        for="joinDate" 
+                                        htmlFor="joinDate" 
                                     >
                                         Joined Date<span className="text-danger">*</span>
                                     </label>

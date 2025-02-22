@@ -105,7 +105,7 @@ function CourseForm() {
                                 <div className="row mb-3 mt-5">
                                     <label 
                                         className="col-sm-2 col-form-label" 
-                                        for="courseName"
+                                        htmlFor="courseName"
                                     >
                                         Course Name<span className="text-danger">*</span>
                                     </label>

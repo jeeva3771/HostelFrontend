@@ -318,7 +318,7 @@ const AttendanceForm = () => {
                             <div className="col-2 text-center mt-4">
                                 <div className="form-group">
                                     <label 
-                                        for="date" 
+                                        htmlFor="date" 
                                         className="mb-2"
                                     ><strong>Date</strong>
                                     </label>
@@ -484,7 +484,7 @@ const AttendanceForm = () => {
                                           checked={attendance.some((entry) => entry.studentId === student.studentId && entry.isPresent === 1)}
                                           onChange={() => handleAttendanceChange(student.studentId, 1)}
                                         />
-                                        <label className="form-check-label" for={`present_${student.studentId}`}>Present</label>
+                                        <label className="form-check-label" htmlFor={`present_${student.studentId}`}>Present</label>
                                       </div>
                                       <div className="form-check form-check-inline">
                                         <input
@@ -496,7 +496,7 @@ const AttendanceForm = () => {
                                           checked={attendance.some((entry) => entry.studentId === student.studentId && entry.isPresent === 0)}
                                           onChange={() => handleAttendanceChange(student.studentId, 0)}
                                         />
-                                        <label className="form-check-label" for={`absent_${student.studentId}`}>Absent</label>
+                                        <label className="form-check-label" htmlFor={`absent_${student.studentId}`}>Absent</label>
                                       </div>
                                     </td>
                                   </tr>

@@ -19,7 +19,6 @@ import { useAuth } from "../../AuthContext"
 import { wardenAppUrl } from "../../../config"
 import formatDate from "../DateFormat"
 
-
 function UserDetail() {
     const { wardenDetails, userLogout } = useAuth()
     const [details, setDetails] = useState(wardenDetails)
@@ -288,21 +287,36 @@ function UserDetail() {
                                 <div className="card-body pt-3">
                                     <ul className="nav nav-tabs nav-tabs-bordered">
                                         <li className="nav-item">
-                                            <button className="nav-link active" data-bs-toggle="tab"
-                                            data-bs-target="#profile-overview">Overview</button>
+                                            <button 
+                                                className="nav-link active" 
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#profile-overview"
+                                            >Overview
+                                            </button>
                                         </li>
 
                                         <li className="nav-item">
-                                            <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit User</button>
+                                            <button 
+                                                className="nav-link" 
+                                                data-bs-toggle="tab" 
+                                                data-bs-target="#profile-edit"
+                                            >Edit User
+                                            </button>
                                         </li>
 
                                         <li className="nav-item">
-                                            <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change
-                                            Password</button>
+                                            <button 
+                                                className="nav-link" 
+                                                data-bs-toggle="tab" 
+                                                data-bs-target="#profile-change-password"
+                                            >Change Password</button>
                                         </li>
                                     </ul>
                                     <div className="tab-content pt-2">
-                                        <div className="tab-pane fade show active profile-overview" id="profile-overview">
+                                        <div 
+                                            className="tab-pane fade show active profile-overview" 
+                                            id="profile-overview"
+                                        >
                                         <h5 className="card-title">User Details</h5>
                                         {details &&
                                             fields.map(({ label, key }) => (
@@ -325,7 +339,11 @@ function UserDetail() {
 
                                 <div>
                                     <div className="row mb-3">
-                                        <label for="profileImage" className="col-md-4 col-lg-3 col-form-label">User Image</label>
+                                        <label 
+                                            htmlFor="profileImage" 
+                                            className="col-md-4 col-lg-3 col-form-label"
+                                        >User Image
+                                        </label>
                                         <div className="col-md-8 col-lg-9">
                                             <div >
                                                 <span className="spinner-border text-secondary spinner2" id="spinner"></span>
@@ -361,7 +379,7 @@ function UserDetail() {
                                     </div>
                                     <div className="row mb-3">
                                         <label 
-                                            for="firstName" 
+                                            htmlFor="firstName" 
                                             className="col-md-4 col-lg-3 col-form-label"
                                         >First Name
                                         </label>
@@ -382,7 +400,7 @@ function UserDetail() {
 
                                     <div className="row mb-3">
                                         <label 
-                                            for="lastName" 
+                                            htmlFor="lastName" 
                                             className="col-md-4 col-lg-3 col-form-label"
                                         >Last Name
                                         </label>
@@ -403,7 +421,7 @@ function UserDetail() {
 
                                     <div className="row mb-3">
                                         <label 
-                                            for="dob" 
+                                            htmlFor="dob" 
                                             className="col-md-4 col-lg-3 col-form-label"
                                         >DOB
                                         </label>
@@ -424,7 +442,7 @@ function UserDetail() {
                                     
                                     <div className="row mb-3">
                                         <label 
-                                            for="email" 
+                                            htmlFor="email" 
                                             className="col-md-4 col-lg-3 col-form-label"
                                         >Email
                                         </label>
@@ -462,7 +480,7 @@ function UserDetail() {
                                     <div>
                                         <div className="row mb-3">
                                             <label 
-                                                for="currentPassword" 
+                                                htmlFor="currentPassword" 
                                                 className="col-md-4 col-lg-3 col-form-label"
                                             >Current Password
                                             </label>
@@ -483,7 +501,7 @@ function UserDetail() {
 
                                         <div className="row mb-3">
                                             <label 
-                                                for="newPassword" 
+                                                htmlFor="newPassword" 
                                                 className="col-md-4 col-lg-3 col-form-label"
                                             >New Password
                                             </label>
@@ -504,7 +522,7 @@ function UserDetail() {
 
                                         <div className="row mb-3">
                                             <label 
-                                                for="renewPassword" 
+                                                htmlFor="renewPassword" 
                                                 className="col-md-4 col-lg-3 col-form-label"
                                             >Re-enter New Password
                                             </label>
