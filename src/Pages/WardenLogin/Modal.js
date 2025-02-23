@@ -71,7 +71,7 @@ const DetailsModal = forwardRef((_, ref) => {
         { label: "Reviewed At", key: "createdTimeStamp" },
         { label: "Reviewed By", key: "reviewedWardenFirstName", key2: "reviewedWardenLastName" },
         { label: "Updated At", key: "updatedTimeStamp" },
-        { label: "Updated By", key: "updatedFirstName", key2: "updatedLastName", fallback: "---" }
+        { label: "Updated By", key: "reviewedWardenFirstName", key2: "reviewedWardenLastName", fallback: "---" }
     ]
 
     useImperativeHandle(ref, () => ({
@@ -140,9 +140,10 @@ const DetailsModal = forwardRef((_, ref) => {
                     <div className="modal-body">
                         {modalData ? (
                             fields.map(({ label, key, key2, format, fallback }) => {
+                                const shouldCapitalize = ["createdFirstName", "reviewedWardenFirstName", "updatedFirstName", "reviewedWardenLastName"].includes(key)
                                 const value = format 
                                 ? format(modalData[key]) 
-                                : key === ("createdFirstName" || "reviewedWardenFirstName" ) || key === ("updatedFirstName" || "reviewedWardenLastName")
+                                : shouldCapitalize
                                 ? modalData[key]?.charAt(0).toUpperCase() + modalData[key]?.slice(1) || fallback || ""
                                 : modalData[key] || fallback || ""
 

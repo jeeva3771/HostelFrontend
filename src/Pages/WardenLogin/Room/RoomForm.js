@@ -376,7 +376,15 @@ function RoomForm() {
                                         type="button"
                                         className="btn btn-primary"
                                         onClick={handleSubmit}
-                                        disabled={!room.blockCode || !room.floorNumber || room.isActive === null || loading}
+                                        disabled={
+                                            !room.blockCode ||
+                                            !room.floorNumber || 
+                                            !room.roomNumber ||
+                                            !room.roomCapacity ||
+                                            room.isActive === null ||
+                                            room.isAirConditioner === null ||
+                                            loading
+                                        }
                                     >
                                         {loading ? "Submitting..." : "Submit"}
                                     </button>

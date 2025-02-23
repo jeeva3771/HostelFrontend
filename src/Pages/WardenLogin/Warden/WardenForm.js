@@ -104,16 +104,16 @@ function WardenForm() {
             if ([200, 201].includes(response.status)) {
                 navigate('/warden/')
             } else {
-                const responseData = await response.json();
+                const responseData = await response.json()
                 if (Array.isArray(responseData)) {
-                    const errorMessage = responseData.join('\n');
-                    alert(errorMessage);
+                    const errorMessage = responseData.join('\n')
+                    alert(errorMessage)
                 } else {
-                    alert(responseData.error || responseData);
+                    alert(responseData.error || responseData)
                 }
             }
         } catch (error) {
-            alert("Something went wrong. Please try later.");
+            alert("Something went wrong. Please try later.")
         } finally {
             setLoading(false)
         }
@@ -332,10 +332,10 @@ function WardenForm() {
                                             !warden.dob ||
                                             !warden.emailId ||
                                             warden.isAdmin === null ||
-                                            (!wardenId && (!warden.password || warden.password !== warden.confirmPassword)) ||
-                                            warden.password.length <= 6 ||
-                                            warden.confirmPassword.length <= 6 ||
-                                            loading
+                                            (!wardenId && (!warden.password || 
+                                                warden.password !== warden.confirmPassword || 
+                                                warden.password.length < 6)
+                                            ) || loading
                                         }
                                     >
                                         {loading ? "Submitting..." : "Submit"}

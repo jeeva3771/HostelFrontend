@@ -862,6 +862,7 @@ export async function saveOrUpdateWarden(wardenId, payload) {
             dob: payload.dob,
             emailId: payload.emailId,
             superAdmin: payload.superAdmin,
+            password: payload.password
         }
         requestBody = JSON.stringify(updatePayload)
     }
