@@ -17,11 +17,9 @@
     "tinymce": "^7.6.1",
     "xlsx": "^0.18.5"
   },
+  
   "scripts": {
-  "start": "node server.js"
-  },
-  "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
