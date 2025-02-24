@@ -145,7 +145,7 @@ function AttendanceList() {
                                                             <option value="-1">All</option>
                                                         </select> entries per page
                                                     </label>
-                                                    <Link to="/attendance/report/" class="btn btn-secondary">Report</Link>
+                                                    <Link to="/attendance/report/" className="btn btn-secondary">Report</Link>
                                                 </div>
                                             </div>
                                         </div>

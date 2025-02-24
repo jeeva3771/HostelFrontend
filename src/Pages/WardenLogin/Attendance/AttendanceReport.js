@@ -172,7 +172,7 @@ function AttendanceReport() {
                             <div className="row g-3 justify-content-center mb-4 mt-3">
                                 <div className="col-auto">
                                     <label 
-                                        class="visually-hidden" 
+                                        className="visually-hidden" 
                                         htmlFor="student"
                                     >Student
                                     </label>    

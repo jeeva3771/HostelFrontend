@@ -231,11 +231,11 @@ function Detail() {
                                                     name="image"
                                                 />
                                                 <button 
-                                                    class="btn btn-danger btn-sm" 
+                                                    className="btn btn-danger btn-sm" 
                                                     title="Remove my profile image"
                                                     onClick={deleteImageHandler}
                                                 >
-                                                    <i class="bi bi-trash"></i>
+                                                    <i className="bi bi-trash"></i>
                                                 </button>
                                             </div>
                                         </div>

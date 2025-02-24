@@ -107,7 +107,7 @@ function ResetPassword() {
                                         <>
                                         <div className="col-12">
                                             <label htmlFor="emailId" className="form-label">Email</label>
-                                                <div class="input-group has-validation">
+                                                <div className="input-group has-validation">
                                                 <input
                                                     type="email"
                                                     className="form-control"
