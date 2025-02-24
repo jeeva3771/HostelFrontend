@@ -219,7 +219,7 @@ function App() {
                 </WardenPrivateRoute>
               }
             />
-{/* 
+
             <Route
               path="/warden/"
               element={
@@ -228,15 +228,6 @@ function App() {
                     <WardenList />
                   </SuperAdminPrivateRoute>
                 </WardenPrivateRoute>
-              }
-            /> */}
-
-            <Route
-              path="/warden/"
-              element={
-                
-                    <WardenList />
-                  
               }
             />
 
