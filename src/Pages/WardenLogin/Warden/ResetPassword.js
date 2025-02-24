@@ -22,7 +22,6 @@ function ResetPassword() {
         password === confirmPassword
 
     const handleGenerateOtp = async () => {
-        console.log('hiiiiiiii')
         setLoading(true)
         setEmailError("")
         const payload = {
