@@ -22,6 +22,7 @@ function ResetPassword() {
         password === confirmPassword
 
     const handleGenerateOtp = async () => {
+        console.log('hiiiiiiii')
         setLoading(true)
         setEmailError("")
         const payload = {
@@ -66,14 +67,14 @@ function ResetPassword() {
             if (response.status === 200) {
                 navigate('/login/')
             } else if (response.status === 400) {
-                const errorData = await response.json();
+                const errorData = await response.json()
                 if (errorData.errorType === "OTP") {
-                    setOtpError(errorData.message);
+                    setOtpError(errorData.message)
                 } else {
-                    setPasswordError(errorData.message || "Password must be at least 6 characters.");
+                    setPasswordError(errorData.message || "Password must be at least 6 characters.")
                 }
             } else {
-                alert(await response.text());
+                alert(await response.text())
                 navigate('/login/')
             }
         } catch (error) {
@@ -81,7 +82,7 @@ function ResetPassword() {
         } finally {
             setLoading(false)
         }
-    };
+    }
     
     return (
     <main>
