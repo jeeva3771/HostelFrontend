@@ -20,7 +20,7 @@ function Header() {
         if (wardenDetails?.role === "warden") {
             setImageUrl(`${wardenAppUrl}/api/warden/${wardenDetails.wardenId}/avatar?date=${Date.now()}`)
         } else if (studentDetails) {
-            setImageUrl(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
+            setImageUrl(`${studentAppUrl}/student/api/student/image?date=${Date.now()}`)
         }
     }, [wardenDetails, studentDetails])
 

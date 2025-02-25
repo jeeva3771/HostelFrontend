@@ -81,7 +81,7 @@ function Detail() {
             }
 
             if(response.ok) {
-                setImageUrl(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
+                setImageUrl(`${studentAppUrl}/student/api/student/image?date=${Date.now()}`)
                 alert("Image updated successfully!")
             } else if (response.status === 400) {
                 alert(await response.text())
@@ -109,7 +109,7 @@ function Detail() {
             }
 
             if (response.ok) {
-                setImageUrl(`${studentAppUrl}/api/student/image?date=${Date.now()}`)
+                setImageUrl(`${studentAppUrl}/student/api/student/image?date=${Date.now()}`)
             } else {
                 alert('Not deleted')
             }
