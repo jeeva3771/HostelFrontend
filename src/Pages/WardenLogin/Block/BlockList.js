@@ -60,6 +60,7 @@ function BlockList() {
             }
 
             const { blocks, blockCount } = await response.json()
+            console.log(blocks)
             setBlocks(blocks || [])
             setBlockCount(blockCount || 0)
         } catch (error) {

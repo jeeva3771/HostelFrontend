@@ -5,7 +5,7 @@ import { useAuth } from "../AuthContext"
 const { useState, useEffect } = require("react")
 
 function WardenLogin() {
-    const [email, setEmail] = useState('prem123@gmail.com')
+    const [email, setEmail] = useState('jeeva37710@gmail.com')
     const [password, setPassword] = useState('123123')
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -28,8 +28,7 @@ function WardenLogin() {
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev)
-    };
-
+    }
 
     const loginUser = async () => {
         setIsLoading(true)
@@ -42,14 +41,14 @@ function WardenLogin() {
             }
 
             if (response.status === 200) {
-                userLogged(await response.json(), "warden")
+                const data = await response.json()
+                userLogged(data, "warden")
                 navigate('/home/')
             } else {
                 alert(await response.text())
                 setIsLoading(false)
             }
         } catch (error) {
-            console.log(error)
             alert('Something went wrong.Please try later')
         }
     }

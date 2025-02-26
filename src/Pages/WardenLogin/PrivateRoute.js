@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom"
 import { useAuth } from "../AuthContext"
-import { useState } from "react";
 
 export const WardenPrivateRoute = ({ children }) => {
     const { isWardenLogged } = useAuth()

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { studentAppUrl } from '../../config/index'
 import { generateOtp, verifyOtpAndLogin } from './Api'
 
 function StudentLogin() {

@@ -22,17 +22,17 @@ function Home() {
     const navigate = useNavigate()
     const { userLogout } = useAuth()
     const [state, setState] = useState({
-        blockCount: '',
+        blockCount: 0,
         isBlockLoad: false,
-        floorCount: '',
+        floorCount: 0,
         isFloorLoad: false,
-        roomCount: '',
+        roomCount: 0,
         isRoomLoad: false,
-        studentCount: '',
+        studentCount: 0,
         isStudentLoad: false,
-        wardenCount: '',
+        wardenCount: 0,
         isWardenLoad: false,
-        courseCount: '',
+        courseCount: 0,
         isCourseLoad: false
     })
 
@@ -76,11 +76,9 @@ function Home() {
                 return
             }
 
-            if(response.ok) {
+            if (response.ok) {
                 const block = await response.json()
                 setState(prev => ({ ...prev, blockCount: block.totalBlockCount }))
-            } else if (response.status === 404) {
-                alert(await response.text())
             } 
 
         } catch (error) {
@@ -109,8 +107,6 @@ function Home() {
             if(response.ok) {
                 const blockFloor = await response.json()
                 setState( prev => ({ ...prev, floorCount: blockFloor.totalFloorCount}))
-            } else if (response.status === 404) {
-                alert(await response.text())
             } 
 
         } catch (error) {
@@ -139,8 +135,6 @@ function Home() {
             if(response.ok) {
                 const room = await response.json()
                 setState( prev => ({ ...prev, roomCount: room.totalRoomCount}))
-            } else if (response.status === 404) {
-                alert(await response.text())
             } 
 
         } catch (error) {
@@ -169,8 +163,6 @@ function Home() {
             if(response.ok) {
                 const student = await response.json()
                 setState( prev => ({ ...prev, studentCount: student.totalStudentCount}))
-            } else if (response.status === 404) {
-                alert(await response.text())
             } 
 
         } catch (error) {
@@ -199,8 +191,6 @@ function Home() {
             if(response.ok) {
                 const warden = await response.json()
                 setState( prev => ({ ...prev, wardenCount: warden.totalWardenCount}))
-            } else if (response.status === 404) {
-                alert(await response.text())
             } 
         } catch (error) {
             alert('Something went wrong.Please try later')
@@ -228,8 +218,6 @@ function Home() {
             if(response.ok) {
                 const course = await response.json()
                 setState( prev => ({ ...prev, courseCount: course.totalCourseCount}))
-            } else if (response.status === 404) {
-                alert(await response.text())
             } 
 
         } catch (error) {

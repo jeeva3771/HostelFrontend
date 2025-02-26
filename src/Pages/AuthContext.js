@@ -36,21 +36,13 @@ export const AuthProvider = ({children}) => {
         if (role === "student") {
             localStorage.removeItem("wardenDetails")
             localStorage.removeItem("isWardenLogged")
+            setIsStudentLogged(true)
+            setStudentDetails({ ...user, role })
         } else if (role === "warden") {
             localStorage.removeItem("studentDetails")
             localStorage.removeItem("isStudentLogged")
-        }
-        
-        if (role === "student") {
-            setIsStudentLogged(true)
-            localStorage.setItem("isStudentLogged", "true")
-            setStudentDetails({ ...user, role })
-            localStorage.setItem("studentDetails", JSON.stringify({ ...user, role }))
-        } else if (role === "warden") {
             setIsWardenLogged(true)
-            localStorage.setItem("isWardenLogged", "true")
             setWardenDetails({ ...user, role })
-            localStorage.setItem("wardenDetails", JSON.stringify({ ...user, role }))
         }
     }
 

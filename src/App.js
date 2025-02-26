@@ -79,7 +79,7 @@ function App() {
             <Route
               path="/block/"
               element={
-                <WardenPrivateRoute>
+                <WardenPrivateRoute> 
                   <BlockList />
                 </WardenPrivateRoute>
               }

@@ -17,7 +17,7 @@ export async function authentication(email, password) {
             body: raw,
             credentials: 'include'
         }
-        alert(wardenAppUrl)
+
         const response = await fetch(`${wardenAppUrl}/api/login/`, requestOptions)
         return {
             response,
