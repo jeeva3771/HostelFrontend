@@ -50,6 +50,7 @@ function WardenLogin() {
             }
         } catch (error) {
             alert('Something went wrong.Please try later')
+            setIsLoading(false)
         }
     }
 
