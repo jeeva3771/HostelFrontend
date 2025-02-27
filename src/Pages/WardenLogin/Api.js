@@ -4,7 +4,7 @@ var headers = new Headers()
 headers.append("Content-Type", "application/json")
 var formdata = new FormData()
 
-export async function authentication(email, password) {
+export async function  authentication(email, password) {
     try {
         const raw = JSON.stringify({
             "emailId": email,
