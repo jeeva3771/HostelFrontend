@@ -1,4 +1,4 @@
-import { wardenAppUrl } from '../../config/index'
+import { appUrl } from '../../config/index'
 
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
@@ -18,7 +18,7 @@ export async function  authentication(email, password) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/login/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/login/`, requestOptions)
         return {
             response,
             error: null,
@@ -40,7 +40,7 @@ export async function readBlockCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/block/blockcount/block/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/block/blockcount/block/`, requestOptions)
         return {
             response,
             error: null,
@@ -62,7 +62,7 @@ export async function readBlockFloorCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/blockfloor/blockfloorcount/floor/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/blockfloor/blockfloorcount/floor/`, requestOptions)
         return {
             response,
             error: null,
@@ -84,7 +84,7 @@ export async function readRoomCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/room/roomcount/room/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/room/roomcount/room/`, requestOptions)
         return {
             response,
             error: null,
@@ -106,7 +106,7 @@ export async function readStudentCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/student/studentcount/student/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/student/studentcount/student/`, requestOptions)
         return {
             response,
             error: null,
@@ -128,7 +128,7 @@ export async function readWardenCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/wardencount/warden/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/wardencount/warden/`, requestOptions)
         return {
             response,
             error: null,
@@ -150,7 +150,7 @@ export async function readCourseCount() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/course/coursecount/course/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/course/coursecount/course/`, requestOptions)
         return {
             response,
             error: null,
@@ -172,7 +172,7 @@ export async function readBlocks(limit, pageNo, sortColumn, sortOrder, searchTex
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/block/?limit=${limit}&page=${pageNo}&orderby=bk.${sortColumn}&sort=${sortOrder}`
+        let url = `${appUrl}/api/block/?limit=${limit}&page=${pageNo}&orderby=bk.${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -199,7 +199,7 @@ export async function readBlockById(blockId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/block/${blockId}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/block/${blockId}`, requestOptions)
         return {
             response,
             error: null,
@@ -221,7 +221,7 @@ export async function saveOrUpdateBlock(blockId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/block${blockId ? `/${blockId}/` : "/"}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/block${blockId ? `/${blockId}/` : "/"}`, requestOptions)
         return {
             response,
             error: null,
@@ -241,7 +241,7 @@ export async function deleteBlockById(blockId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${wardenAppUrl}/api/block/${blockId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/block/${blockId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -263,7 +263,7 @@ export async function readBlockFloors(limit, pageNo, sortColumn, sortOrder, sear
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/blockfloor/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
+        let url = `${appUrl}/api/blockfloor/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -290,7 +290,7 @@ export async function readFloorById(floorId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/blockfloor/${floorId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/blockfloor/${floorId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -312,7 +312,7 @@ export async function readBlockCodes() {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/block/blockfloor/blockcodecount/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/block/blockfloor/blockcodecount/`, requestOptions)
         return {
             response,
             error: null,
@@ -334,7 +334,7 @@ export async function saveOrUpdateFloor(floorId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/blockfloor${floorId ? `/${floorId}/` : "/"}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/blockfloor${floorId ? `/${floorId}/` : "/"}`, requestOptions)
         return {
             response,
             error: null,
@@ -354,7 +354,7 @@ export async function deleteFloorById(floorId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${wardenAppUrl}/api/blockfloor/${floorId}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/blockfloor/${floorId}`, requestOptions)
         return {
             response,
             error: null,
@@ -376,7 +376,7 @@ export async function readRooms(limit, pageNo, sortColumn, sortOrder, searchText
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/room/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
+        let url = `${appUrl}/api/room/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -403,7 +403,7 @@ export async function readRoomById(roomId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/room/${roomId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/room/${roomId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -425,7 +425,7 @@ export async function saveOrUpdateRoom(roomId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/room${roomId ? `/${roomId}/` : "/"}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/room${roomId ? `/${roomId}/` : "/"}`, requestOptions)
         return {
             response,
             error: null,
@@ -445,7 +445,7 @@ export async function deleteRoomById(roomId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${wardenAppUrl}/api/room/${roomId}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/room/${roomId}`, requestOptions)
         return {
             response,
             error: null,
@@ -467,7 +467,7 @@ export async function readFloorNumbers(blockId, blockFloor = false) {
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/blockfloor/floornumber/?blockId=${blockId}`
+        let url = `${appUrl}/api/blockfloor/floornumber/?blockId=${blockId}`
         if(blockFloor === true) {
             url += '&blockFloor=true'
         } 
@@ -493,7 +493,7 @@ export async function readCourses(limit, pageNo, sortColumn, sortOrder, searchTe
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/course/`
+        let url = `${appUrl}/api/course/`
         if (limit !== undefined && pageNo !== undefined && sortColumn && sortOrder) {
             url += `?limit=${limit}&page=${pageNo}&orderby=c.${sortColumn}&sort=${sortOrder}`
         }
@@ -525,7 +525,7 @@ export async function readCourses(limit, pageNo, sortColumn, sortOrder, searchTe
 //             credentials: 'include'
 //         }
 
-//         let url = `${wardenAppUrl}/api/course/?limit=${limit}&page=${pageNo}&orderby=c.${sortColumn}&sort=${sortOrder}`
+//         let url = `${appUrl}/api/course/?limit=${limit}&page=${pageNo}&orderby=c.${sortColumn}&sort=${sortOrder}`
 //         if (searchText) {
 //             url += `&search=${searchText.trim()}`
 //         }
@@ -552,7 +552,7 @@ export async function readCourseById(courseId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/course/${courseId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/course/${courseId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -574,7 +574,7 @@ export async function saveOrUpdateCourse(courseId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/course${courseId ? `/${courseId}/` : "/"}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/course${courseId ? `/${courseId}/` : "/"}`, requestOptions)
         return {
             response,
             error: null,
@@ -594,7 +594,7 @@ export async function deleteCourseById(courseId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${wardenAppUrl}/api/course/${courseId}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/course/${courseId}`, requestOptions)
         return {
             response,
             error: null,
@@ -616,7 +616,7 @@ export async function readStudents(limit, pageNo, sortColumn, sortOrder, searchT
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/student/?limit=${limit}&page=${pageNo}&orderby=s.${sortColumn}&sort=${sortOrder}`
+        let url = `${appUrl}/api/student/?limit=${limit}&page=${pageNo}&orderby=s.${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -643,7 +643,7 @@ export async function readStudentById(studentId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/student/${studentId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -665,7 +665,7 @@ export async function saveOrUpdateStudent(studentId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/student${studentId ? `/${studentId}/` : "/"}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/student${studentId ? `/${studentId}/` : "/"}`, requestOptions)
         return {
             response,
             error: null,
@@ -685,7 +685,7 @@ export async function deleteStudentById(studentId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/student/${studentId}`, requestOptions)
         return {
             response,
             error: null,
@@ -708,7 +708,7 @@ export async function updateStudentImage(studentId, file) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/editimage/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/student/${studentId}/editimage/`, requestOptions)
         return {
             response,
             error: null,
@@ -730,7 +730,7 @@ export async function deleteStudentImage(studentId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/student/${studentId}/deleteimage/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/student/${studentId}/deleteimage/`, requestOptions)
         return {
             response,
             error: null,
@@ -752,7 +752,7 @@ export async function readRoomNumbers(floorId) {
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/room/roomnumber/?blockFloorId=${floorId}`
+        let url = `${appUrl}/api/room/roomnumber/?blockFloorId=${floorId}`
         
         const response = await fetch(url, requestOptions)
         return {
@@ -776,7 +776,7 @@ export async function readWardens(limit, pageNo, sortColumn, sortOrder, searchTe
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/warden/?limit=${limit}&page=${pageNo}&orderby=w.${sortColumn}&sort=${sortOrder}`
+        let url = `${appUrl}/api/warden/?limit=${limit}&page=${pageNo}&orderby=w.${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -803,7 +803,7 @@ export async function readWardenById(wardenId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/${wardenId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -823,7 +823,7 @@ export async function deleteWardenById(wardenId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/${wardenId}`, requestOptions)
         return {
             response,
             error: null,
@@ -876,7 +876,7 @@ export async function saveOrUpdateWarden(wardenId, payload) {
         };
 
         const response = await fetch(
-            `${wardenAppUrl}/api/warden${wardenId ? `/${wardenId}/` : "/"}`,
+            `${appUrl}/api/warden${wardenId ? `/${wardenId}/` : "/"}`,
             requestOptions
         )
 
@@ -901,7 +901,7 @@ export async function readAttendances(limit, pageNo, sortColumn, sortOrder, sear
             credentials: 'include'
         }
 
-        let url = `${wardenAppUrl}/api/attendance/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
+        let url = `${appUrl}/api/attendance/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }
@@ -928,7 +928,7 @@ export async function readAttendanceById(attendanceId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/attendance/${attendanceId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/attendance/${attendanceId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -950,7 +950,7 @@ export async function populateBlockCode(checkIn) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/attendance/block?date=${checkIn}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/attendance/block?date=${checkIn}/`, requestOptions)
         return {
             response,
             error: null,
@@ -972,7 +972,7 @@ export async function populateFloorNumber(checkIn, blockId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/attendance/blockfloor?date=${checkIn}&blockId=${blockId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/attendance/blockfloor?date=${checkIn}&blockId=${blockId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -994,7 +994,7 @@ export async function populateRoomNumber(checkIn, floorId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/attendance/room?date=${checkIn}&blockFloorId=${floorId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/attendance/room?date=${checkIn}&blockFloorId=${floorId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -1016,7 +1016,7 @@ export async function fetchStudents(roomId, checkIn) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/attendance/student/${roomId}?checkIn=${checkIn}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/attendance/student/${roomId}?checkIn=${checkIn}/`, requestOptions)
         return {
             response,
             error: null,
@@ -1038,7 +1038,7 @@ export async function saveOrUpdateAttendance(finalBlockId, finalBlockFloorId, fi
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/attendance/${finalBlockId}/${finalBlockFloorId}/${finalRoomId}`,
+        const response = await fetch(`${appUrl}/api/attendance/${finalBlockId}/${finalBlockFloorId}/${finalRoomId}`,
             requestOptions)
         return {
             response,
@@ -1063,7 +1063,7 @@ export async function updateImage(file, wardenId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/editavatar/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/${wardenId}/editavatar/`, requestOptions)
         return {
             response,
             error: null
@@ -1085,7 +1085,7 @@ export async function deleteImage(wardenId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}/deleteavatar`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/${wardenId}/deleteavatar`, requestOptions)
 
         return {
             response,
@@ -1108,7 +1108,7 @@ export async function readWardenDetails(wardenId) {
             credentials: 'include'
         }
     
-        const response = await fetch(`${wardenAppUrl}/api/warden/${wardenId}?date=${Date.now()}`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/${wardenId}?date=${Date.now()}`, requestOptions)
         return {
             response,
             error: null,
@@ -1131,7 +1131,7 @@ export async function editUserData(wardenId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/edituserwarden/${wardenId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/edituserwarden/${wardenId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -1153,7 +1153,7 @@ export async function changePassword(wardenId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/changepassword/${wardenId}/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/changepassword/${wardenId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -1175,7 +1175,7 @@ export async function generateOtp(payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/generateotp/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/generateotp/`, requestOptions)
         return {
             response,
             error: null,
@@ -1197,7 +1197,7 @@ export const resetPassword = async (payload) => {
             credentials: 'include'
         }
 
-        const response = await fetch(`${wardenAppUrl}/api/warden/resetpassword/`, requestOptions)
+        const response = await fetch(`${appUrl}/api/warden/resetpassword/`, requestOptions)
         return {
             response,
             error: null,
@@ -1212,7 +1212,7 @@ export const resetPassword = async (payload) => {
 
 export async function readStudentNameAndRegNo() {
     try {
-        const response = await fetch(`${wardenAppUrl}/api/student/getstudent/`, {
+        const response = await fetch(`${appUrl}/api/student/getstudent/`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -1232,7 +1232,7 @@ export async function readStudentNameAndRegNo() {
 
 export async function report(month, year, studentName) {
     try {
-        const response = await fetch(`${wardenAppUrl}/api/attendance/studentattendancereport/?month=${month}&year=${year}&studentName=${studentName}`, {
+        const response = await fetch(`${appUrl}/api/attendance/studentattendancereport/?month=${month}&year=${year}&studentName=${studentName}`, {
             method: 'GET',
             credentials: 'include'
         })

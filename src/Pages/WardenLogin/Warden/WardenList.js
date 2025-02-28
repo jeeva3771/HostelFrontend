@@ -11,7 +11,7 @@ import {
     readWardenById, 
     deleteWardenById    
 } from "../Api"
-import { wardenAppUrl } from "../../../config"
+import { appUrl } from "../../../config"
 import { useAuth } from "../../AuthContext"
 
 function WardenList() {
@@ -67,7 +67,7 @@ function WardenList() {
             setWardenCount(wardenCount || 0)
             const images = {}
             wardens.forEach(warden => {
-                images[warden.wardenId] = `${wardenAppUrl}/api/warden/${warden.wardenId}/avatar?date=${Date.now()}`
+                images[warden.wardenId] = `${appUrl}/api/warden/${warden.wardenId}/avatar?date=${Date.now()}`
             })
             setWardenImages(images)
         } catch (error) {

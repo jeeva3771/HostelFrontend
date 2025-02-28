@@ -13,7 +13,7 @@ import {
     updateStudentImage,
     deleteStudentImage
 } from "../Api"
-import { wardenAppUrl } from "../../../config"
+import { appUrl } from "../../../config"
 import { useAuth } from "../../AuthContext"
 
 function StudentList() {
@@ -70,7 +70,7 @@ function StudentList() {
             setStudentCount(studentCount || 0)
             const images = {}
             students.forEach(student => {
-                images[student.studentId] = `${wardenAppUrl}/api/student/${student.studentId}/image?date=${Date.now()}`
+                images[student.studentId] = `${appUrl}/api/student/${student.studentId}/image?date=${Date.now()}`
             })
             setStudentImages(images)
         } catch (error) {
@@ -110,7 +110,7 @@ function StudentList() {
             if(response.ok) {
                 setStudentImages(prevImages => ({
                     ...prevImages,
-                    [studentId]: `${wardenAppUrl}/api/student/${studentId}/image?date=${Date.now()}`
+                    [studentId]: `${appUrl}/api/student/${studentId}/image?date=${Date.now()}`
                 }))
                 alert("Image updated successfully!")
             } else if (response.status === 400) {
@@ -140,7 +140,7 @@ function StudentList() {
             if (response.ok) {
                 setStudentImages(prevImages => ({
                     ...prevImages,
-                    [studentId]: `${wardenAppUrl}/api/student/${studentId}/image?date=${Date.now()}`
+                    [studentId]: `${appUrl}/api/student/${studentId}/image?date=${Date.now()}`
                 }))
             } else {
                 alert('Not deleted')

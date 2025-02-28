@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../AuthContext"
 import { Link, useNavigate } from "react-router-dom" 
 import { logout } from "../StudentLogin/Api"
-import { studentAppUrl, wardenAppUrl } from "../../config"
+import { studentAppUrl, appUrl } from "../../config"
 
 function Header() {
     const [showBackToTop, setShowBackToTop] = useState(false)
@@ -18,7 +18,7 @@ function Header() {
 
     useEffect(() => {
         if (wardenDetails?.role === "warden") {
-            setImageUrl(`${wardenAppUrl}/api/warden/${wardenDetails.wardenId}/avatar?date=${Date.now()}`)
+            setImageUrl(`${appUrl}/api/warden/${wardenDetails.wardenId}/avatar?date=${Date.now()}`)
         } else if (studentDetails) {
             setImageUrl(`${studentAppUrl}/student/api/student/image?date=${Date.now()}`)
         }

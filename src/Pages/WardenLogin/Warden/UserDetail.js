@@ -16,14 +16,14 @@ import {
 } from '../Api'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from "../../AuthContext"
-import { wardenAppUrl } from "../../../config"
+import { appUrl } from "../../../config"
 import formatDate from "../DateFormat"
 
 function UserDetail() {
     const { wardenDetails, userLogout } = useAuth()
     const [details, setDetails] = useState(wardenDetails)
     const fileInputRef = useRef(null)
-    const [imageUrl, setImageUrl] = useState(`${wardenAppUrl}/api/warden/${details.wardenId}/avatar/?date=${Date.now()}/`)
+    const [imageUrl, setImageUrl] = useState(`${appUrl}/api/warden/${details.wardenId}/avatar/?date=${Date.now()}/`)
     const [isUploading, setIsUploading] = useState(false)
     const { navigate } = useNavigate()
     const [originalData, setOriginalData] = useState(null)
@@ -101,7 +101,7 @@ function UserDetail() {
             }
 
             if(response.ok) {
-                setImageUrl(`${wardenAppUrl}/api/warden/${details.wardenId}/avatar/?date=${Date.now()}`)
+                setImageUrl(`${appUrl}/api/warden/${details.wardenId}/avatar/?date=${Date.now()}`)
                 alert("Image updated successfully!")
             } else if (response.status === 400) {
                 alert(await response.text())
@@ -128,7 +128,7 @@ function UserDetail() {
             }
 
             if (response.ok) {
-                setImageUrl(`${wardenAppUrl}/api/warden/${details.wardenId}/avatar/?date=${Date.now()}/`)
+                setImageUrl(`${appUrl}/api/warden/${details.wardenId}/avatar/?date=${Date.now()}/`)
             } else {
                 alert('Not deleted')
             }
