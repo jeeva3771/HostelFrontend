@@ -13,9 +13,9 @@ export async function  authentication(email, password) {
 
         const requestOptions = {
             method: "POST",
+            credentials: 'include',
             headers,
-            body: raw,
-            credentials: 'include'
+            body: raw
         }
 
         const response = await fetch(`${appUrl}/api/login/`, requestOptions)
@@ -36,8 +36,8 @@ export async function readBlockCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
-            headers: myHeaders,
-            credentials: 'include'
+            credentials: 'include',
+            headers: myHeaders
         }
 
         const response = await fetch(`${appUrl}/api/block/blockcount/block/`, requestOptions)
@@ -58,8 +58,8 @@ export async function readBlockFloorCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
-            headers: myHeaders,
-            credentials: 'include'
+            credentials: 'include',
+            headers: myHeaders
         }
 
         const response = await fetch(`${appUrl}/api/blockfloor/blockfloorcount/floor/`, requestOptions)
@@ -80,8 +80,8 @@ export async function readRoomCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
+            credentials: 'include',
             headers: myHeaders,
-            credentials: 'include'
         }
 
         const response = await fetch(`${appUrl}/api/room/roomcount/room/`, requestOptions)
@@ -102,8 +102,8 @@ export async function readStudentCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
+            credentials: 'include',
             headers: myHeaders,
-            credentials: 'include'
         }
 
         const response = await fetch(`${appUrl}/api/student/studentcount/student/`, requestOptions)
@@ -124,8 +124,8 @@ export async function readWardenCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
-            headers: myHeaders,
-            credentials: 'include'
+            credentials: 'include',
+            headers: myHeaders
         }
 
         const response = await fetch(`${appUrl}/api/warden/wardencount/warden/`, requestOptions)
@@ -146,8 +146,8 @@ export async function readCourseCount() {
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
+            credentials: 'include',
             headers: myHeaders,
-            credentials: 'include'
         }
 
         const response = await fetch(`${appUrl}/api/course/coursecount/course/`, requestOptions)
