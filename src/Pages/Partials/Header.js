@@ -19,7 +19,7 @@ function Header() {
     useEffect(() => {
         if (wardenDetails?.role === "warden") {
             setImageUrl(`${appUrl}/api/warden/${wardenDetails.wardenId}/avatar?date=${Date.now()}`)
-        } else if (studentDetails) {
+        } else if (studentDetails?.role === "student") {
             setImageUrl(`${studentAppUrl}/student/api/student/image?date=${Date.now()}`)
         }
     }, [wardenDetails, studentDetails])
